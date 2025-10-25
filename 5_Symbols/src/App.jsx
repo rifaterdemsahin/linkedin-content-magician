@@ -937,9 +937,14 @@ Examples:
                             className="bg-transparent border-light text-white"
                             style={{backgroundColor: 'rgba(255, 255, 255, 0.05)'}}
                           />
-                          <Form.Text className="text-muted">
-                            💡 Tip: The more context you provide, the better the AI can create authentic content in your voice
-                          </Form.Text>
+                          <div className="d-flex justify-content-between">
+                            <Form.Text className="text-muted">
+                              💡 Tip: The more context you provide, the better the AI can create authentic content in your voice
+                            </Form.Text>
+                            <Form.Text className="text-muted">
+                              {prompt.trim().split(/\s+/).filter(Boolean).length} Words
+                            </Form.Text>
+                          </div>
                         </Form.Group>
                         
                         <Button

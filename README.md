@@ -2,102 +2,61 @@
 
 ![CI](https://github.com/rifaterdemsahin/linkedin-content-magician/actions/workflows/static.yml/badge.svg)
 
-Custom RAG to build newsletters for professionals
+**Custom RAG to build newsletters for professionals**
 
-## ☁️ Cloud URL
+---
 
-**🔗 [Access the Application](https://rifaterdemsahin.github.io/linkedin-content-magician/)**
-**📊 [Delivery Pilot Dashboard](https://rifaterdemsahin.github.io/linkedin-content-magician/dashboard.html)**
+## ☁️ Cloud URLs & Deployments
 
-### How to Navigate:
-1. **Visit**: [https://rifaterdemsahin.github.io/linkedin-content-magician/](https://rifaterdemsahin.github.io/linkedin-content-magician/)
-2. **Dashboard**: [https://rifaterdemsahin.github.io/linkedin-content-magician/dashboard.html](https://rifaterdemsahin.github.io/linkedin-content-magician/dashboard.html) - Project overview and navigation
-3. **Auto-redirect**: The landing page will automatically redirect you to the main application
-4. **Main App**: Located at `/5_Symbols/dist/index.html` - the core LinkedIn Content Magician interface
-5. **Features**: Generate, review, and manage AI-powered LinkedIn content with RAG technology
+- **🔗 GitHub Pages:** [Access the Application](https://rifaterdemsahin.github.io/linkedin-content-magician/)
+- **📊 Delivery Pilot Dashboard:** [Project Dashboard](https://rifaterdemsahin.github.io/linkedin-content-magician/dashboard.html)
+- **🚀 Vercel (Full RAG):** [Live Application](https://linkedin-content-magician-nrywmc06o-rifaterdemsahins-projects.vercel.app)
+- **⚙️ n8n Workflow Monitoring:** [View Executions](https://n8n.rifaterdemsahin.com/workflow/u8PdboUp5JCCPv55/executions)
+- **⚡ Netlify:** [Live Application](https://content-magician.netlify.app/)
 
-> **Note**: If auto-redirect doesn't work, manually click the "click here" link on the landing page.
+---
 
-## 🚀 Vercel Production Deployment
+## 💻 Local Development
 
-**🔗 [Live Application with Full RAG](https://linkedin-content-magician-nrywmc06o-rifaterdemsahins-projects.vercel.app)**
-
-### Full-Stack Features:
-- **Real RAG Search**: Python-powered semantic search using FAISS vector database
-- **Serverless Backend**: Python API functions for content generation
-- **Global CDN**: Fast loading worldwide via Vercel edge network
-- **Dynamic Content**: Real-time LinkedIn content generation with AI
-- **Production Database**: Live access to knowledge base documents
-
-> **Note**: This is the production deployment with complete RAG functionality, unlike the static GitHub Pages version.
-
-## � n8n Workflow Monitoring
-
-**🔗 [View Workflow Executions](https://n8n.rifaterdemsahin.com/workflow/u8PdboUp5JCCPv55/executions)**
-
-### Workflow Monitoring:
-- **Real-time execution tracking**: Monitor automation workflow runs in real-time
-- **Success/failure analysis**: View detailed logs of content processing and LinkedIn posting
-- **Performance metrics**: Track execution times and success rates
-- **Debug information**: Access detailed workflow execution data for troubleshooting
-- **Webhook integration**: Monitor incoming requests from the Content Magician app
-
-> **Note**: This link provides access to the Proxmox-hosted n8n instance that handles the automation workflows for LinkedIn content publishing.
-
-## 🚀 Netlify Deployment
-
-**🔗 [Live Application on Netlify](https://content-magician.netlify.app/)**
-
-### Netlify Features:
-- **Continuous Deployment**: Automatically deploys from GitHub on every push
-- **Static Site Hosting**: Fast, reliable hosting with global CDN
-- **Custom Domain**: Clean, memorable URL for easy access
-- **HTTPS by Default**: Secure connection with SSL certificates
-- **Branch Previews**: Deploy preview versions for testing
-
-> **Note**: This is an alternative deployment option providing fast static hosting with automatic builds.
-
-## 💻 Local URL
-
-**🔗 [http://localhost:5173/](http://localhost:5173/)**
+- **🔗 Local URL:** [http://localhost:5173/](http://localhost:5173/)
 
 ---
 
 ## 📂 Project Structure Explained
 
-This project is organized into a unique, seven-folder structure that represents a holistic development journey, from defining objectives to final testing. Each folder has a specific purpose, guiding the developer through a structured and philosophical workflow.
+This project uses a unique seven-folder structure that represents a holistic development journey. Each folder has a specific purpose, guiding you through a structured and philosophical workflow.
 
 ### 🎯 1_Real: Objectives & Key Results
-**Premise:** Every project must begin with a clear and measurable goal. This folder establishes the "why" behind the work.
-**Content:** Contains documentation defining the project's high-level objectives and the key results (OKRs) that will measure its success.
-**Conclusion:** By starting here, all subsequent work in other folders is aligned with a tangible, measurable purpose.
+- **Premise:** Every project must begin with a clear and measurable goal. This folder establishes the **"why"** behind the work.
+- **Content:** High-level objectives and key results (OKRs).
+- **Conclusion:** Aligns all work with a tangible purpose.
 
 ### 🗺️ 2_Environment: Roadmap & Use Cases
-**Premise:** A goal needs a path to achieve it. This folder lays out the strategic plan and real-world applications.
-**Content:** Includes the project roadmap, learning modules, and detailed use cases that guide the development process.
-**Conclusion:** This ensures the project has a clear direction and that its features are grounded in practical user needs.
+- **Premise:** A goal needs a path. This folder lays out the strategic plan.
+- **Content:** Project roadmap, learning modules, and use cases.
+- **Conclusion:** Ensures a clear direction grounded in user needs.
 
 ### 🧠 3_UI: Knowledge & Skill Acquisition
-**Premise:** The journey of development is also a journey of learning. This folder is dedicated to tracking the growth of the developer.
-**Content:** A space to document concepts, theories, and skills acquired during the project, acting as a personal knowledge base.
-**Conclusion:** This folder fosters continuous improvement and turns the development process into a valuable learning experience.
+- **Premise:** Development is a journey of learning.
+- **Content:** A personal knowledge base for concepts, theories, and skills.
+- **Conclusion:** Fosters continuous improvement.
 
 ### 📚 4_Formula: Guides & Best Practices
-**Premise:** Don't reinvent the wheel. This folder is a collection of established knowledge and solutions to common problems.
-**Content:** A curated set of essential guides, formulas, code snippets, and best practices relevant to the project.
-**Conclusion:** This repository of knowledge helps solve challenges efficiently and ensures a high standard of quality.
+- **Premise:** Don't reinvent the wheel.
+- **Content:** Essential guides, formulas, and code snippets.
+- **Conclusion:** Solves challenges efficiently and ensures high quality.
 
 ### 💻 5_Symbols: Implementation & Code
-**Premise:** This is where theory becomes reality. This folder contains the active source code of the application.
-**Content:** The core application logic, including the Vite + React frontend, UI components, and all related configuration files.
-**Conclusion:** This is the heart of the project, where the ideas and plans from the preceding folders are brought to life.
+- **Premise:** Where theory becomes reality.
+- **Content:** The core application source code (Vite + React).
+- **Conclusion:** The heart of the project.
 
 ### 🐞 6_Semblance: Error Logging & Solutions
-**Premise:** Mistakes are valuable learning opportunities. This folder is for documenting and learning from errors.
-**Content:** A log of bugs, errors, and the solutions that resolved them, creating a project-specific troubleshooting guide.
-**Conclusion:** By treating errors as lessons, this folder helps prevent repeated mistakes and accelerates future development.
+- **Premise:** Mistakes are valuable learning opportunities.
+- **Content:** A log of bugs, errors, and their solutions.
+- **Conclusion:** Prevents repeated mistakes and accelerates development.
 
 ### ✅ 7_Testing: Validation & Quality Assurance
-**Premise:** A project is only complete when it is proven to work. This folder ensures the project meets its goals.
-**Content:** All testing-related activities, scripts, and documentation needed to validate that the codebase meets the key results defined in `1_Real`.
-**Conclusion:** This final step guarantees the quality of the project and confirms that the initial objectives have been successfully met.
+- **Premise:** A project is only complete when proven to work.
+- **Content:** Testing scripts and documentation.
+- **Conclusion:** Guarantees quality and confirms objectives are met.
