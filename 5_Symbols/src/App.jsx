@@ -1891,9 +1891,9 @@ Examples:
                                 <Button 
                                   size="sm" 
                                   variant="outline-light"
-                                  onClick={() => {
+                                  onClick={(event) => {
                                     navigator.clipboard.writeText(n8nResult.data);
-                                    // Optional: Show temporary feedback
+                                    // Show temporary feedback
                                     const btn = event.target;
                                     const originalText = btn.textContent;
                                     btn.textContent = '✓ Copied!';
@@ -1908,8 +1908,11 @@ Examples:
                               <pre className="mt-1 p-2 rounded" style={{ 
                                 backgroundColor: 'rgba(0,0,0,0.2)', 
                                 fontSize: '0.75rem',
-                                maxHeight: '100px',
-                                overflowY: 'auto'
+                                maxHeight: '200px',
+                                overflowY: 'auto',
+                                whiteSpace: 'pre-wrap',
+                                wordWrap: 'break-word',
+                                wordBreak: 'break-word'
                               }}>
                                 {n8nResult.data}
                               </pre>
