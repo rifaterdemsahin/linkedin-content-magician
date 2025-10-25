@@ -281,6 +281,174 @@ Agree or disagree? Let's debate in the comments! 🔥
     await saveToStorage('config', updated);
   };
 
+  const generateReleasePrompts = async (post) => {
+    const releasePrompts = {
+      textPrompts: [
+        {
+          title: "LinkedIn Carousel Post",
+          prompt: `Create a 10-slide LinkedIn carousel about "${post.prompt}". Each slide should have:
+- Slide 1: Hook/Title
+- Slides 2-8: Key points with actionable insights
+- Slide 9: Call-to-action
+- Slide 10: About me/contact
+
+Use this content as reference: ${post.content}`
+        },
+        {
+          title: "Twitter Thread",
+          prompt: `Transform this LinkedIn post about "${post.prompt}" into a compelling Twitter thread (8-12 tweets):
+- Start with a hook tweet
+- Break down key insights into digestible tweets
+- Include relevant hashtags
+- End with engagement question
+
+Base content: ${post.content}`
+        },
+        {
+          title: "Blog Article Outline",
+          prompt: `Create a comprehensive blog article outline for "${post.prompt}" based on this content:
+- SEO-optimized title
+- Introduction hook
+- 5-7 main sections with subpoints
+- Conclusion with actionable steps
+- Meta description
+
+Source: ${post.content}`
+        },
+        {
+          title: "Video Script",
+          prompt: `Write a 3-5 minute video script about "${post.prompt}":
+- Engaging opening (15 seconds)
+- Problem statement (30 seconds)
+- Solution breakdown (2-3 minutes)
+- Call-to-action (30 seconds)
+- Visual cues and transitions
+
+Based on: ${post.content}`
+        },
+        {
+          title: "Email Newsletter",
+          prompt: `Create an email newsletter about "${post.prompt}":
+- Subject line variations (5 options)
+- Engaging preview text
+- Newsletter body with personal story
+- Resources/links section
+- P.S. with engagement hook
+
+Content source: ${post.content}`
+        }
+      ],
+      imagePrompts: [
+        {
+          title: "Hero Image",
+          prompt: `Create a professional hero image for "${post.prompt}":
+- Modern, clean design
+- Relevant icons or illustrations
+- Brand colors: #58A6FF (blue), #A371F7 (purple)
+- Readable typography
+- LinkedIn post dimensions (1200x627px)`
+        },
+        {
+          title: "Infographic",
+          prompt: `Design an infographic about "${post.prompt}":
+- Visual hierarchy with key statistics
+- Icons and illustrations
+- Step-by-step process or framework
+- Professional color scheme
+- Mobile-friendly layout`
+        },
+        {
+          title: "Carousel Slides",
+          prompt: `Create 10 carousel slides for "${post.prompt}":
+- Consistent design template
+- Readable fonts (minimum 24px)
+- High contrast colors
+- Each slide focuses on one key point
+- Instagram/LinkedIn carousel format (1080x1080px)`
+        },
+        {
+          title: "Quote Graphics",
+          prompt: `Design quote graphics from this content about "${post.prompt}":
+- Extract 3-5 powerful quotes
+- Minimalist design with brand colors
+- Attribution to your name
+- Various social media sizes
+- Shareable format`
+        },
+        {
+          title: "Video Thumbnail",
+          prompt: `Create an eye-catching video thumbnail for "${post.prompt}":
+- Bright, contrasting colors
+- Large, readable text overlay
+- Your photo or relevant imagery
+- YouTube/social media friendly
+- Clickable and curiosity-driven design`
+        }
+      ],
+      videoPrompts: [
+        {
+          title: "Short-form Video (TikTok/Reels)",
+          prompt: `Create a 30-60 second vertical video about "${post.prompt}":
+- Hook in first 3 seconds
+- Quick tips or insights
+- Text overlays for key points
+- Trending audio if applicable
+- Strong call-to-action at the end`
+        },
+        {
+          title: "YouTube Video",
+          prompt: `Plan a 10-15 minute YouTube video on "${post.prompt}":
+- Compelling title and thumbnail concept
+- Structured outline with timestamps
+- B-roll suggestions
+- Screen recording segments
+- Engagement hooks throughout`
+        },
+        {
+          title: "Tutorial Video",
+          prompt: `Create a step-by-step tutorial about "${post.prompt}":
+- Clear learning objectives
+- Screen recording setup
+- Voice-over script
+- Resource links and materials
+- Follow-up content suggestions`
+        }
+      ],
+      marketingPrompts: [
+        {
+          title: "Social Media Campaign",
+          prompt: `Design a 7-day social media campaign for "${post.prompt}":
+- Platform-specific content calendar
+- Hashtag strategy
+- Engagement tactics
+- Cross-promotion ideas
+- Success metrics to track`
+        },
+        {
+          title: "Landing Page Copy",
+          prompt: `Write landing page copy for a resource about "${post.prompt}":
+- Compelling headline
+- Problem/solution sections
+- Social proof elements
+- Clear value proposition
+- Multiple CTA variations`
+        }
+      ]
+    };
+
+    const updatedPost = {
+      ...post,
+      releasePrompts,
+      status: 'release_ready'
+    };
+
+    const updatedPosts = posts.map(p => 
+      p.id === post.id ? updatedPost : p
+    );
+    setPosts(updatedPosts);
+    await saveToStorage('posts', updatedPosts);
+  };
+
   return (
     <div className="min-h-100vh bg-dark-custom text-white">
       <Container fluid className="py-4">
@@ -454,9 +622,9 @@ Agree or disagree? Let's debate in the comments! 🔥
                 <Tab.Pane eventKey="review">
                   <Card className="card-glassmorphism border-0 text-white">
                     <Card.Body className="p-4">
-                      <h2 className="h3 fw-bold mb-4">Review & Approve</h2>
+                      <h2 className="h3 fw-bold mb-4">Review & Prepare Release</h2>
                       <p style={{ color: '#8B949E' }} className="mb-4">
-                        Review AI-generated content before publishing. Human-in-the-loop keeps you in control.
+                        Generate comprehensive content and assets for your final release. Get prompts for text, images, videos, and marketing materials.
                       </p>
                       
                       {posts.length === 0 ? (
@@ -478,32 +646,43 @@ Agree or disagree? Let's debate in the comments! 🔥
                                       </span>
                                       <Badge 
                                         bg={post.status === 'approved' ? 'success' : 
-                                            post.status === 'rejected' ? 'danger' : 'secondary'}
+                                            post.status === 'rejected' ? 'danger' : 
+                                            post.status === 'release_ready' ? 'primary' : 'secondary'}
                                         className="ms-2"
                                       >
-                                        {post.status}
+                                        {post.status === 'release_ready' ? 'Release Ready' : post.status}
                                       </Badge>
                                     </div>
                                     <p className="fw-bold mb-2" style={{ color: '#58A6FF' }}>Prompt: {post.prompt}</p>
                                   </Col>
                                   <Col sm={4} className="text-end">
                                     {post.status === 'pending' && (
-                                      <div className="d-flex gap-2 justify-content-end">
+                                      <div className="d-flex flex-column gap-2">
+                                        <div className="d-flex gap-2 justify-content-end">
+                                          <Button
+                                            size="sm"
+                                            variant="success"
+                                            onClick={() => updatePostStatus(post.id, 'approved')}
+                                          >
+                                            <CheckCircle size={16} className="me-1" />
+                                            Approve
+                                          </Button>
+                                          <Button
+                                            size="sm"
+                                            variant="danger"
+                                            onClick={() => updatePostStatus(post.id, 'rejected')}
+                                          >
+                                            <XCircle size={16} className="me-1" />
+                                            Reject
+                                          </Button>
+                                        </div>
                                         <Button
                                           size="sm"
-                                          variant="success"
-                                          onClick={() => updatePostStatus(post.id, 'approved')}
+                                          variant="outline-primary"
+                                          className="w-100"
+                                          onClick={() => generateReleasePrompts(post)}
                                         >
-                                          <CheckCircle size={16} className="me-1" />
-                                          Approve
-                                        </Button>
-                                        <Button
-                                          size="sm"
-                                          variant="danger"
-                                          onClick={() => updatePostStatus(post.id, 'rejected')}
-                                        >
-                                          <XCircle size={16} className="me-1" />
-                                          Reject
+                                          📝 Generate Release Prompts
                                         </Button>
                                       </div>
                                     )}
@@ -517,6 +696,128 @@ Agree or disagree? Let's debate in the comments! 🔥
                                     </pre>
                                   </Card.Body>
                                 </Card>
+
+                                {post.releasePrompts && (
+                                  <div className="mt-4">
+                                    <h5 className="mb-3" style={{ color: '#58A6FF' }}>🚀 Release Prompts Generated</h5>
+                                    
+                                    {/* Text Content Prompts */}
+                                    <Card className="mb-3" style={{ backgroundColor: 'rgba(88, 166, 255, 0.1)', borderColor: '#58A6FF' }}>
+                                      <Card.Header className="bg-transparent" style={{ borderColor: '#58A6FF' }}>
+                                        <h6 className="mb-0 text-white">📝 Text Content Prompts</h6>
+                                      </Card.Header>
+                                      <Card.Body>
+                                        {post.releasePrompts.textPrompts.map((prompt, idx) => (
+                                          <div key={idx} className="mb-3 p-3 border border-secondary rounded">
+                                            <div className="d-flex justify-content-between align-items-start mb-2">
+                                              <h6 className="text-primary mb-0">{prompt.title}</h6>
+                                              <Button 
+                                                size="sm" 
+                                                variant="outline-light"
+                                                onClick={() => navigator.clipboard.writeText(prompt.prompt)}
+                                              >
+                                                📋 Copy
+                                              </Button>
+                                            </div>
+                                            <p className="text-white-50 small mb-0" style={{fontSize: '0.85rem'}}>
+                                              {prompt.prompt}
+                                            </p>
+                                          </div>
+                                        ))}
+                                      </Card.Body>
+                                    </Card>
+
+                                    {/* Image Prompts */}
+                                    <Card className="mb-3" style={{ backgroundColor: 'rgba(163, 113, 247, 0.1)', borderColor: '#A371F7' }}>
+                                      <Card.Header className="bg-transparent" style={{ borderColor: '#A371F7' }}>
+                                        <h6 className="mb-0 text-white">🎨 Image Generation Prompts</h6>
+                                      </Card.Header>
+                                      <Card.Body>
+                                        {post.releasePrompts.imagePrompts.map((prompt, idx) => (
+                                          <div key={idx} className="mb-3 p-3 border border-secondary rounded">
+                                            <div className="d-flex justify-content-between align-items-start mb-2">
+                                              <h6 className="text-info mb-0">{prompt.title}</h6>
+                                              <Button 
+                                                size="sm" 
+                                                variant="outline-light"
+                                                onClick={() => navigator.clipboard.writeText(prompt.prompt)}
+                                              >
+                                                📋 Copy
+                                              </Button>
+                                            </div>
+                                            <p className="text-white-50 small mb-0" style={{fontSize: '0.85rem'}}>
+                                              {prompt.prompt}
+                                            </p>
+                                          </div>
+                                        ))}
+                                      </Card.Body>
+                                    </Card>
+
+                                    {/* Video Prompts */}
+                                    <Card className="mb-3" style={{ backgroundColor: 'rgba(255, 193, 7, 0.1)', borderColor: '#FFC107' }}>
+                                      <Card.Header className="bg-transparent" style={{ borderColor: '#FFC107' }}>
+                                        <h6 className="mb-0 text-white">🎥 Video Content Prompts</h6>
+                                      </Card.Header>
+                                      <Card.Body>
+                                        {post.releasePrompts.videoPrompts.map((prompt, idx) => (
+                                          <div key={idx} className="mb-3 p-3 border border-secondary rounded">
+                                            <div className="d-flex justify-content-between align-items-start mb-2">
+                                              <h6 className="text-warning mb-0">{prompt.title}</h6>
+                                              <Button 
+                                                size="sm" 
+                                                variant="outline-light"
+                                                onClick={() => navigator.clipboard.writeText(prompt.prompt)}
+                                              >
+                                                📋 Copy
+                                              </Button>
+                                            </div>
+                                            <p className="text-white-50 small mb-0" style={{fontSize: '0.85rem'}}>
+                                              {prompt.prompt}
+                                            </p>
+                                          </div>
+                                        ))}
+                                      </Card.Body>
+                                    </Card>
+
+                                    {/* Marketing Prompts */}
+                                    <Card className="mb-3" style={{ backgroundColor: 'rgba(40, 167, 69, 0.1)', borderColor: '#28A745' }}>
+                                      <Card.Header className="bg-transparent" style={{ borderColor: '#28A745' }}>
+                                        <h6 className="mb-0 text-white">📈 Marketing & Campaign Prompts</h6>
+                                      </Card.Header>
+                                      <Card.Body>
+                                        {post.releasePrompts.marketingPrompts.map((prompt, idx) => (
+                                          <div key={idx} className="mb-3 p-3 border border-secondary rounded">
+                                            <div className="d-flex justify-content-between align-items-start mb-2">
+                                              <h6 className="text-success mb-0">{prompt.title}</h6>
+                                              <Button 
+                                                size="sm" 
+                                                variant="outline-light"
+                                                onClick={() => navigator.clipboard.writeText(prompt.prompt)}
+                                              >
+                                                📋 Copy
+                                              </Button>
+                                            </div>
+                                            <p className="text-white-50 small mb-0" style={{fontSize: '0.85rem'}}>
+                                              {prompt.prompt}
+                                            </p>
+                                          </div>
+                                        ))}
+                                      </Card.Body>
+                                    </Card>
+
+                                    <Alert variant="success" className="mt-3 bg-transparent border-success">
+                                      <div className="small">
+                                        <strong>💡 Usage Tips:</strong>
+                                        <ul className="mb-0 mt-1">
+                                          <li>Copy these prompts to your AI tools (ChatGPT, Claude, Midjourney, etc.)</li>
+                                          <li>Customize the prompts with your specific brand voice and requirements</li>
+                                          <li>Use the generated content across multiple platforms for maximum reach</li>
+                                          <li>Track performance and iterate based on engagement metrics</li>
+                                        </ul>
+                                      </div>
+                                    </Alert>
+                                  </div>
+                                )}
 
                                 <Alert variant="info" className="mb-0 bg-transparent">
                                   <div className="small">
