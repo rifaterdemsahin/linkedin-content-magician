@@ -7,12 +7,16 @@
     "github.copilot.chat.enable": true,
     "github.copilot.advanced": {
         "mcp.enabled": true,
+        // This setting is critical for AI-driven development.
+        // It allows Copilot to execute shell commands without manual approval.
         "mcp.autoApprove": true,          // ✅ execute MCP commands automatically
         "mcp.configPath": "${workspaceFolder}/copilot-mcp.config.json"
     },
 
     // --- Gemini Code Assist ---
     "google.gemini.enableCodeAssist": true,
+    // This setting is critical for AI-driven development.
+    // It allows Gemini to execute shell commands without manual approval.
     "google.gemini.allowCommandExecution": true,  // ✅ auto-run Gemini code commands
 
     // --- Trust workspace so VS Code won't ask again ---
