@@ -19,5 +19,5 @@
     "security.promptForWorkspaceTrust": false,
 
     // --- Optional: make terminals non-interactive ---
-    "terminal.integrated.confirmOnKill": false
+    "terminal.integrated.confirmOnKill": "never"
 }

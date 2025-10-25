@@ -1,0 +1,38 @@
+{
+  "name": "LinkedIn Content Magician MCP Configuration",
+  "description": "Model Context Protocol configuration for GitHub Copilot integration",
+  "version": "1.0.0",
+  "mcpServers": {
+    "linkedin-content-magician": {
+      "command": "node",
+      "args": ["./mcp-server.js"],
+      "env": {
+        "WORKSPACE_ROOT": "${workspaceFolder}",
+        "RAG_ENDPOINT": "https://linkedin-content-magician-nrywmc06o-rifaterdemsahins-projects.vercel.app/api/rag-search"
+      }
+    }
+  },
+  "tools": {
+    "rag-search": {
+      "description": "Search RAG knowledge base for relevant content",
+      "endpoint": "/api/rag-search",
+      "method": "POST",
+      "autoApprove": true
+    },
+    "content-generation": {
+      "description": "Generate LinkedIn content using RAG",
+      "autoApprove": true
+    }
+  },
+  "permissions": {
+    "allowFileAccess": true,
+    "allowNetworkAccess": true,
+    "allowCommandExecution": true,
+    "autoApproveCommands": [
+      "npm run dev",
+      "npm run build",
+      "vercel",
+      "python"
+    ]
+  }
+}
