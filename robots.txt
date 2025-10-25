@@ -1,0 +1,40 @@
+# LinkedIn Content Magician - Robots.txt
+# AI-Powered Content Creation Platform
+
+User-agent: *
+Allow: /
+
+# Allow indexing of main pages
+Allow: /index.html
+Allow: /5_Symbols/
+Allow: /README.md
+Allow: /gemini.md
+
+# Disallow sensitive directories
+Disallow: /.git/
+Disallow: /.vscode/
+Disallow: /.github/
+
+# Allow search engines to find our content
+Allow: /1_Real/
+Allow: /2_Environment/
+Allow: /3_UI/
+Allow: /4_Formula/
+Allow: /6_Semblance/
+Allow: /7_Testing/
+
+# Sitemap location (if we add one later)
+# Sitemap: https://rifaterdemsahin.github.io/linkedin-content-magician/sitemap.xml
+
+# Crawl delay (be nice to servers)
+Crawl-delay: 1
+
+# Common bot directives
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
