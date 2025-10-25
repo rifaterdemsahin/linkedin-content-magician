@@ -17,3 +17,5 @@ Connect Telegram for human-in-the-loop approval
 Generate and review content before publishing
 
 - Access the Delivery Pilot Dashboard for project overview > make the link work
+https://rifaterdemsahin.github.io/linkedin-content-magician/dashboard.html
+which is located in /Users/rifaterdemsahin/projects/linkedin-content-magician/5_Symbols/dashboard.html include in the nodejs and it is inthe src
