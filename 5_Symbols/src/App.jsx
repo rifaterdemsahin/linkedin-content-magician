@@ -4,7 +4,7 @@ import { Send, Bot, User, Database, Zap, MessageSquare, CheckCircle, XCircle, Lo
 
 export default function LinkedInContentMagician() {
   const [posts, setPosts] = useState([]);
-  const [activeTab, setActiveTab] = useState('generate');
+  const [activeTab, setActiveTab] = useState('seed-data');
   const [prompt, setPrompt] = useState('');
   const [loading, setLoading] = useState(false);
   const [debugData, setDebugData] = useState({
@@ -237,7 +237,7 @@ Agree or disagree? Let's debate in the comments! 🔥
       
       setLoading(false);
       setPrompt('');
-      setActiveTab('review');
+      setActiveTab('prompt-generation');
     }, 2000);
   };
 
@@ -825,29 +825,47 @@ Content source: ${post.content}`
                   <Nav variant="pills" className="justify-content-center flex-wrap">
                     <Nav.Item className="flex-fill">
                       <Nav.Link 
-                        eventKey="generate" 
+                        eventKey="seed-data" 
                         className="text-center fw-medium border-0 text-white"
-                        style={{backgroundColor: activeTab === 'generate' ? '#58A6FF' : 'transparent'}}
+                        style={{backgroundColor: activeTab === 'seed-data' ? '#58A6FF' : 'transparent'}}
                       >
-                        📊 Generate Prompts
+                        🌱 1. Seed Data Collect and Normalize
                       </Nav.Link>
                     </Nav.Item>
                     <Nav.Item className="flex-fill">
                       <Nav.Link 
-                        eventKey="review" 
+                        eventKey="rag-process" 
                         className="text-center fw-medium border-0 text-white"
-                        style={{backgroundColor: activeTab === 'review' ? '#58A6FF' : 'transparent'}}
+                        style={{backgroundColor: activeTab === 'rag-process' ? '#58A6FF' : 'transparent'}}
                       >
-                        🚀 Review & Release
+                        ⚡ 2. RAG Process
                       </Nav.Link>
                     </Nav.Item>
                     <Nav.Item className="flex-fill">
                       <Nav.Link 
-                        eventKey="setup" 
+                        eventKey="prompt-generation" 
                         className="text-center fw-medium border-0 text-white"
-                        style={{backgroundColor: activeTab === 'setup' ? '#58A6FF' : 'transparent'}}
+                        style={{backgroundColor: activeTab === 'prompt-generation' ? '#58A6FF' : 'transparent'}}
                       >
-                        Setup
+                        📝 3. Prompt Generation
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item className="flex-fill">
+                      <Nav.Link 
+                        eventKey="review-execute" 
+                        className="text-center fw-medium border-0 text-white"
+                        style={{backgroundColor: activeTab === 'review-execute' ? '#58A6FF' : 'transparent'}}
+                      >
+                        �️ 4. Review and Execute
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item className="flex-fill">
+                      <Nav.Link 
+                        eventKey="linkedin-publishing" 
+                        className="text-center fw-medium border-0 text-white"
+                        style={{backgroundColor: activeTab === 'linkedin-publishing' ? '#58A6FF' : 'transparent'}}
+                      >
+                        🚀 5. LinkedIn Publishing
                       </Nav.Link>
                     </Nav.Item>
                   </Nav>
@@ -856,68 +874,14 @@ Content source: ${post.content}`
 
               {/* Tab Content */}
               <Tab.Content>
-                <Tab.Pane eventKey="generate">
+                <Tab.Pane eventKey="seed-data">
                   <Card className="card-glassmorphism border-0 text-white">
                     <Card.Body className="p-4">
-                      <h2 className="h3 fw-bold mb-4">Generate Content Prompts</h2>
+                      <h2 className="h3 fw-bold mb-4">🌱 Seed Data Collection and Normalization</h2>
                       <p style={{ color: '#8B949E' }} className="mb-4">
-                        Transform your seed ideas into comprehensive content strategies. Follow our 5-stage process from idea to LinkedIn post.
+                        Gather and normalize your raw content ideas from various sources. This is the foundation of your content creation pipeline.
                       </p>
 
-                      {/* Workflow Stages */}
-                      <Row className="mb-4">
-                        <Col md={12}>
-                          <Card className="bg-transparent border-info mb-4">
-                            <Card.Header className="bg-transparent border-info">
-                              <h5 className="mb-0 text-info">🚀 Content Creation Workflow</h5>
-                            </Card.Header>
-                            <Card.Body>
-                              <div className="workflow-stages">
-                                <div className="stage-item d-flex align-items-start mb-3">
-                                  <div className="stage-number bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style={{minWidth: '30px', height: '30px', fontSize: '14px'}}>1</div>
-                                  <div>
-                                    <h6 className="text-primary mb-1">📊 Seed Data Collection</h6>
-                                    <p className="small text-muted mb-0">Gather ideas from your weekly streams, whiteboards, and brainstorming sessions</p>
-                                  </div>
-                                </div>
-                                
-                                <div className="stage-item d-flex align-items-start mb-3">
-                                  <div className="stage-number bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3" style={{minWidth: '30px', height: '30px', fontSize: '14px'}}>2</div>
-                                  <div>
-                                    <h6 className="text-warning mb-1">⚡ RAG Processing</h6>
-                                    <p className="small text-muted mb-0">AI analyzes your seed data against indexed content to create authentic prompts</p>
-                                  </div>
-                                </div>
-                                
-                                <div className="stage-item d-flex align-items-start mb-3">
-                                  <div className="stage-number bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-3" style={{minWidth: '30px', height: '30px', fontSize: '14px'}}>3</div>
-                                  <div>
-                                    <h6 className="text-info mb-1">📝 Prompt Generation</h6>
-                                    <p className="small text-muted mb-0">System creates multiple content prompts for text, images, videos, and campaigns</p>
-                                  </div>
-                                </div>
-                                
-                                <div className="stage-item d-flex align-items-start mb-3">
-                                  <div className="stage-number bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style={{minWidth: '30px', height: '30px', fontSize: '14px'}}>4</div>
-                                  <div>
-                                    <h6 className="text-success mb-1">👁️ Review & Execute</h6>
-                                    <p className="small text-muted mb-0">Human-in-the-loop review, customization, and execution of generated prompts</p>
-                                  </div>
-                                </div>
-                                
-                                <div className="stage-item d-flex align-items-start mb-0">
-                                  <div className="stage-number bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3" style={{minWidth: '30px', height: '30px', fontSize: '14px'}}>5</div>
-                                  <div>
-                                    <h6 className="text-danger mb-1">🚀 LinkedIn Publishing</h6>
-                                    <p className="small text-muted mb-0">Automated posting to LinkedIn with analytics tracking</p>
-                                  </div>
-                                </div>
-                              </div>
-                            </Card.Body>
-                          </Card>
-                        </Col>
-                      </Row>
-                      
                       <Form>
                         <Form.Group className="mb-4">
                           <Form.Label className="text-white mb-2">🌱 Enter Your Seed Data</Form.Label>
@@ -948,28 +912,126 @@ Examples:
                         </Form.Group>
                         
                         <Button
-                          onClick={generateContent}
-                          disabled={loading || !prompt.trim()}
+                          onClick={() => setActiveTab('rag-process')}
+                          disabled={!prompt.trim()}
                           className="btn-primary-custom w-100 py-3 d-flex align-items-center justify-content-center gap-2"
                         >
-                          {loading ? (
-                            <>
-                              <Spinner animation="border" size="sm" />
-                              Processing with RAG...
-                            </>
-                          ) : (
-                            <>
-                              <Send size={20} />
-                              Generate Content Prompts
-                            </>
-                          )}
+                          <Send size={20} />
+                          Proceed to RAG Process
                         </Button>
                       </Form>
 
-                      <Alert variant="primary" className="mt-4 bg-transparent border-primary">
+                      <Alert variant="info" className="mt-4 bg-transparent border-info">
                         <Alert.Heading className="h6 d-flex align-items-center gap-2">
                           <Database size={20} />
-                          How Our RAG System Works
+                          Data Collection Sources
+                        </Alert.Heading>
+                        <ul className="mb-0 small">
+                          <li>📝 <strong>Stream Notes:</strong> Raw thoughts and concepts from weekly streams</li>
+                          <li>🖼️ <strong>Whiteboard Sessions:</strong> Visual frameworks and brainstorming outputs</li>
+                          <li>📊 <strong>Case Studies:</strong> Client success stories and project insights</li>
+                          <li>🔬 <strong>Technical Learnings:</strong> New discoveries and technical insights</li>
+                          <li>📈 <strong>Industry Trends:</strong> Market observations and trend analysis</li>
+                        </ul>
+                      </Alert>
+                    </Card.Body>
+                  </Card>
+                </Tab.Pane>
+
+                <Tab.Pane eventKey="rag-process">
+                  <Card className="card-glassmorphism border-0 text-white">
+                    <Card.Body className="p-4">
+                      <h2 className="h3 fw-bold mb-4">⚡ RAG Processing</h2>
+                      <p style={{ color: '#8B949E' }} className="mb-4">
+                        AI analyzes your seed data against indexed content to create authentic prompts that match your voice and style.
+                      </p>
+
+                      {/* Workflow Stages */}
+                      <Row className="mb-4">
+                        <Col md={12}>
+                          <Card className="bg-transparent border-warning mb-4">
+                            <Card.Header className="bg-transparent border-warning">
+                              <h5 className="mb-0 text-warning">⚡ RAG Processing Pipeline</h5>
+                            </Card.Header>
+                            <Card.Body>
+                              <div className="workflow-stages">
+                                <div className="stage-item d-flex align-items-start mb-3">
+                                  <div className="stage-number bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style={{minWidth: '30px', height: '30px', fontSize: '14px'}}>1</div>
+                                  <div>
+                                    <h6 className="text-primary mb-1">🔍 Retrieval</h6>
+                                    <p className="small text-muted mb-0">Search your indexed content library for relevant insights and patterns</p>
+                                  </div>
+                                </div>
+                                
+                                <div className="stage-item d-flex align-items-start mb-3">
+                                  <div className="stage-number bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3" style={{minWidth: '30px', height: '30px', fontSize: '14px'}}>2</div>
+                                  <div>
+                                    <h6 className="text-warning mb-1">🧠 Augmentation</h6>
+                                    <p className="small text-muted mb-0">Enhance your seed data with historical patterns and voice consistency</p>
+                                  </div>
+                                </div>
+                                
+                                <div className="stage-item d-flex align-items-start mb-0">
+                                  <div className="stage-number bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style={{minWidth: '30px', height: '30px', fontSize: '14px'}}>3</div>
+                                  <div>
+                                    <h6 className="text-success mb-1">✨ Context Generation</h6>
+                                    <p className="small text-muted mb-0">Prepare enriched context for authentic content generation</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                      </Row>
+
+                      <div className="text-center py-4">
+                        {prompt.trim() ? (
+                          <>
+                            <Button
+                              onClick={generateContent}
+                              disabled={loading}
+                              className="btn-warning w-75 py-3 d-flex align-items-center justify-content-center gap-2 mx-auto"
+                            >
+                              {loading ? (
+                                <>
+                                  <Spinner animation="border" size="sm" />
+                                  Processing with RAG...
+                                </>
+                              ) : (
+                                <>
+                                  <Send size={20} />
+                                  Start RAG Processing
+                                </>
+                              )}
+                            </Button>
+                            {!loading && (
+                              <Button
+                                onClick={() => setActiveTab('prompt-generation')}
+                                variant="outline-light"
+                                className="mt-3"
+                              >
+                                Skip to Prompt Generation →
+                              </Button>
+                            )}
+                          </>
+                        ) : (
+                          <div className="text-muted">
+                            <Database size={64} className="opacity-50 mb-3" />
+                            <p>Please enter seed data in the previous step to proceed with RAG processing.</p>
+                            <Button
+                              onClick={() => setActiveTab('seed-data')}
+                              variant="outline-info"
+                            >
+                              ← Go Back to Seed Data
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+
+                      <Alert variant="warning" className="mt-4 bg-transparent border-warning">
+                        <Alert.Heading className="h6 d-flex align-items-center gap-2">
+                          <Database size={20} />
+                          How RAG Processing Works
                         </Alert.Heading>
                         <ul className="mb-0 small">
                           <li>🔍 <strong>Retrieval:</strong> Searches your indexed content library for relevant insights</li>
@@ -978,30 +1040,160 @@ Examples:
                           <li>🎯 <strong>Frameworks:</strong> Applies your unique methodologies and perspectives</li>
                         </ul>
                       </Alert>
+                    </Card.Body>
+                  </Card>
+                </Tab.Pane>
 
-                      <Alert variant="success" className="mt-3 bg-transparent border-success">
+                <Tab.Pane eventKey="prompt-generation">
+                  <Card className="card-glassmorphism border-0 text-white">
+                    <Card.Body className="p-4">
+                      <h2 className="h3 fw-bold mb-4">📝 Prompt Generation</h2>
+                      <p style={{ color: '#8B949E' }} className="mb-4">
+                        Generate comprehensive content prompts for text, images, videos, and marketing campaigns based on your processed seed data.
+                      </p>
+
+                      {posts.length === 0 ? (
+                        <div className="text-center py-5">
+                          <Bot size={64} className="opacity-50 mb-3" />
+                          <p className="text-muted">No content generated yet. Complete the RAG processing step to generate prompts!</p>
+                          <Button
+                            onClick={() => setActiveTab('rag-process')}
+                            variant="outline-warning"
+                          >
+                            ← Go Back to RAG Process
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="d-grid gap-4">
+                          {posts.map(post => (
+                            <Card key={post.id} className="bg-transparent" style={{ borderColor: '#30363D' }}>
+                              <Card.Body>
+                                <Row className="align-items-start">
+                                  <Col sm={8} className="mb-3">
+                                    <div className="d-flex align-items-center gap-2 mb-2">
+                                      <User size={16} style={{ color: '#58A6FF' }} />
+                                      <span className="small text-muted">
+                                        {new Date(post.timestamp).toLocaleDateString()}
+                                      </span>
+                                      <Badge bg="info" className="ms-2">
+                                        Generated
+                                      </Badge>
+                                    </div>
+                                    <p className="fw-bold mb-2" style={{ color: '#58A6FF' }}>Prompt: {post.prompt}</p>
+                                  </Col>
+                                  <Col sm={4} className="text-end">
+                                    <Button
+                                      size="sm"
+                                      variant="success"
+                                      onClick={() => setActiveTab('review-execute')}
+                                    >
+                                      Review & Execute →
+                                    </Button>
+                                  </Col>
+                                </Row>
+                                
+                                <Card className="border-0 mb-3" style={{ backgroundColor: '#0D1117' }}>
+                                  <Card.Body className="p-3">
+                                    <pre className="mb-0 text-white" style={{whiteSpace: 'pre-wrap', fontFamily: 'inherit'}}>
+                                      {post.content}
+                                    </pre>
+                                  </Card.Body>
+                                </Card>
+
+                                {/* Template content prompts */}
+                                <div className="mt-4">
+                                  <h5 className="mb-3" style={{ color: '#58A6FF' }}>📝 Content Template Prompts</h5>
+                                  <p className="text-muted small mb-3">
+                                    Ready-to-use templates for different content types. Copy and customize for your workflow.
+                                  </p>
+                                  
+                                  {(() => {
+                                    const templatePrompts = getTemplateReleasePrompts(post);
+                                    return (
+                                      <>
+                                        {/* Text Content Prompts */}
+                                        <Card className="mb-3" style={{ backgroundColor: 'rgba(88, 166, 255, 0.1)', borderColor: '#58A6FF' }}>
+                                          <Card.Header className="bg-transparent" style={{ borderColor: '#58A6FF' }}>
+                                            <h6 className="mb-0 text-white">� Text Content Prompts</h6>
+                                          </Card.Header>
+                                          <Card.Body>
+                                            {templatePrompts.textPrompts.map((prompt, idx) => (
+                                              <div key={idx} className="mb-3 p-3 border border-secondary rounded">
+                                                <div className="d-flex justify-content-between align-items-start mb-2">
+                                                  <h6 className="text-primary mb-0">{prompt.title}</h6>
+                                                  <Button 
+                                                    size="sm" 
+                                                    variant="outline-light"
+                                                    onClick={() => navigator.clipboard.writeText(prompt.prompt)}
+                                                  >
+                                                    📋 Copy
+                                                  </Button>
+                                                </div>
+                                                <p className="text-white-50 small mb-0" style={{fontSize: '0.85rem'}}>
+                                                  {prompt.prompt}
+                                                </p>
+                                              </div>
+                                            ))}
+                                          </Card.Body>
+                                        </Card>
+
+                                        {/* Image Prompts */}
+                                        <Card className="mb-3" style={{ backgroundColor: 'rgba(163, 113, 247, 0.1)', borderColor: '#A371F7' }}>
+                                          <Card.Header className="bg-transparent" style={{ borderColor: '#A371F7' }}>
+                                            <h6 className="mb-0 text-white">🎨 Image Generation Prompts</h6>
+                                          </Card.Header>
+                                          <Card.Body>
+                                            {templatePrompts.imagePrompts.map((prompt, idx) => (
+                                              <div key={idx} className="mb-3 p-3 border border-secondary rounded">
+                                                <div className="d-flex justify-content-between align-items-start mb-2">
+                                                  <h6 className="text-info mb-0">{prompt.title}</h6>
+                                                  <Button 
+                                                    size="sm" 
+                                                    variant="outline-light"
+                                                    onClick={() => navigator.clipboard.writeText(prompt.prompt)}
+                                                  >
+                                                    📋 Copy
+                                                  </Button>
+                                                </div>
+                                                <p className="text-white-50 small mb-0" style={{fontSize: '0.85rem'}}>
+                                                  {prompt.prompt}
+                                                </p>
+                                              </div>
+                                            ))}
+                                          </Card.Body>
+                                        </Card>
+                                      </>
+                                    );
+                                  })()}
+                                </div>
+                              </Card.Body>
+                            </Card>
+                          ))}
+                        </div>
+                      )}
+
+                      <Alert variant="info" className="mt-4 bg-transparent border-info">
                         <Alert.Heading className="h6 d-flex align-items-center gap-2">
-                          <CheckCircle size={20} />
-                          What Happens Next?
+                          <Send size={20} />
+                          Next Steps
                         </Alert.Heading>
-                        <ol className="mb-0 small">
-                          <li>Initial LinkedIn post is generated from your seed data</li>
-                          <li>Go to "Review & Prepare Release" tab to review the content</li>
-                          <li>View comprehensive content templates automatically generated</li>
-                          <li>Use prompts with AI tools (ChatGPT, Midjourney, etc.) to create assets</li>
-                          <li>Deploy across multiple platforms with automated publishing</li>
-                        </ol>
+                        <ul className="mb-0 small">
+                          <li>📝 <strong>Copy Prompts:</strong> Use the generated prompts with AI tools like ChatGPT, Claude, or Midjourney</li>
+                          <li>🎨 <strong>Create Assets:</strong> Generate images, videos, and additional content variations</li>
+                          <li>👁️ <strong>Review Process:</strong> Move to Review & Execute tab for human oversight</li>
+                          <li>🚀 <strong>Publishing:</strong> Prepare for automated LinkedIn publishing</li>
+                        </ul>
                       </Alert>
                     </Card.Body>
                   </Card>
                 </Tab.Pane>
 
-                <Tab.Pane eventKey="review">
+                <Tab.Pane eventKey="review-execute">
                   <Card className="card-glassmorphism border-0 text-white">
                     <Card.Body className="p-4">
-                      <h2 className="h3 fw-bold mb-4">Review & Prepare Release</h2>
+                      <h2 className="h3 fw-bold mb-4">👁️ Review and Execute</h2>
                       <p style={{ color: '#8B949E' }} className="mb-4">
-                        Generate comprehensive content and assets for your final release. Get prompts for text, images, videos, and marketing materials.
+                        Human-in-the-loop review, customization, and execution of generated content before publishing.
                       </p>
                       
                       {/* N8N Send Result */}
@@ -1046,7 +1238,7 @@ Examples:
                       {posts.length === 0 ? (
                         <div className="text-center py-5">
                           <Bot size={64} className="opacity-50 mb-3" />
-                          <p className="text-muted">No posts generated yet. Head to the "Generate Prompts" tab to create your first content!</p>
+                          <p className="text-muted">No posts generated yet. Head to the "Seed Data Collection" tab to start your first content!</p>
                         </div>
                       ) : (
                         <div className="d-grid gap-4">
@@ -1304,6 +1496,169 @@ Examples:
                           ))}
                         </div>
                       )}
+                    </Card.Body>
+                  </Card>
+                </Tab.Pane>
+
+                <Tab.Pane eventKey="linkedin-publishing">
+                  <Card className="card-glassmorphism border-0 text-white">
+                    <Card.Body className="p-4">
+                      <h2 className="h3 fw-bold mb-4">🚀 LinkedIn Publishing</h2>
+                      <p style={{ color: '#8B949E' }} className="mb-4">
+                        Automated posting to LinkedIn with analytics tracking and scheduling capabilities.
+                      </p>
+                      
+                      {/* N8N Send Result */}
+                      {n8nResult && (
+                        <Alert 
+                          variant={n8nResult.success ? 'success' : 'danger'} 
+                          className="mb-4 bg-transparent"
+                          style={{ borderColor: n8nResult.success ? '#28a745' : '#dc3545' }}
+                          dismissible
+                          onClose={() => setN8nResult(null)}
+                        >
+                          <div className="d-flex align-items-center gap-2 mb-2">
+                            {n8nResult.success ? (
+                              <CheckCircle size={20} className="text-success" />
+                            ) : (
+                              <XCircle size={20} className="text-danger" />
+                            )}
+                            <strong>{n8nResult.message}</strong>
+                          </div>
+                          {n8nResult.data && (
+                            <div className="small">
+                              <strong>N8N Response:</strong>
+                              <pre className="mt-1 p-2 rounded" style={{ 
+                                backgroundColor: 'rgba(0,0,0,0.2)', 
+                                fontSize: '0.75rem',
+                                maxHeight: '200px',
+                                overflowY: 'auto',
+                                whiteSpace: 'pre-wrap',
+                                wordWrap: 'break-word',
+                                overflowWrap: 'break-word'
+                              }}>
+                                {n8nResult.data}
+                              </pre>
+                            </div>
+                          )}
+                          <div className="small text-muted mt-2">
+                            📅 {new Date(n8nResult.timestamp).toLocaleString()}
+                          </div>
+                        </Alert>
+                      )}
+                      
+                      {posts.filter(post => post.status === 'approved' || post.status === 'release_ready').length === 0 ? (
+                        <div className="text-center py-5">
+                          <Bot size={64} className="opacity-50 mb-3" />
+                          <p className="text-muted">No approved posts ready for publishing. Review and approve content first!</p>
+                          <Button
+                            onClick={() => setActiveTab('review-execute')}
+                            variant="outline-success"
+                          >
+                            ← Go Back to Review & Execute
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="d-grid gap-4">
+                          {posts.filter(post => post.status === 'approved' || post.status === 'release_ready').map(post => (
+                            <Card key={post.id} className="bg-transparent" style={{ borderColor: '#30363D' }}>
+                              <Card.Body>
+                                <Row className="align-items-start">
+                                  <Col sm={8} className="mb-3">
+                                    <div className="d-flex align-items-center gap-2 mb-2">
+                                      <User size={16} style={{ color: '#58A6FF' }} />
+                                      <span className="small text-muted">
+                                        {new Date(post.timestamp).toLocaleDateString()}
+                                      </span>
+                                      <Badge bg="success" className="ms-2">
+                                        Ready to Publish
+                                      </Badge>
+                                    </div>
+                                    <p className="fw-bold mb-2" style={{ color: '#58A6FF' }}>Prompt: {post.prompt}</p>
+                                  </Col>
+                                  <Col sm={4} className="text-end">
+                                    <div className="d-flex flex-column gap-2">
+                                      <Button
+                                        size="sm"
+                                        variant="danger"
+                                        className="w-100"
+                                        disabled={n8nSending}
+                                        onClick={() => sendToN8n({
+                                          originalPrompt: post.prompt,
+                                          platform: "LinkedIn",
+                                          contentType: "Post",
+                                          generatedContent: post.content,
+                                          contentMetrics: {
+                                            characterCount: post.content.length,
+                                            wordCount: post.content.split(' ').length,
+                                            hashtags: (post.content.match(/#\w+/g) || []).length,
+                                            emojis: (post.content.match(/[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu) || []).length
+                                          },
+                                          ragSources: post.ragSources || [],
+                                          timestamp: new Date().toISOString(),
+                                          status: "publishing"
+                                        })}
+                                      >
+                                        {n8nSending ? (
+                                          <>
+                                            <Spinner animation="border" size="sm" className="me-2" />
+                                            Publishing to LinkedIn...
+                                          </>
+                                        ) : (
+                                          <>
+                                            🚀 Publish to LinkedIn
+                                          </>
+                                        )}
+                                      </Button>
+                                      <Button
+                                        size="sm"
+                                        variant="outline-secondary"
+                                        className="w-100"
+                                        onClick={() => console.log('Schedule functionality coming soon')}
+                                      >
+                                        📅 Schedule Post
+                                      </Button>
+                                    </div>
+                                  </Col>
+                                </Row>
+                                
+                                <Card className="border-0 mb-3" style={{ backgroundColor: '#0D1117' }}>
+                                  <Card.Body className="p-3">
+                                    <pre className="mb-0 text-white" style={{whiteSpace: 'pre-wrap', fontFamily: 'inherit'}}>
+                                      {post.content}
+                                    </pre>
+                                  </Card.Body>
+                                </Card>
+
+                                <Alert variant="danger" className="mb-0 bg-dark bg-opacity-50 border-danger border-opacity-50">
+                                  <div className="small">
+                                    <strong className="text-danger">📊 Publishing Analytics:</strong>
+                                    <ul className="mb-0 mt-2 list-unstyled">
+                                      <li className="mb-1">📝 <strong>Content Length:</strong> {post.content.length} characters</li>
+                                      <li className="mb-1">📊 <strong>Word Count:</strong> {post.content.split(' ').length} words</li>
+                                      <li className="mb-1">🏷️ <strong>Hashtags:</strong> {(post.content.match(/#\w+/g) || []).length}</li>
+                                      <li className="mb-1">😊 <strong>Emojis:</strong> {(post.content.match(/[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu) || []).length}</li>
+                                    </ul>
+                                  </div>
+                                </Alert>
+                              </Card.Body>
+                            </Card>
+                          ))}
+                        </div>
+                      )}
+
+                      <Alert variant="danger" className="mt-4 bg-transparent border-danger">
+                        <Alert.Heading className="h6 d-flex align-items-center gap-2">
+                          <Send size={20} />
+                          LinkedIn Publishing Pipeline
+                        </Alert.Heading>
+                        <ul className="mb-0 small">
+                          <li>🚀 <strong>Automated Publishing:</strong> Direct posting to LinkedIn via N8N automation</li>
+                          <li>📅 <strong>Scheduling:</strong> Queue posts for optimal timing (coming soon)</li>
+                          <li>📊 <strong>Analytics:</strong> Track engagement metrics and performance</li>
+                          <li>🔄 <strong>Cross-posting:</strong> Expand to other social platforms</li>
+                        </ul>
+                      </Alert>
                     </Card.Body>
                   </Card>
                 </Tab.Pane>

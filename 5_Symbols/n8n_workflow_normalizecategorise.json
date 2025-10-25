@@ -1,0 +1,105 @@
+{
+  "name": "Data Normalization for Vectorization",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "normalize-data",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-start",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "data-normalize"
+    },
+    {
+      "parameters": {
+        "functionCode": "// Extract incoming data\nconst inputData = $input.item.json.body || $input.item.json;\n\n// Normalize text fields\nfunction normalizeText(text) {\n  if (!text) return '';\n  return text\n    .toString()\n    .toLowerCase()\n    .trim()\n    .replace(/\\s+/g, ' ')\n    .replace(/[^\\w\\s.-]/g, '');\n}\n\n// Categorize based on content analysis\nfunction categorizeData(data) {\n  const categories = [];\n  const text = JSON.stringify(data).toLowerCase();\n  \n  // Simple keyword-based categorization\n  const categoryKeywords = {\n    'financial': ['price', 'cost', 'payment', 'invoice', 'revenue', 'budget'],\n    'technical': ['api', 'code', 'system', 'database', 'server', 'error'],\n    'customer': ['customer', 'client', 'user', 'feedback', 'review', 'support'],\n    'product': ['product', 'feature', 'inventory', 'stock', 'item'],\n    'administrative': ['policy', 'procedure', 'compliance', 'legal', 'contract']\n  };\n  \n  for (const [category, keywords] of Object.entries(categoryKeywords)) {\n    if (keywords.some(keyword => text.includes(keyword))) {\n      categories.push(category);\n    }\n  }\n  \n  return categories.length > 0 ? categories : ['general'];\n}\n\n// Process each field in the data\nfunction processData(data) {\n  const processed = {};\n  \n  for (const [key, value] of Object.entries(data)) {\n    if (typeof value === 'string') {\n      processed[key] = {\n        original: value,\n        normalized: normalizeText(value),\n        type: 'text'\n      };\n    } else if (typeof value === 'number') {\n      processed[key] = {\n        original: value,\n        normalized: value,\n        type: 'numeric'\n      };\n    } else if (Array.isArray(value)) {\n      processed[key] = {\n        original: value,\n        normalized: value.map(v => typeof v === 'string' ? normalizeText(v) : v),\n        type: 'array'\n      };\n    } else if (typeof value === 'object' && value !== null) {\n      processed[key] = {\n        original: value,\n        normalized: processData(value),\n        type: 'object'\n      };\n    } else {\n      processed[key] = {\n        original: value,\n        normalized: value,\n        type: typeof value\n      };\n    }\n  }\n  \n  return processed;\n}\n\n// Main processing\nconst processedData = processData(inputData);\nconst categories = categorizeData(inputData);\n\n// Create normalized text for vectorization\nfunction extractTextForVectorization(data) {\n  let textContent = [];\n  \n  for (const [key, value] of Object.entries(data)) {\n    if (value.type === 'text') {\n      textContent.push(value.normalized);\n    } else if (value.type === 'array') {\n      textContent.push(...value.normalized.filter(v => typeof v === 'string'));\n    } else if (value.type === 'object') {\n      textContent.push(...extractTextForVectorization(value.normalized));\n    }\n  }\n  \n  return textContent;\n}\n\nconst vectorizationText = extractTextForVectorization(processedData).join(' ');\n\n// Return normalized and categorized data\nreturn {\n  json: {\n    id: $input.item.json.id || Date.now().toString(),\n    timestamp: new Date().toISOString(),\n    categories: categories,\n    processedData: processedData,\n    vectorizationReady: {\n      text: vectorizationText,\n      length: vectorizationText.length,\n      wordCount: vectorizationText.split(' ').filter(w => w.length > 0).length\n    },\n    metadata: {\n      originalFieldCount: Object.keys(inputData).length,\n      processedFieldCount: Object.keys(processedData).length,\n      primaryCategory: categories[0]\n    }\n  }\n};\n"
+      },
+      "id": "normalize-code",
+      "name": "Normalize & Categorize",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Add quality checks and validation\nconst data = $input.item.json;\n\n// Quality metrics\nconst qualityChecks = {\n  hasCategories: data.categories && data.categories.length > 0,\n  hasVectorizationText: data.vectorizationReady.text.length > 0,\n  sufficientContent: data.vectorizationReady.wordCount >= 3,\n  hasMetadata: !!data.metadata\n};\n\nconst qualityScore = Object.values(qualityChecks).filter(v => v).length / Object.keys(qualityChecks).length;\n\n// Add enrichment suggestions\nconst enrichmentSuggestions = [];\nif (data.vectorizationReady.wordCount < 10) {\n  enrichmentSuggestions.push('Consider adding more descriptive content');\n}\nif (data.categories.includes('general')) {\n  enrichmentSuggestions.push('Data could benefit from more specific categorization');\n}\n\nreturn {\n  json: {\n    ...data,\n    quality: {\n      score: qualityScore,\n      checks: qualityChecks,\n      status: qualityScore >= 0.75 ? 'good' : qualityScore >= 0.5 ? 'acceptable' : 'needs_improvement'\n    },\n    enrichmentSuggestions: enrichmentSuggestions,\n    readyForVectorization: qualityScore >= 0.5\n  }\n};"
+      },
+      "id": "quality-check",
+      "name": "Quality Check",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json, null, 2) }}",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "webhook-response",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [900, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Normalize & Categorize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize & Categorize": {
+      "main": [
+        [
+          {
+            "node": "Quality Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Quality Check": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-10-25T00:00:00.000Z",
+  "versionId": "1"
+}
