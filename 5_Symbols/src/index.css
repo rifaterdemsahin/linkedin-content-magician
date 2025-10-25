@@ -109,6 +109,18 @@ body {
   height: 20px;
 }
 
+/* GitHub Actions Badge Styling */
+.github-badge img {
+  max-height: 20px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.github-badge:hover img {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
 /* Responsive typography */
 @media (max-width: 768px) {
   .display-4 {
