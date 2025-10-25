@@ -10,25 +10,28 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -288,
-        -16
+        -160,
+        944
       ],
-      "id": "0f3c9049-b2d8-4da2-b421-f8493803a077",
-      "name": "Webhook",
+      "id": "dac77299-5461-4e89-990c-ec52721fca0d",
+      "name": "Webhook1",
       "webhookId": "05c91180-4e19-4ccd-8917-658a96008ad9"
     },
     {
       "parameters": {
-        "options": {}
+        "content": "## Published to \nhttps://rifaterdemsahin.github.io/linkedin-content-magician/",
+        "height": 144,
+        "width": 304,
+        "color": 3
       },
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1.4,
+      "type": "n8n-nodes-base.stickyNote",
       "position": [
-        880,
-        -224
+        -880,
+        560
       ],
-      "id": "d56beef7-efba-42da-9f9b-5d29eff7d240",
-      "name": "Respond to Webhook"
+      "typeVersion": 1,
+      "id": "9b8c9fd3-9ec8-4603-9252-5d913faec778",
+      "name": "Sticky Note"
     },
     {
       "parameters": {
@@ -39,10 +42,10 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        592,
-        -16
+        784,
+        880
       ],
-      "id": "83d1397d-f533-49b2-bb12-cb595190e123",
+      "id": "cf4cc74d-f2d6-4aea-ba92-38ea4eae8ded",
       "name": "Send ON Notification",
       "webhookId": "40ac5ce8-4444-4737-98d7-8f29ca248a8c",
       "credentials": {
@@ -54,18 +57,60 @@
     },
     {
       "parameters": {
+        "jsCode": "const templateData = {\n  \"templateVersion\": \"1.0\",\n  \"description\": \"Template for generating comprehensive release prompts from N8N output\",\n  \"structure\": {\n    \"textPrompts\": [\n      {\n        \"title\": \"LinkedIn Carousel Post\",\n        \"category\": \"text\",\n        \"platform\": \"linkedin\",\n        \"format\": \"carousel\",\n        \"description\": \"10-slide LinkedIn carousel for professional engagement\",\n        \"template\": \"Create a 10-slide LinkedIn carousel about \\\"{topic}\\\". Each slide should have:\\n- Slide 1: Hook/Title\\n- Slides 2-8: Key points with actionable insights\\n- Slide 9: Call-to-action\\n- Slide 10: About me/contact\\n\\nUse this content as reference: {baseContent}\"\n      },\n      {\n        \"title\": \"Twitter Thread\",\n        \"category\": \"text\",\n        \"platform\": \"twitter\",\n        \"format\": \"thread\",\n        \"description\": \"8-12 tweet thread for maximum engagement\",\n        \"template\": \"Transform this LinkedIn post about \\\"{topic}\\\" into a compelling Twitter thread (8-12 tweets):\\n- Start with a hook tweet\\n- Break down key insights into digestible tweets\\n- Include relevant hashtags\\n- End with engagement question\\n\\nBase content: {baseContent}\"\n      },\n      {\n        \"title\": \"Blog Article Outline\",\n        \"category\": \"text\",\n        \"platform\": \"blog\",\n        \"format\": \"outline\",\n        \"description\": \"SEO-optimized blog article structure\",\n        \"template\": \"Create a comprehensive blog article outline for \\\"{topic}\\\" based on this content:\\n- SEO-optimized title\\n- Introduction hook\\n- 5-7 main sections with subpoints\\n- Conclusion with actionable steps\\n- Meta description\\n\\nSource: {baseContent}\"\n      },\n      {\n        \"title\": \"Video Script\",\n        \"category\": \"text\",\n        \"platform\": \"video\",\n        \"format\": \"script\",\n        \"description\": \"3-5 minute video script with timing\",\n        \"template\": \"Write a 3-5 minute video script about \\\"{topic}\\\":\\n- Engaging opening (15 seconds)\\n- Problem statement (30 seconds)\\n- Solution breakdown (2-3 minutes)\\n- Call-to-action (30 seconds)\\n- Visual cues and transitions\\n\\nBased on: {baseContent}\"\n      },\n      {\n        \"title\": \"Email Newsletter\",\n        \"category\": \"text\",\n        \"platform\": \"email\",\n        \"format\": \"newsletter\",\n        \"description\": \"Complete email newsletter with subject lines\",\n        \"template\": \"Create an email newsletter about \\\"{topic}\\\":\\n- Subject line variations (5 options)\\n- Engaging preview text\\n- Newsletter body with personal story\\n- Resources/links section\\n- P.S. with engagement hook\\n\\nContent source: {baseContent}\"\n      }\n    ],\n    \"imagePrompts\": [\n      {\n        \"title\": \"Hero Image\",\n        \"category\": \"image\",\n        \"platform\": \"social\",\n        \"format\": \"hero\",\n        \"description\": \"Professional hero image for social media\",\n        \"template\": \"Create a professional hero image for \\\"{topic}\\\":\\n- Modern, clean design\\n- Relevant icons or illustrations\\n- Brand colors: #58A6FF (blue), #A371F7 (purple)\\n- Readable typography\\n- LinkedIn post dimensions (1200x627px)\"\n      },\n      {\n        \"title\": \"Infographic\",\n        \"category\": \"image\",\n        \"platform\": \"social\",\n        \"format\": \"infographic\",\n        \"description\": \"Data-driven visual content\",\n        \"template\": \"Design an infographic about \\\"{topic}\\\":\\n- Visual hierarchy with key statistics\\n- Icons and illustrations\\n- Step-by-step process or framework\\n- Professional color scheme\\n- Mobile-friendly layout\"\n      },\n      {\n        \"title\": \"Carousel Slides\",\n        \"category\": \"image\",\n        \"platform\": \"social\",\n        \"format\": \"carousel\",\n        \"description\": \"Instagram/LinkedIn carousel graphics\",\n        \"template\": \"Create 10 carousel slides for \\\"{topic}\\\":\\n- Consistent design template\\n- Readable fonts (minimum 24px)\\n- High contrast colors\\n- Each slide focuses on one key point\\n- Instagram/LinkedIn carousel format (1080x1080px)\"\n      },\n      {\n        \"title\": \"Quote Graphics\",\n        \"category\": \"image\",\n        \"platform\": \"social\",\n        \"format\": \"quote\",\n        \"description\": \"Shareable quote graphics\",\n        \"template\": \"Design quote graphics from this content about \\\"{topic}\\\":\\n- Extract 3-5 powerful quotes\\n- Minimalist design with brand colors\\n- Attribution to your name\\n- Various social media sizes\\n- Shareable format\"\n      },\n      {\n        \"title\": \"Video Thumbnail\",\n        \"category\": \"image\",\n        \"platform\": \"youtube\",\n        \"format\": \"thumbnail\",\n        \"description\": \"Eye-catching YouTube thumbnail\",\n        \"template\": \"Create an eye-catching video thumbnail for \\\"{topic}\\\":\\n- Bright, contrasting colors\\n- Large, readable text overlay\\n- Your photo or relevant imagery\\n- YouTube/social media friendly\\n- Clickable and curiosity-driven design\"\n      }\n    ],\n    \"videoPrompts\": [\n      {\n        \"title\": \"Short-form Video (TikTok/Reels)\",\n        \"category\": \"video\",\n        \"platform\": \"social\",\n        \"format\": \"short\",\n        \"description\": \"30-60 second vertical video\",\n        \"template\": \"Create a 30-60 second vertical video about \\\"{topic}\\\":\\n- Hook in first 3 seconds\\n- Quick tips or insights\\n- Text overlays for key points\\n- Trending audio if applicable\\n- Strong call-to-action at the end\"\n      },\n      {\n        \"title\": \"YouTube Video\",\n        \"category\": \"video\",\n        \"platform\": \"youtube\",\n        \"format\": \"long\",\n        \"description\": \"10-15 minute educational video\",\n        \"template\": \"Plan a 10-15 minute YouTube video on \\\"{topic}\\\":\\n- Compelling title and thumbnail concept\\n- Structured outline with timestamps\\n- B-roll suggestions\\n- Screen recording segments\\n- Engagement hooks throughout\"\n      },\n      {\n        \"title\": \"Tutorial Video\",\n        \"category\": \"video\",\n        \"platform\": \"education\",\n        \"format\": \"tutorial\",\n        \"description\": \"Step-by-step instructional video\",\n        \"template\": \"Create a step-by-step tutorial about \\\"{topic}\\\":\\n- Clear learning objectives\\n- Screen recording setup\\n- Voice-over script\\n- Resource links and materials\\n- Follow-up content suggestions\"\n      }\n    ],\n    \"marketingPrompts\": [\n      {\n        \"title\": \"Social Media Campaign\",\n        \"category\": \"marketing\",\n        \"platform\": \"multi\",\n        \"format\": \"campaign\",\n        \"description\": \"7-day multi-platform campaign\",\n        \"template\": \"Design a 7-day social media campaign for \\\"{topic}\\\":\\n- Platform-specific content calendar\\n- Hashtag strategy\\n- Engagement tactics\\n- Cross-promotion ideas\\n- Success metrics to track\"\n      },\n      {\n        \"title\": \"Landing Page Copy\",\n        \"category\": \"marketing\",\n        \"platform\": \"web\",\n        \"format\": \"copy\",\n        \"description\": \"Conversion-optimized landing page\",\n        \"template\": \"Write landing page copy for a resource about \\\"{topic}\\\":\\n- Compelling headline\\n- Problem/solution sections\\n- Social proof elements\\n- Clear value proposition\\n- Multiple CTA variations\"\n      }\n    ]\n  },\n  \"usageTips\": [\n    \"Copy these prompts to your AI tools (ChatGPT, Claude, Midjourney, etc.)\",\n    \"Customize the prompts with your specific brand voice and requirements\",\n    \"Use the generated content across multiple platforms for maximum reach\",\n    \"Track performance and iterate based on engagement metrics\"\n  ]\n};\n\n// Get input data from previous node\nconst inputData = $input.all()[0].json;\nconst topic = inputData.originalPrompt || inputData.body?.originalPrompt || 'the topic';\nconst baseContent = inputData.generatedContent || inputData.body?.generatedContent || 'the content';\n\n// Generate release prompts by replacing placeholders\nconst generatePrompts = (prompts, topic, baseContent) => {\n  return prompts.map(prompt => ({\n    ...prompt,\n    prompt: prompt.template\n      .replace(/\\{topic\\}/g, topic)\n      .replace(/\\{baseContent\\}/g, baseContent)\n  }));\n};\n\nconst releasePrompts = {\n  textPrompts: generatePrompts(templateData.structure.textPrompts, topic, baseContent),\n  imagePrompts: generatePrompts(templateData.structure.imagePrompts, topic, baseContent),\n  videoPrompts: generatePrompts(templateData.structure.videoPrompts, topic, baseContent),\n  marketingPrompts: generatePrompts(templateData.structure.marketingPrompts, topic, baseContent),\n  usageTips: templateData.usageTips\n};\n\n// Return the enhanced data with release prompts\nreturn {\n  ...inputData,\n  releasePrompts: releasePrompts,\n  timestamp: new Date().toISOString(),\n  status: 'release_prompts_generated'\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        720
+      ],
+      "id": "c5feb7bb-3d64-4977-8fbe-575c2900e907",
+      "name": "Generate Release Prompts"
+    },
+    {
+      "parameters": {
+        "content": "## Input Expected\n\n{\n  \"timestamp\": \"2025-10-25T...\",\n  \"source\": \"LinkedIn Content Magician\",\n  \"originalPrompt\": \"user input\",\n  \"generatedContent\": \"AI-generated post\",\n  \"ragSources\": [\"source1\", \"source2\", ...],\n  \"contentMetrics\": {\n    \"characterCount\": 450,\n    \"wordCount\": 85,\n    \"hashtags\": 3,\n    \"emojis\": 8\n  },\n  \"platform\": \"linkedin\",\n  \"contentType\": \"post\",\n  \"status\": \"ready_for_review\"\n}\n\n## Output Generated\n\n{\n  ...inputData,\n  \"releasePrompts\": {\n    \"textPrompts\": [5 prompts],\n    \"imagePrompts\": [5 prompts],\n    \"videoPrompts\": [3 prompts],\n    \"marketingPrompts\": [2 prompts],\n    \"usageTips\": [array]\n  },\n  \"status\": \"release_prompts_generated\"\n}",
+        "height": 600,
+        "width": 400,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -944,
+        816
+      ],
+      "typeVersion": 1,
+      "id": "6af67afd-5927-48d0-ae1c-3b7bf6c3186e",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1072,
+        672
+      ],
+      "id": "e9570063-21bc-46cf-8cfd-8b487a6628c1",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
         "content": "## LinkedIn Content Magician with Release Prompts\n* Receives structured input with timestamp, original prompt, and content metrics\n* Uses AI Agent to generate LinkedIn post content\n* Leverages RAG sources for content enhancement\n* Validates content metrics (character count, hashtags, emojis)\n* Generates comprehensive release prompts for multi-platform content:\n  - 📝 Text Content (5 types): Carousel, Twitter Thread, Blog, Video Script, Newsletter\n  - 🎨 Image Generation (5 types): Hero Image, Infographic, Carousel Slides, Quote Graphics, Thumbnail\n  - 🎥 Video Content (3 types): Short-form, YouTube, Tutorial\n  - 📈 Marketing (2 types): Social Campaign, Landing Page\n* Sends notification with full content statistics and prompt counts\n* Returns ready-for-multi-platform-release status",
         "height": 560,
         "width": 1696
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -608,
-        -272
+        -416,
+        624
       ],
       "typeVersion": 1,
-      "id": "429821bb-2dd6-4406-ae71-a15c28af06fc",
-      "name": "Sticky Note"
+      "id": "58d756aa-d5df-4c8f-8a41-fbc251e713d8",
+      "name": "Sticky Note4"
     },
     {
       "parameters": {
@@ -74,11 +119,11 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        -16,
-        32
+        176,
+        928
       ],
-      "id": "b0232a5e-f28b-468d-9244-e178bc14d843",
-      "name": "OpenRouter Chat Model1",
+      "id": "5530bcfc-5c0f-403a-afbb-29742ac98ef2",
+      "name": "OpenRouter Chat Model",
       "credentials": {
         "openRouterApi": {
           "id": "e95QbimUJvBb4tqj",
@@ -95,48 +140,19 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2.2,
       "position": [
-        64,
-        -176
+        256,
+        720
       ],
-      "id": "91b55178-07f1-4d20-80c4-86be79798ed8",
-      "name": "AI Agent - Generate Content"
-    },
-    {
-      "parameters": {
-        "jsCode": "const templateData = {\n  \"templateVersion\": \"1.0\",\n  \"description\": \"Template for generating comprehensive release prompts from N8N output\",\n  \"structure\": {\n    \"textPrompts\": [\n      {\n        \"title\": \"LinkedIn Carousel Post\",\n        \"category\": \"text\",\n        \"platform\": \"linkedin\",\n        \"format\": \"carousel\",\n        \"description\": \"10-slide LinkedIn carousel for professional engagement\",\n        \"template\": \"Create a 10-slide LinkedIn carousel about \\\"{topic}\\\". Each slide should have:\\n- Slide 1: Hook/Title\\n- Slides 2-8: Key points with actionable insights\\n- Slide 9: Call-to-action\\n- Slide 10: About me/contact\\n\\nUse this content as reference: {baseContent}\"\n      },\n      {\n        \"title\": \"Twitter Thread\",\n        \"category\": \"text\",\n        \"platform\": \"twitter\",\n        \"format\": \"thread\",\n        \"description\": \"8-12 tweet thread for maximum engagement\",\n        \"template\": \"Transform this LinkedIn post about \\\"{topic}\\\" into a compelling Twitter thread (8-12 tweets):\\n- Start with a hook tweet\\n- Break down key insights into digestible tweets\\n- Include relevant hashtags\\n- End with engagement question\\n\\nBase content: {baseContent}\"\n      },\n      {\n        \"title\": \"Blog Article Outline\",\n        \"category\": \"text\",\n        \"platform\": \"blog\",\n        \"format\": \"outline\",\n        \"description\": \"SEO-optimized blog article structure\",\n        \"template\": \"Create a comprehensive blog article outline for \\\"{topic}\\\" based on this content:\\n- SEO-optimized title\\n- Introduction hook\\n- 5-7 main sections with subpoints\\n- Conclusion with actionable steps\\n- Meta description\\n\\nSource: {baseContent}\"\n      },\n      {\n        \"title\": \"Video Script\",\n        \"category\": \"text\",\n        \"platform\": \"video\",\n        \"format\": \"script\",\n        \"description\": \"3-5 minute video script with timing\",\n        \"template\": \"Write a 3-5 minute video script about \\\"{topic}\\\":\\n- Engaging opening (15 seconds)\\n- Problem statement (30 seconds)\\n- Solution breakdown (2-3 minutes)\\n- Call-to-action (30 seconds)\\n- Visual cues and transitions\\n\\nBased on: {baseContent}\"\n      },\n      {\n        \"title\": \"Email Newsletter\",\n        \"category\": \"text\",\n        \"platform\": \"email\",\n        \"format\": \"newsletter\",\n        \"description\": \"Complete email newsletter with subject lines\",\n        \"template\": \"Create an email newsletter about \\\"{topic}\\\":\\n- Subject line variations (5 options)\\n- Engaging preview text\\n- Newsletter body with personal story\\n- Resources/links section\\n- P.S. with engagement hook\\n\\nContent source: {baseContent}\"\n      }\n    ],\n    \"imagePrompts\": [\n      {\n        \"title\": \"Hero Image\",\n        \"category\": \"image\",\n        \"platform\": \"social\",\n        \"format\": \"hero\",\n        \"description\": \"Professional hero image for social media\",\n        \"template\": \"Create a professional hero image for \\\"{topic}\\\":\\n- Modern, clean design\\n- Relevant icons or illustrations\\n- Brand colors: #58A6FF (blue), #A371F7 (purple)\\n- Readable typography\\n- LinkedIn post dimensions (1200x627px)\"\n      },\n      {\n        \"title\": \"Infographic\",\n        \"category\": \"image\",\n        \"platform\": \"social\",\n        \"format\": \"infographic\",\n        \"description\": \"Data-driven visual content\",\n        \"template\": \"Design an infographic about \\\"{topic}\\\":\\n- Visual hierarchy with key statistics\\n- Icons and illustrations\\n- Step-by-step process or framework\\n- Professional color scheme\\n- Mobile-friendly layout\"\n      },\n      {\n        \"title\": \"Carousel Slides\",\n        \"category\": \"image\",\n        \"platform\": \"social\",\n        \"format\": \"carousel\",\n        \"description\": \"Instagram/LinkedIn carousel graphics\",\n        \"template\": \"Create 10 carousel slides for \\\"{topic}\\\":\\n- Consistent design template\\n- Readable fonts (minimum 24px)\\n- High contrast colors\\n- Each slide focuses on one key point\\n- Instagram/LinkedIn carousel format (1080x1080px)\"\n      },\n      {\n        \"title\": \"Quote Graphics\",\n        \"category\": \"image\",\n        \"platform\": \"social\",\n        \"format\": \"quote\",\n        \"description\": \"Shareable quote graphics\",\n        \"template\": \"Design quote graphics from this content about \\\"{topic}\\\":\\n- Extract 3-5 powerful quotes\\n- Minimalist design with brand colors\\n- Attribution to your name\\n- Various social media sizes\\n- Shareable format\"\n      },\n      {\n        \"title\": \"Video Thumbnail\",\n        \"category\": \"image\",\n        \"platform\": \"youtube\",\n        \"format\": \"thumbnail\",\n        \"description\": \"Eye-catching YouTube thumbnail\",\n        \"template\": \"Create an eye-catching video thumbnail for \\\"{topic}\\\":\\n- Bright, contrasting colors\\n- Large, readable text overlay\\n- Your photo or relevant imagery\\n- YouTube/social media friendly\\n- Clickable and curiosity-driven design\"\n      }\n    ],\n    \"videoPrompts\": [\n      {\n        \"title\": \"Short-form Video (TikTok/Reels)\",\n        \"category\": \"video\",\n        \"platform\": \"social\",\n        \"format\": \"short\",\n        \"description\": \"30-60 second vertical video\",\n        \"template\": \"Create a 30-60 second vertical video about \\\"{topic}\\\":\\n- Hook in first 3 seconds\\n- Quick tips or insights\\n- Text overlays for key points\\n- Trending audio if applicable\\n- Strong call-to-action at the end\"\n      },\n      {\n        \"title\": \"YouTube Video\",\n        \"category\": \"video\",\n        \"platform\": \"youtube\",\n        \"format\": \"long\",\n        \"description\": \"10-15 minute educational video\",\n        \"template\": \"Plan a 10-15 minute YouTube video on \\\"{topic}\\\":\\n- Compelling title and thumbnail concept\\n- Structured outline with timestamps\\n- B-roll suggestions\\n- Screen recording segments\\n- Engagement hooks throughout\"\n      },\n      {\n        \"title\": \"Tutorial Video\",\n        \"category\": \"video\",\n        \"platform\": \"education\",\n        \"format\": \"tutorial\",\n        \"description\": \"Step-by-step instructional video\",\n        \"template\": \"Create a step-by-step tutorial about \\\"{topic}\\\":\\n- Clear learning objectives\\n- Screen recording setup\\n- Voice-over script\\n- Resource links and materials\\n- Follow-up content suggestions\"\n      }\n    ],\n    \"marketingPrompts\": [\n      {\n        \"title\": \"Social Media Campaign\",\n        \"category\": \"marketing\",\n        \"platform\": \"multi\",\n        \"format\": \"campaign\",\n        \"description\": \"7-day multi-platform campaign\",\n        \"template\": \"Design a 7-day social media campaign for \\\"{topic}\\\":\\n- Platform-specific content calendar\\n- Hashtag strategy\\n- Engagement tactics\\n- Cross-promotion ideas\\n- Success metrics to track\"\n      },\n      {\n        \"title\": \"Landing Page Copy\",\n        \"category\": \"marketing\",\n        \"platform\": \"web\",\n        \"format\": \"copy\",\n        \"description\": \"Conversion-optimized landing page\",\n        \"template\": \"Write landing page copy for a resource about \\\"{topic}\\\":\\n- Compelling headline\\n- Problem/solution sections\\n- Social proof elements\\n- Clear value proposition\\n- Multiple CTA variations\"\n      }\n    ]\n  },\n  \"usageTips\": [\n    \"Copy these prompts to your AI tools (ChatGPT, Claude, Midjourney, etc.)\",\n    \"Customize the prompts with your specific brand voice and requirements\",\n    \"Use the generated content across multiple platforms for maximum reach\",\n    \"Track performance and iterate based on engagement metrics\"\n  ]\n};\n\n// Get input data from previous node\nconst inputData = $input.all()[0].json;\nconst topic = inputData.originalPrompt || inputData.body?.originalPrompt || 'the topic';\nconst baseContent = inputData.generatedContent || inputData.body?.generatedContent || 'the content';\n\n// Generate release prompts by replacing placeholders\nconst generatePrompts = (prompts, topic, baseContent) => {\n  return prompts.map(prompt => ({\n    ...prompt,\n    prompt: prompt.template\n      .replace(/\\{topic\\}/g, topic)\n      .replace(/\\{baseContent\\}/g, baseContent)\n  }));\n};\n\nconst releasePrompts = {\n  textPrompts: generatePrompts(templateData.structure.textPrompts, topic, baseContent),\n  imagePrompts: generatePrompts(templateData.structure.imagePrompts, topic, baseContent),\n  videoPrompts: generatePrompts(templateData.structure.videoPrompts, topic, baseContent),\n  marketingPrompts: generatePrompts(templateData.structure.marketingPrompts, topic, baseContent),\n  usageTips: templateData.usageTips\n};\n\n// Return the enhanced data with release prompts\nreturn {\n  ...inputData,\n  releasePrompts: releasePrompts,\n  timestamp: new Date().toISOString(),\n  status: 'release_prompts_generated'\n};"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        304,
-        -176
-      ],
-      "id": "release-prompts-generator",
-      "name": "Generate Release Prompts"
-    },
-    {
-      "parameters": {
-        "content": "## Input Expected\n\n{\n  \"timestamp\": \"2025-10-25T...\",\n  \"source\": \"LinkedIn Content Magician\",\n  \"originalPrompt\": \"user input\",\n  \"generatedContent\": \"AI-generated post\",\n  \"ragSources\": [\"source1\", \"source2\", ...],\n  \"contentMetrics\": {\n    \"characterCount\": 450,\n    \"wordCount\": 85,\n    \"hashtags\": 3,\n    \"emojis\": 8\n  },\n  \"platform\": \"linkedin\",\n  \"contentType\": \"post\",\n  \"status\": \"ready_for_review\"\n}\n\n## Output Generated\n\n{\n  ...inputData,\n  \"releasePrompts\": {\n    \"textPrompts\": [5 prompts],\n    \"imagePrompts\": [5 prompts],\n    \"videoPrompts\": [3 prompts],\n    \"marketingPrompts\": [2 prompts],\n    \"usageTips\": [array]\n  },\n  \"status\": \"release_prompts_generated\"\n}",
-        "height": 600,
-        "width": 400,
-        "color": 4
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        -1008,
-        -80
-      ],
-      "typeVersion": 1,
-      "id": "3aa6cf53-adfe-45a6-babd-5bf22bdd5af9",
-      "name": "Sticky Note1"
+      "id": "aa99c412-5960-422a-988a-e5535232fc32",
+      "name": "AI Agent - Generate Content1"
     }
   ],
   "connections": {
-    "Webhook": {
+    "Webhook1": {
       "main": [
         [
           {
-            "node": "AI Agent - Generate Content",
+            "node": "AI Agent - Generate Content1",
             "type": "main",
             "index": 0
           }
@@ -147,29 +163,7 @@
       "main": [
         [
           {
-            "node": "Respond to Webhook",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "OpenRouter Chat Model1": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent - Generate Content",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "AI Agent - Generate Content": {
-      "main": [
-        [
-          {
-            "node": "Generate Release Prompts",
+            "node": "Respond to Webhook1",
             "type": "main",
             "index": 0
           }
@@ -181,6 +175,28 @@
         [
           {
             "node": "Send ON Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent - Generate Content1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent - Generate Content1": {
+      "main": [
+        [
+          {
+            "node": "Generate Release Prompts",
             "type": "main",
             "index": 0
           }
