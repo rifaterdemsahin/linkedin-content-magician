@@ -1,114 +1,172 @@
 {
-  "name": "LinkedIn Content Magician Workflow",
   "nodes": [
     {
       "parameters": {
         "httpMethod": "POST",
-        "path": "linkedin-content-magician",
-        "responseMode": "onReceived",
+        "path": "05c91180-4e19-4ccd-8917-658a96008ad9",
+        "responseMode": "responseNode",
         "options": {}
       },
-      "name": "Webhook Trigger",
       "type": "n8n-nodes-base.webhook",
-      "typeVersion": 1,
+      "typeVersion": 2.1,
       "position": [
-        240,
-        300
-      ]
-    },
-    {
-      "parameters": {
-        "rules": {
-          "rules": [
-            {
-              "value": "={{$json["body"]["status"]}}",
-              "operation": "equal",
-              "value2": "approved"
-            }
-          ]
-        }
-      },
-      "name": "If Approved",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        460,
-        300
-      ]
-    },
-    {
-      "parameters": {
-        "content": "={{$json["body"]["content"]}}",
-        "options": {}
-      },
-      "name": "Post to LinkedIn",
-      "type": "n8n-nodes-base.linkedIn",
-      "typeVersion": 1,
-      "position": [
-        680,
-        200
+        -288,
+        -16
       ],
-      "credentials": {
-        "linkedInApi": {
-          "id": "PLACEHOLDER",
-          "name": "LinkedIn account"
-        }
-      }
+      "id": "0f3c9049-b2d8-4da2-b421-f8493803a077",
+      "name": "Webhook",
+      "webhookId": "05c91180-4e19-4ccd-8917-658a96008ad9"
     },
     {
       "parameters": {
-        "chatId": "PLACEHOLDER",
-        "text": "✅ New post has been successfully published to LinkedIn!",
         "options": {}
       },
-      "name": "Notify on Telegram",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        880,
+        -224
+      ],
+      "id": "d56beef7-efba-42da-9f9b-5d29eff7d240",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "chatId": "-1002793496878",
+        "text": "=✅ New post has been successfully preped for LinkedIn!",
+        "additionalFields": {}
+      },
       "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1,
+      "typeVersion": 1.2,
       "position": [
-        900,
-        200
+        592,
+        -16
       ],
+      "id": "83d1397d-f533-49b2-bb12-cb595190e123",
+      "name": "Send ON Notification",
+      "webhookId": "40ac5ce8-4444-4737-98d7-8f29ca248a8c",
       "credentials": {
         "telegramApi": {
-          "id": "PLACEHOLDER",
+          "id": "FNhCBbEpIegop14Z",
           "name": "Telegram account"
         }
       }
+    },
+    {
+      "parameters": {
+        "content": "## Linkedin Content Magician\n* Get the related posts from the rag folder and embeded to here \n* Get the input data\n* mix it and give the output with prompts to run such as the image generation \n* check it before you publish it",
+        "height": 560,
+        "width": 1696
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -608,
+        -272
+      ],
+      "typeVersion": 1,
+      "id": "429821bb-2dd6-4406-ae71-a15c28af06fc",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        32
+      ],
+      "id": "b0232a5e-f28b-468d-9244-e178bc14d843",
+      "name": "OpenRouter Chat Model1",
+      "credentials": {
+        "openRouterApi": {
+          "id": "e95QbimUJvBb4tqj",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Create Prompt needed for my linkedin new letter\n\n{{ JSON.stringify($json.body, null, 2) }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        64,
+        -176
+      ],
+      "id": "91b55178-07f1-4d20-80c4-86be79798ed8",
+      "name": "AI Agent - Generate Content"
+    },
+    {
+      "parameters": {
+        "content": "## Input expected\n\n{\n  \"timestamp\": \"2025-10-25T...\",\n  \"source\": \"LinkedIn Content Magician\",\n  \"originalPrompt\": \"user input\",\n  \"generatedContent\": \"AI-generated post\",\n  \"ragSources\": [\"source1\", \"source2\", ...],\n  \"contentMetrics\": {\n    \"characterCount\": 450,\n    \"wordCount\": 85,\n    \"hashtags\": 3,\n    \"emojis\": 8\n  },\n  \"platform\": \"linkedin\",\n  \"contentType\": \"post\",\n  \"status\": \"ready_for_review\"\n}",
+        "height": 432,
+        "width": 304,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1008,
+        -80
+      ],
+      "typeVersion": 1,
+      "id": "3aa6cf53-adfe-45a6-babd-5bf22bdd5af9",
+      "name": "Sticky Note1"
     }
   ],
   "connections": {
-    "Webhook Trigger": {
+    "Webhook": {
       "main": [
         [
           {
-            "node": "If Approved",
+            "node": "AI Agent - Generate Content",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "If Approved": {
+    "Send ON Notification": {
       "main": [
         [
           {
-            "node": "Post to LinkedIn",
+            "node": "Respond to Webhook",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Post to LinkedIn": {
+    "OpenRouter Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent - Generate Content",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent - Generate Content": {
       "main": [
         [
           {
-            "node": "Notify on Telegram",
+            "node": "Send ON Notification",
             "type": "main",
             "index": 0
           }
         ]
       ]
     }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3df7c7c6cb7e0e978bf80ded11fce953795594ae8fe07b63ac449418b447c9e7"
   }
 }
