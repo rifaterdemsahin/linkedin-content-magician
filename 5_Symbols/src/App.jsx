@@ -514,7 +514,7 @@ Content source: ${post.content}`
         {/* Header */}
         <Row className="justify-content-center mb-5">
           <Col lg={10} xl={8}>
-            <div className="text-center py-4">
+            <div className="text-center py-4 position-relative">
               <div className="d-flex align-items-center justify-content-center gap-3 mb-4">
                 <Bot style={{ color: '#58A6FF' }} size={48} />
                 <h1 className="display-4 fw-bold mb-0" style={{ color: '#E6EDF3' }}>
@@ -522,6 +522,17 @@ Content source: ${post.content}`
                 </h1>
               </div>
               <p className="lead" style={{ color: '#8B949E' }}>Your AI-Powered Content Assistant with RAG Technology</p>
+              
+              {/* Debug Toggle Button */}
+              <Button 
+                variant="outline-warning" 
+                size="sm"
+                className="position-absolute top-0 end-0"
+                onClick={() => setDebugData({ ...debugData, visible: !debugData.visible })}
+                style={{ opacity: 0.7 }}
+              >
+                🐛 Debug {debugData.visible ? 'ON' : 'OFF'}
+              </Button>
             </div>
           </Col>
         </Row>
