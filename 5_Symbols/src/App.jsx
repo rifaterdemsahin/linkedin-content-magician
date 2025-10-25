@@ -89,17 +89,22 @@ export default function LinkedInContentMagician() {
     await saveToStorage('posts', updatedPosts);
   };
 
-  const indexContent = async (content) => {
+  const indexContent = async () => {
     setVectorDB({ ...vectorDB, status: 'indexing' });
-    
-    setTimeout(async () => {
+    setIndexingOutput('Indexing in progress...');
+    try {
+      const result = await window.electron.runShellCommand('python3 /Users/rifaterdemsahin/projects/linkedin-content-magician/5_Symbols/rag/index.py');
+      setIndexingOutput(result.stdout + '\n' + result.stderr);
       const updated = {
-        indexed: vectorDB.indexed + 1,
+        indexed: 5, // Assuming 5 documents are indexed
         status: 'connected'
       };
       setVectorDB(updated);
       await saveToStorage('vectordb', updated);
-    }, 1000);
+    } catch (error) {
+      setIndexingOutput('Error during indexing:\n' + error.message);
+      setVectorDB({ ...vectorDB, status: 'disconnected' });
+    }
   };
 
   const updateConfig = async (field, value) => {
