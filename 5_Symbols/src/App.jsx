@@ -544,9 +544,9 @@ Agree or disagree? Let's debate in the comments! 🔥
                       
                       <Row className="g-4">
                         <Col md={6}>
-                          <Card className="bg-transparent border-success">
-                            <Card.Header className="bg-transparent border-success">
-                              <Card.Title className="h5 mb-0 d-flex align-items-center gap-2">
+                          <Card className="bg-transparent" style={{ borderColor: '#30363D' }}>
+                            <Card.Header className="bg-transparent" style={{ borderColor: '#30363D' }}>
+                              <Card.Title className="h5 mb-0 d-flex align-items-center gap-2" style={{ color: '#E6EDF3' }}>
                                 <Zap className="text-warning" size={20} />
                                 n8n Automation
                               </Card.Title>
@@ -554,29 +554,27 @@ Agree or disagree? Let's debate in the comments! 🔥
                             <Card.Body>
                               <Form>
                                 <Form.Group className="mb-3">
-                                  <Form.Label>Webhook URL</Form.Label>
+                                  <Form.Label style={{ color: '#E6EDF3' }}>Webhook URL</Form.Label>
                                   <Form.Control
                                     type="url"
                                     value={n8nConfig.webhookUrl}
                                     onChange={(e) => updateConfig('webhookUrl', e.target.value)}
                                     placeholder="https://your-n8n.com/webhook/..."
-                                    className="bg-transparent border-light text-white"
                                   />
-                                  <Form.Text className="text-muted">
+                                  <Form.Text style={{ color: '#8B949E' }}>
                                     Connect to your n8n workflow for automated publishing
                                   </Form.Text>
                                 </Form.Group>
                                 
                                 <Form.Group>
-                                  <Form.Label>API Key</Form.Label>
+                                  <Form.Label style={{ color: '#E6EDF3' }}>API Key</Form.Label>
                                   <Form.Control
                                     type="password"
                                     value={n8nConfig.apiKey}
                                     onChange={(e) => updateConfig('apiKey', e.target.value)}
                                     placeholder="Your n8n API key"
-                                    className="bg-transparent border-light text-white"
                                   />
-                                  <Form.Text className="text-muted">
+                                  <Form.Text style={{ color: '#8B949E' }}>
                                     Used for secure API authentication
                                   </Form.Text>
                                 </Form.Group>
@@ -592,24 +590,24 @@ Agree or disagree? Let's debate in the comments! 🔥
                         </Col>
 
                         <Col md={6}>
-                          <Card className="bg-transparent border-info">
-                            <Card.Header className="bg-transparent border-info">
-                              <Card.Title className="h5 mb-0 d-flex align-items-center gap-2">
+                          <Card className="bg-transparent" style={{ borderColor: '#30363D' }}>
+                            <Card.Header className="bg-transparent" style={{ borderColor: '#30363D' }}>
+                              <Card.Title className="h5 mb-0 d-flex align-items-center gap-2" style={{ color: '#E6EDF3' }}>
                                 <Database className="text-info" size={20} />
                                 Vector Database
                               </Card.Title>
                             </Card.Header>
                             <Card.Body>
                               <div className="d-flex align-items-center justify-content-between mb-3">
-                                <span>Status</span>
+                                <span style={{ color: '#E6EDF3' }}>Status</span>
                                 <Badge bg={vectorDB.status === 'connected' ? 'success' : 'warning'}>
                                   {vectorDB.status === 'connected' ? 'Connected' : 'Disconnected'}
                                 </Badge>
                               </div>
                               
                               <div className="d-flex align-items-center justify-content-between mb-3">
-                                <span>Indexed Content</span>
-                                <span className="fw-bold">{vectorDB.indexed} posts</span>
+                                <span style={{ color: '#E6EDF3' }}>Indexed Content</span>
+                                <span className="fw-bold" style={{ color: '#E6EDF3' }}>{vectorDB.indexed} posts</span>
                               </div>
                               
                               <Button 
@@ -633,9 +631,9 @@ Agree or disagree? Let's debate in the comments! 🔥
                       </Row>
 
                       {/* Integration Guide */}
-                      <Alert variant="primary" className="mt-4 bg-transparent border-primary">
-                        <Alert.Heading className="h5">🚀 Quick Start Guide</Alert.Heading>
-                        <ol className="mb-0">
+                      <Alert variant="primary" className="mt-4 bg-transparent" style={{ borderColor: '#58A6FF' }}>
+                        <Alert.Heading className="h5" style={{ color: '#58A6FF' }}>🚀 Quick Start Guide</Alert.Heading>
+                        <ol className="mb-0" style={{ color: '#E6EDF3' }}>
                           <li>Set up your n8n workflow with the webhook trigger</li>
                           <li>Configure Faiss vector database for content storage</li>
                           <li>Index your best LinkedIn posts to train your voice</li>
