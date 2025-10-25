@@ -675,6 +675,11 @@ Agree or disagree? Let's debate in the comments! 🔥
                   </div>
                 </Col>
                 <Col lg={6} className="text-center text-lg-end">
+                  <div className="mb-3">
+                    <a href="https://github.com/rifaterdemsahin/linkedin-content-magician/actions/workflows/deploy-static-content-to-pages.yml" target="_blank" rel="noopener noreferrer" title="GitHub Actions Build Status">
+                      <img src="https://github.com/rifaterdemsahin/linkedin-content-magician/actions/workflows/deploy-static-content-to-pages.yml/badge.svg" alt="Build Status" className="mb-2" />
+                    </a>
+                  </div>
                   <a href="https://buymeacoffee.com/rifaterdemsahin" target="_blank" rel="noopener noreferrer" className="support-btn">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
