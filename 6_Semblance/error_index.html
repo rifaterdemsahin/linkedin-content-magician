@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error: React Code Displayed as HTML</title>
+    <style>
+        body { font-family: sans-serif; margin: 2em; }
+        pre { background-color: #f4f4f4; padding: 1em; border-radius: 5px; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h1>Error: React Code Displayed as HTML</h1>
+    <p>The following code is a React component, which is being displayed as plain text instead of a rendered HTML page. This usually happens when a file containing JSX (React's syntax extension for JavaScript) is served as a static HTML file without being compiled first.</p>
+    <h2>Problematic Code:</h2>
+    <pre><code>import React, { useState, useEffect } from 'react';
+import { Send, Bot, User, Database, Zap, MessageSquare, CheckCircle, XCircle, Loader } from 'lucide-react';
+
+export default function LinkedInContentMagician() {
+  const [posts, setPosts] = useState([]);
+  const [activeTab, setActiveTab] = useState('generate');
+  const [prompt, setPrompt] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [n8nConfig, setN8nConfig] = useState({
+    webhookUrl: '',
+    apiKey: ''
+  });
+  const [vectorDB, setVectorDB] = useState({
+    indexed: 0,
+    status: 'disconnected'
+  });
+
+  useEffect(() => {
+    loadFromStorage();
+  }, []);
+
+  const loadFromStorage = async () => {
+    try {
+      const postsData = await window.storage.get('posts');
+      const configData = await window.storage.get('config');
+      const vectorData = await window.storage.get('vectordb');
+      
+      if (postsData) setPosts(JSON.parse(postsData.value));
+      if (configData) setN8nConfig(JSON.parse(configData.value));
+      if (vectorData) setVectorDB(JSON.parse(vectorData.value));
+    } catch (error) {
+      console.log('No stored data found, starting fresh');
+    }
+  };
+
+  const saveToStorage = async (key, value) => {
+    try {
+      await window.storage.set(key, JSON.stringify(value));
+    } catch (error) {
+      console.error('Storage error:', error);
+    }
+  };
+
+  const generateContent = async () => {
+    if (!prompt.trim()) return;
+    
+    setLoading(true);
+    
+    // Simulate content generation with RAG
+    setTimeout(async () => {
+      const newPost = {
+        id: Date.now(),
+        content: generateRAGContent(prompt),
+        prompt: prompt,
+        status: 'pending',
+        timestamp: new Date().toISOString(),
+        voiceScore: Math.floor(Math.random() * 20) + 80
+      };
+      
+      const updatedPosts = [newPost, ...posts];
+      setPosts(updatedPosts);
+      await saveToStorage('posts', updatedPosts);
+      
+      setPrompt('');
+      setLoading(false);
+      setActiveTab('review');
+    }, 2000);
+  };
+
+  const generateRAGContent = (userPrompt) => {
+    const templates = [
+      `🚀 ${userPrompt}\n\nHere's what I've learned after years in this space:\n\nThe key isn't just using AI—it's using it strategically. Most people are still treating it like a fancy search engine.\n\nBut the real power comes from:\n→ Building custom systems\n→ Training on your unique voice\n→ Keeping humans in the loop\n\nThis changes everything.\n\nWhat's your biggest challenge with AI-assisted content? Drop a comment below. 👇`,
+      
+      `Let me share something that completely changed my perspective on ${userPrompt}...\n\nI used to spend 10+ hours a week on content creation. Now? Less than 2.\n\nThe difference? A RAG system that actually understands my voice.\n\nHere's the framework:\n\n1. Store your best content in a vector database\n2. Use semantic search to find relevant insights\n3. Generate content that maintains YOUR style\n4. Review and refine with one tap\n\nAuthenticity at scale isn't a myth. It's just a better system.\n\nWho else is building custom AI solutions? Let's connect. 🤝`,
+      
+      `Quick question about ${userPrompt}:\n\nWhy are we still choosing between learning new skills and building our brand?\n\nThat's a false choice.\n\nI built a system that handles content creation while I focus on what matters:\n→ Deep learning\n→ Skill building\n→ Real connections\n\nThe secret? RAG + automation + human oversight.\n\nYour voice stays authentic. Your time stays protected.\n\nInterested in the technical breakdown? Comment 
