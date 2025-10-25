@@ -10,7 +10,8 @@ export default function LinkedInContentMagician() {
   const [n8nConfig, setN8nConfig] = useState({
     webhookUrl: 'https://n8n.rifaterdemsahin.com/webhook-test/05c91180-4e19-4ccd-8917-658a96008ad9',
     connectionStatus: 'disconnected',
-    testing: false
+    testing: false,
+    debugOutput: []
   });
   const [vectorDB, setVectorDB] = useState({
     indexed: 0,
@@ -162,42 +163,114 @@ Agree or disagree? Let's debate in the comments! 🔥
   };
 
   const testN8nConnection = async () => {
-    setN8nConfig({ ...n8nConfig, testing: true });
+    const debugLog = [];
+    const timestamp = new Date().toISOString();
+    
+    debugLog.push(`🔍 [${new Date().toLocaleTimeString()}] Starting connection test...`);
+    debugLog.push(`📡 Target URL: ${n8nConfig.webhookUrl}`);
+    
+    setN8nConfig({ 
+      ...n8nConfig, 
+      testing: true, 
+      debugOutput: debugLog,
+      connectionStatus: 'testing'
+    });
     
     try {
-      const response = await fetch(n8nConfig.webhookUrl, {
+      debugLog.push(`🚀 [${new Date().toLocaleTimeString()}] Sending POST request...`);
+      
+      const requestPayload = {
+        test: true,
+        message: 'Connection test from LinkedIn Content Magician',
+        timestamp: timestamp,
+        source: 'LinkedIn Content Magician UI',
+        debugMode: true
+      };
+      
+      debugLog.push(`📦 Request payload: ${JSON.stringify(requestPayload, null, 2)}`);
+      
+      const requestOptions = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'User-Agent': 'LinkedIn-Content-Magician/1.0.0',
+          'X-Debug-Request': 'true'
         },
-        body: JSON.stringify({
-          test: true,
-          message: 'Connection test from LinkedIn Content Magician',
-          timestamp: new Date().toISOString()
-        })
-      });
+        body: JSON.stringify(requestPayload)
+      };
+      
+      debugLog.push(`🔧 Request headers: ${JSON.stringify(requestOptions.headers, null, 2)}`);
+      
+      const startTime = performance.now();
+      const response = await fetch(n8nConfig.webhookUrl, requestOptions);
+      const endTime = performance.now();
+      const responseTime = Math.round(endTime - startTime);
+      
+      debugLog.push(`⏱️ Response time: ${responseTime}ms`);
+      debugLog.push(`📊 Status Code: ${response.status} ${response.statusText}`);
+      debugLog.push(`🌐 Response headers: ${JSON.stringify(Object.fromEntries(response.headers), null, 2)}`);
+      
+      let responseText = '';
+      try {
+        responseText = await response.text();
+        debugLog.push(`📄 Response body: ${responseText || '(empty)'}`);
+      } catch (textError) {
+        debugLog.push(`❌ Failed to read response body: ${textError.message}`);
+      }
 
       if (response.ok) {
+        debugLog.push(`✅ [${new Date().toLocaleTimeString()}] Connection successful!`);
         const updated = { 
           ...n8nConfig, 
           connectionStatus: 'connected', 
-          testing: false 
+          testing: false,
+          debugOutput: debugLog,
+          lastTestTime: timestamp,
+          lastResponseTime: responseTime
         };
         setN8nConfig(updated);
         await saveToStorage('config', updated);
       } else {
+        debugLog.push(`❌ [${new Date().toLocaleTimeString()}] HTTP Error: ${response.status}`);
+        if (response.status === 404) {
+          debugLog.push(`🔍 404 Error: Webhook endpoint not found. Please check the URL.`);
+        } else if (response.status === 500) {
+          debugLog.push(`🔍 500 Error: Server error. Check n8n workflow configuration.`);
+        } else if (response.status === 403) {
+          debugLog.push(`🔍 403 Error: Forbidden. Check webhook permissions.`);
+        }
+        
         setN8nConfig({ 
           ...n8nConfig, 
           connectionStatus: 'failed', 
-          testing: false 
+          testing: false,
+          debugOutput: debugLog,
+          lastError: `HTTP ${response.status}: ${response.statusText}`,
+          lastTestTime: timestamp
         });
       }
     } catch (error) {
+      debugLog.push(`💥 [${new Date().toLocaleTimeString()}] Network Error: ${error.message}`);
+      debugLog.push(`🔍 Error type: ${error.name}`);
+      debugLog.push(`📍 Error stack: ${error.stack}`);
+      
+      // More specific error analysis
+      if (error.message.includes('Failed to fetch')) {
+        debugLog.push(`🌐 Network issue: Unable to reach the server. Check internet connection and URL.`);
+      } else if (error.message.includes('CORS')) {
+        debugLog.push(`🔒 CORS Error: Server may not allow cross-origin requests.`);
+      } else if (error.message.includes('timeout')) {
+        debugLog.push(`⏰ Timeout Error: Request took too long. Server may be slow or down.`);
+      }
+      
       console.error('Connection test failed:', error);
       setN8nConfig({ 
         ...n8nConfig, 
         connectionStatus: 'failed', 
-        testing: false 
+        testing: false,
+        debugOutput: debugLog,
+        lastError: error.message,
+        lastTestTime: timestamp
       });
     }
   };
@@ -209,19 +282,19 @@ Agree or disagree? Let's debate in the comments! 🔥
   };
 
   return (
-    <div className="min-h-100vh bg-gradient-dark text-white">
+    <div className="min-h-100vh bg-dark-custom text-white">
       <Container fluid className="py-4">
         {/* Header */}
         <Row className="justify-content-center mb-5">
           <Col lg={10} xl={8}>
             <div className="text-center py-4">
               <div className="d-flex align-items-center justify-content-center gap-3 mb-4">
-                <Bot className="text-primary" size={48} />
-                <h1 className="display-4 fw-bold mb-0">
+                <Bot style={{ color: '#58A6FF' }} size={48} />
+                <h1 className="display-4 fw-bold mb-0" style={{ color: '#E6EDF3' }}>
                   LinkedIn Content Magician 🧙‍♂️
                 </h1>
               </div>
-              <p className="lead text-light">Your AI-Powered Content Assistant with RAG Technology</p>
+              <p className="lead" style={{ color: '#8B949E' }}>Your AI-Powered Content Assistant with RAG Technology</p>
             </div>
           </Col>
         </Row>
@@ -236,7 +309,7 @@ Agree or disagree? Let's debate in the comments! 🔥
                     <Database className="text-success me-3" size={32} />
                     <div>
                       <div className="fs-2 fw-bold">{vectorDB.indexed}</div>
-                      <div className="small text-light">Posts Indexed</div>
+                      <div className="small" style={{ color: '#8B949E' }}>Posts Indexed</div>
                     </div>
                   </Card.Body>
                 </Card>
@@ -248,7 +321,7 @@ Agree or disagree? Let's debate in the comments! 🔥
                     <Zap className="text-warning me-3" size={32} />
                     <div>
                       <div className="fs-2 fw-bold">{posts.length}</div>
-                      <div className="small text-light">Generated Posts</div>
+                      <div className="small" style={{ color: '#8B949E' }}>Generated Posts</div>
                     </div>
                   </Card.Body>
                 </Card>
@@ -260,7 +333,7 @@ Agree or disagree? Let's debate in the comments! 🔥
                     <CheckCircle className="text-info me-3" size={32} />
                     <div>
                       <div className="fs-2 fw-bold">{posts.filter(p => p.status === 'approved').length}</div>
-                      <div className="small text-light">Approved</div>
+                      <div className="small" style={{ color: '#8B949E' }}>Approved</div>
                     </div>
                   </Card.Body>
                 </Card>
@@ -269,10 +342,10 @@ Agree or disagree? Let's debate in the comments! 🔥
               <Col sm={6} lg={3}>
                 <Card className="card-glassmorphism border-0 text-white h-100">
                   <Card.Body className="d-flex align-items-center">
-                    <MessageSquare className="text-purple me-3" size={32} />
+                    <MessageSquare style={{ color: '#A371F7' }} className="me-3" size={32} />
                     <div>
                       <div className="fs-2 fw-bold">{vectorDB.status === 'connected' ? 'Active' : 'Setup'}</div>
-                      <div className="small text-light">RAG Status</div>
+                      <div className="small" style={{ color: '#8B949E' }}>RAG Status</div>
                     </div>
                   </Card.Body>
                 </Card>
@@ -293,28 +366,28 @@ Agree or disagree? Let's debate in the comments! 🔥
                       <Nav.Link 
                         eventKey="generate" 
                         className="text-center fw-medium border-0 text-white"
-                        style={{backgroundColor: activeTab === 'generate' ? '#3b82f6' : 'transparent'}}
+                        style={{backgroundColor: activeTab === 'generate' ? '#58A6FF' : 'transparent'}}
                       >
                         Generate
-                      </Nav.Link>
+                      </Nav.LInk>
                     </Nav.Item>
                     <Nav.Item className="flex-fill">
                       <Nav.Link 
                         eventKey="review" 
                         className="text-center fw-medium border-0 text-white"
-                        style={{backgroundColor: activeTab === 'review' ? '#3b82f6' : 'transparent'}}
+                        style={{backgroundColor: activeTab === 'review' ? '#58A6FF' : 'transparent'}}
                       >
                         Review
-                      </Nav.Link>
+                      </Nav.LInk>
                     </Nav.Item>
                     <Nav.Item className="flex-fill">
                       <Nav.Link 
                         eventKey="setup" 
                         className="text-center fw-medium border-0 text-white"
-                        style={{backgroundColor: activeTab === 'setup' ? '#3b82f6' : 'transparent'}}
+                        style={{backgroundColor: activeTab === 'setup' ? '#58A6FF' : 'transparent'}}
                       >
                         Setup
-                      </Nav.Link>
+                      </Nav.LInk>
                     </Nav.Item>
                   </Nav>
                 </Card.Header>
@@ -326,7 +399,7 @@ Agree or disagree? Let's debate in the comments! 🔥
                   <Card className="card-glassmorphism border-0 text-white">
                     <Card.Body className="p-4">
                       <h2 className="h3 fw-bold mb-4">Generate New Content</h2>
-                      <p className="text-light mb-4">
+                      <p style={{ color: '#8B949E' }} className="mb-4">
                         Enter a topic or idea from your whiteboard from your weekly stream, and the RAG system will generate authentic content in your voice.
                       </p>
                       
@@ -382,7 +455,7 @@ Agree or disagree? Let's debate in the comments! 🔥
                   <Card className="card-glassmorphism border-0 text-white">
                     <Card.Body className="p-4">
                       <h2 className="h3 fw-bold mb-4">Review & Approve</h2>
-                      <p className="text-light mb-4">
+                      <p style={{ color: '#8B949E' }} className="mb-4">
                         Review AI-generated content before publishing. Human-in-the-loop keeps you in control.
                       </p>
                       
@@ -394,24 +467,24 @@ Agree or disagree? Let's debate in the comments! 🔥
                       ) : (
                         <div className="d-grid gap-4">
                           {posts.map(post => (
-                            <Card key={post.id} className="bg-transparent border-light">
+                            <Card key={post.id} className="bg-transparent" style={{ borderColor: '#30363D' }}>
                               <Card.Body>
                                 <Row className="align-items-start">
                                   <Col sm={8} className="mb-3">
                                     <div className="d-flex align-items-center gap-2 mb-2">
-                                      <User size={16} className="text-primary" />
+                                      <User size={16} style={{ color: '#58A6FF' }} />
                                       <span className="small text-muted">
                                         {new Date(post.timestamp).toLocaleDateString()}
                                       </span>
                                       <Badge 
                                         bg={post.status === 'approved' ? 'success' : 
-                                            post.status === 'rejected' ? 'danger' : 'warning'}
+                                            post.status === 'rejected' ? 'danger' : 'secondary'}
                                         className="ms-2"
                                       >
                                         {post.status}
                                       </Badge>
                                     </div>
-                                    <p className="fw-bold text-primary mb-2">Prompt: {post.prompt}</p>
+                                    <p className="fw-bold mb-2" style={{ color: '#58A6FF' }}>Prompt: {post.prompt}</p>
                                   </Col>
                                   <Col sm={4} className="text-end">
                                     {post.status === 'pending' && (
@@ -437,7 +510,7 @@ Agree or disagree? Let's debate in the comments! 🔥
                                   </Col>
                                 </Row>
                                 
-                                <Card className="bg-secondary bg-opacity-25 border-0 mb-3">
+                                <Card className="border-0 mb-3" style={{ backgroundColor: '#0D1117' }}>
                                   <Card.Body className="p-3">
                                     <pre className="mb-0 text-white" style={{whiteSpace: 'pre-wrap', fontFamily: 'inherit'}}>
                                       {post.content}
@@ -581,7 +654,7 @@ Agree or disagree? Let's debate in the comments! 🔥
         {/* Footer */}
         <Row className="justify-content-center mt-5">
           <Col lg={10} xl={8}>
-            <footer className="py-4 border-top border-light border-opacity-25">
+            <footer className="py-4 border-top" style={{ borderColor: '#30363D !important' }}>
               <Row className="g-4">
                 <Col lg={6} className="text-center text-lg-start">
                   <h3 className="h5">Connect with me</h3>
