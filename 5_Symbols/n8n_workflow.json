@@ -33,7 +33,7 @@
     {
       "parameters": {
         "chatId": "-1002793496878",
-        "text": "=✅ New post has been successfully preped for LinkedIn!",
+        "text": "=✅ New LinkedIn post ready for review!\n\n📊 Content Stats:\n• Characters: {{ $('AI Agent - Generate Content').item.json.contentMetrics.characterCount }}\n• Words: {{ $('AI Agent - Generate Content').item.json.contentMetrics.wordCount }}\n• Hashtags: {{ $('AI Agent - Generate Content').item.json.contentMetrics.hashtags }}\n• Emojis: {{ $('AI Agent - Generate Content').item.json.contentMetrics.emojis }}\n\n📝 Original Prompt: {{ $('AI Agent - Generate Content').item.json.originalPrompt }}\n\n🔗 Platform: {{ $('AI Agent - Generate Content').item.json.platform }}\n📌 Status: {{ $('AI Agent - Generate Content').item.json.status }}",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.telegram",
@@ -54,7 +54,7 @@
     },
     {
       "parameters": {
-        "content": "## Linkedin Content Magician\n* Get the related posts from the rag folder and embeded to here \n* Get the input data\n* mix it and give the output with prompts to run such as the image generation \n* check it before you publish it",
+        "content": "## LinkedIn Content Magician\n* Receives structured input with timestamp, original prompt, and content metrics\n* Uses AI Agent to generate LinkedIn post content\n* Leverages RAG sources for content enhancement\n* Validates content metrics (character count, hashtags, emojis)\n* Sends notification with full content statistics\n* Returns ready-for-review status",
         "height": 560,
         "width": 1696
       },
@@ -89,7 +89,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=Create Prompt needed for my linkedin new letter\n\n{{ JSON.stringify($json.body, null, 2) }}",
+        "text": "=Generate an engaging LinkedIn post based on the following information:\n\n📋 Original Prompt: {{ $json.body.originalPrompt }}\n\n📊 Target Metrics:\n- Character Count: ~{{ $json.body.contentMetrics.characterCount }}\n- Word Count: ~{{ $json.body.contentMetrics.wordCount }}\n- Hashtags: {{ $json.body.contentMetrics.hashtags }}\n- Emojis: {{ $json.body.contentMetrics.emojis }}\n\n🔍 RAG Sources to reference:\n{{ $json.body.ragSources ? $json.body.ragSources.join(', ') : 'No sources provided' }}\n\n📝 Platform: {{ $json.body.platform }}\n📅 Content Type: {{ $json.body.contentType }}\n\nCreate professional, engaging content that:\n1. Addresses the original prompt effectively\n2. Meets the target metrics\n3. Uses appropriate hashtags and emojis\n4. Is optimized for {{ $json.body.platform }}\n5. References RAG sources when relevant\n\nReturn the generated content in the same JSON structure with updated 'generatedContent' field and actual metrics achieved.",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -103,7 +103,7 @@
     },
     {
       "parameters": {
-        "content": "## Input expected\n\n{\n  \"timestamp\": \"2025-10-25T...\",\n  \"source\": \"LinkedIn Content Magician\",\n  \"originalPrompt\": \"user input\",\n  \"generatedContent\": \"AI-generated post\",\n  \"ragSources\": [\"source1\", \"source2\", ...],\n  \"contentMetrics\": {\n    \"characterCount\": 450,\n    \"wordCount\": 85,\n    \"hashtags\": 3,\n    \"emojis\": 8\n  },\n  \"platform\": \"linkedin\",\n  \"contentType\": \"post\",\n  \"status\": \"ready_for_review\"\n}",
+        "content": "## Input Expected\n\n{\n  \"timestamp\": \"2025-10-25T...\",\n  \"source\": \"LinkedIn Content Magician\",\n  \"originalPrompt\": \"user input\",\n  \"generatedContent\": \"AI-generated post\",\n  \"ragSources\": [\"source1\", \"source2\", ...],\n  \"contentMetrics\": {\n    \"characterCount\": 450,\n    \"wordCount\": 85,\n    \"hashtags\": 3,\n    \"emojis\": 8\n  },\n  \"platform\": \"linkedin\",\n  \"contentType\": \"post\",\n  \"status\": \"ready_for_review\"\n}",
         "height": 432,
         "width": 304,
         "color": 4
