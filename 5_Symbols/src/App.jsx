@@ -15,6 +15,7 @@ export default function LinkedInContentMagician() {
     indexed: 0,
     status: 'disconnected'
   });
+  const [indexingOutput, setIndexingOutput] = useState('');
 
   useEffect(() => {
     loadFromStorage();
@@ -108,18 +109,22 @@ export default function LinkedInContentMagician() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white p-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-100vh bg-gradient-dark text-white">
+      <Container fluid className="py-4">
         {/* Header */}
-        <header className="text-center py-8">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Bot className="w-12 h-12 text-blue-400" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              LinkedIn Content Magician 🧙‍♂️
-            </h1>
-          </div>
-          <p className="text-gray-300 text-lg">Your AI-Powered Content Assistant with RAG Technology</p>
-        </header>
+        <Row className="justify-content-center mb-5">
+          <Col lg={10} xl={8}>
+            <div className="text-center py-4">
+              <div className="d-flex align-items-center justify-content-center gap-3 mb-4">
+                <Bot className="text-primary" size={48} />
+                <h1 className="display-4 fw-bold text-gradient mb-0">
+                  LinkedIn Content Magician 🧙‍♂️
+                </h1>
+              </div>
+              <p className="lead text-light">Your AI-Powered Content Assistant with RAG Technology</p>
+            </div>
+          </Col>
+        </Row>
 
         {/* Stats Bar */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
@@ -166,7 +171,7 @@ export default function LinkedInContentMagician() {
 
         {/* Tab Navigation */}
         <div className="flex gap-2 mb-6 bg-white/5 p-1 rounded-lg">
-          {['generate', 'review', 'setup'].map(tab => (
+          {['setup', 'generate', 'review'].map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}

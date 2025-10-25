@@ -1,0 +1,584 @@
+import React, { useState, useEffect } from 'react';
+import { Container, Row, Col, Nav, Tab, Card, Button, Form, Alert, Spinner, Badge } from 'react-bootstrap';
+import { Send, Bot, User, Database, Zap, MessageSquare, CheckCircle, XCircle, Loader } from 'lucide-react';
+
+export default function LinkedInContentMagician() {
+  const [posts, setPosts] = useState([]);
+  const [activeTab, setActiveTab] = useState('generate');
+  const [prompt, setPrompt] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [n8nConfig, setN8nConfig] = useState({
+    webhookUrl: '',
+    apiKey: ''
+  });
+  const [vectorDB, setVectorDB] = useState({
+    indexed: 0,
+    status: 'disconnected'
+  });
+
+  useEffect(() => {
+    loadFromStorage();
+  }, []);
+
+  const loadFromStorage = async () => {
+    try {
+      const postsData = await window.storage.get('posts');
+      const configData = await window.storage.get('config');
+      const vectorData = await window.storage.get('vectordb');
+      
+      if (postsData) setPosts(JSON.parse(postsData.value));
+      if (configData) setN8nConfig(JSON.parse(configData.value));
+      if (vectorData) setVectorDB(JSON.parse(vectorData.value));
+    } catch (error) {
+      console.log('No stored data found, starting fresh');
+    }
+  };
+
+  const saveToStorage = async (key, value) => {
+    try {
+      await window.storage.set(key, JSON.stringify(value));
+    } catch (error) {
+      console.error('Storage error:', error);
+    }
+  };
+
+  const generateContent = async () => {
+    if (!prompt.trim()) return;
+    
+    setLoading(true);
+    
+    // Simulate content generation with RAG
+    setTimeout(async () => {
+      const templates = [
+        `🎯 ${prompt}
+
+Just finished exploring this fascinating topic! Here's what I discovered:
+
+🔍 The key insight: [Insert your specific angle here]
+
+💡 What caught my attention:
+• First major point about the topic
+• Second insight that challenges conventional thinking  
+• Third practical application
+
+🚀 The practical takeaway: This isn't just theory - it's about real implementation.
+
+What's your experience with ${prompt.toLowerCase()}? Drop your thoughts below! 👇
+
+#LinkedIn #Innovation #Technology`,
+
+        `🧠 Quick thoughts on ${prompt}:
+
+After years in this space, I've learned that [insert personal insight].
+
+Here's the framework I use:
+📊 Step 1: [Analyze the current state]
+⚡ Step 2: [Identify the gap]
+🎯 Step 3: [Design the solution]
+
+The biggest mistake I see? People focus on the tool, not the outcome.
+
+Remember: Technology is just the enabler. The real magic happens when you combine it with human insight.
+
+What's your take? How are you approaching this?
+
+#DigitalTransformation #Strategy #Leadership`,
+
+        `🔥 Unpopular opinion about ${prompt}:
+
+Everyone's talking about the technical aspects, but missing the human element.
+
+Here's what I've observed working with 50+ clients:
+• 80% of failures aren't technical - they're organizational
+• The best implementations start with culture, not code
+• ROI comes from adoption, not features
+
+My hot take: Stop building for engineers. Start building for humans.
+
+The companies winning in this space? They're the ones who remember that behind every screen is a person trying to do their job better.
+
+Agree or disagree? Let's debate in the comments! 🔥
+
+#HumanCenteredDesign #Technology #BusinessStrategy`
+      ];
+
+      const selectedTemplate = templates[Math.floor(Math.random() * templates.length)];
+      
+      const newPost = {
+        id: Date.now(),
+        content: selectedTemplate,
+        prompt: prompt,
+        timestamp: new Date().toISOString(),
+        status: 'pending',
+        ragSources: [
+          'Previous LinkedIn post about automation',
+          'Video transcript from tech talk',
+          'Article draft on AI implementation'
+        ]
+      };
+
+      const updatedPosts = [newPost, ...posts];
+      setPosts(updatedPosts);
+      await saveToStorage('posts', updatedPosts);
+      await indexContent(selectedTemplate);
+      
+      setLoading(false);
+      setPrompt('');
+      setActiveTab('review');
+    }, 2000);
+  };
+
+  const getRandomTemplate = () => {
+    const templates = [
+      "🎯 Just discovered something fascinating about {topic}...",
+      "🔥 Hot take on {topic} that might be controversial...", 
+      "💡 Here's what 5 years of {topic} experience taught me...",
+      "🚀 Quick wins you can implement with {topic} today..."
+    ];
+    
+    return templates[Math.floor(Math.random() * templates.length)];
+  };
+
+  const updatePostStatus = async (postId, status) => {
+    const updatedPosts = posts.map(p => 
+      p.id === postId ? { ...p, status } : p
+    );
+    setPosts(updatedPosts);
+    await saveToStorage('posts', updatedPosts);
+  };
+
+  const indexContent = async (content) => {
+    setVectorDB({ ...vectorDB, status: 'indexing' });
+    
+    setTimeout(async () => {
+      const updated = {
+        indexed: vectorDB.indexed + 1,
+        status: 'connected'
+      };
+      setVectorDB(updated);
+      await saveToStorage('vectordb', updated);
+    }, 1000);
+  };
+
+  const updateConfig = async (field, value) => {
+    const updated = { ...n8nConfig, [field]: value };
+    setN8nConfig(updated);
+    await saveToStorage('config', updated);
+  };
+
+  return (
+    <div className="min-h-100vh bg-gradient-dark text-white">
+      <Container fluid className="py-4">
+        {/* Header */}
+        <Row className="justify-content-center mb-5">
+          <Col lg={10} xl={8}>
+            <div className="text-center py-4">
+              <div className="d-flex align-items-center justify-content-center gap-3 mb-4">
+                <Bot className="text-primary" size={48} />
+                <h1 className="display-4 fw-bold mb-0">
+                  LinkedIn Content Magician 🧙‍♂️
+                </h1>
+              </div>
+              <p className="lead text-light">Your AI-Powered Content Assistant with RAG Technology</p>
+            </div>
+          </Col>
+        </Row>
+
+        {/* Stats Bar */}
+        <Row className="justify-content-center mb-4">
+          <Col lg={10} xl={8}>
+            <Row className="g-3">
+              <Col sm={6} lg={3}>
+                <Card className="card-glassmorphism border-0 text-white h-100">
+                  <Card.Body className="d-flex align-items-center">
+                    <Database className="text-success me-3" size={32} />
+                    <div>
+                      <div className="fs-2 fw-bold">{vectorDB.indexed}</div>
+                      <div className="small text-light">Posts Indexed</div>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+              
+              <Col sm={6} lg={3}>
+                <Card className="card-glassmorphism border-0 text-white h-100">
+                  <Card.Body className="d-flex align-items-center">
+                    <Zap className="text-warning me-3" size={32} />
+                    <div>
+                      <div className="fs-2 fw-bold">{posts.length}</div>
+                      <div className="small text-light">Generated Posts</div>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+              
+              <Col sm={6} lg={3}>
+                <Card className="card-glassmorphism border-0 text-white h-100">
+                  <Card.Body className="d-flex align-items-center">
+                    <CheckCircle className="text-info me-3" size={32} />
+                    <div>
+                      <div className="fs-2 fw-bold">{posts.filter(p => p.status === 'approved').length}</div>
+                      <div className="small text-light">Approved</div>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+              
+              <Col sm={6} lg={3}>
+                <Card className="card-glassmorphism border-0 text-white h-100">
+                  <Card.Body className="d-flex align-items-center">
+                    <MessageSquare className="text-purple me-3" size={32} />
+                    <div>
+                      <div className="fs-2 fw-bold">{vectorDB.status === 'connected' ? 'Active' : 'Setup'}</div>
+                      <div className="small text-light">RAG Status</div>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+
+        {/* Main Content */}
+        <Row className="justify-content-center">
+          <Col lg={10} xl={8}>
+            <Tab.Container activeKey={activeTab} onSelect={setActiveTab}>
+              {/* Tab Navigation */}
+              <Card className="card-glassmorphism border-0 mb-4">
+                <Card.Header className="bg-transparent border-0 p-2">
+                  <Nav variant="pills" className="justify-content-center flex-wrap">
+                    <Nav.Item className="flex-fill">
+                      <Nav.Link 
+                        eventKey="generate" 
+                        className="text-center fw-medium border-0 text-white"
+                        style={{backgroundColor: activeTab === 'generate' ? '#3b82f6' : 'transparent'}}
+                      >
+                        Generate
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item className="flex-fill">
+                      <Nav.Link 
+                        eventKey="review" 
+                        className="text-center fw-medium border-0 text-white"
+                        style={{backgroundColor: activeTab === 'review' ? '#3b82f6' : 'transparent'}}
+                      >
+                        Review
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item className="flex-fill">
+                      <Nav.Link 
+                        eventKey="setup" 
+                        className="text-center fw-medium border-0 text-white"
+                        style={{backgroundColor: activeTab === 'setup' ? '#3b82f6' : 'transparent'}}
+                      >
+                        Setup
+                      </Nav.Link>
+                    </Nav.Item>
+                  </Nav>
+                </Card.Header>
+              </Card>
+
+              {/* Tab Content */}
+              <Tab.Content>
+                <Tab.Pane eventKey="generate">
+                  <Card className="card-glassmorphism border-0 text-white">
+                    <Card.Body className="p-4">
+                      <h2 className="h3 fw-bold mb-4">Generate New Content</h2>
+                      <p className="text-light mb-4">
+                        Enter a topic or idea from your whiteboard from your weekly stream, and the RAG system will generate authentic content in your voice.
+                      </p>
+                      
+                      <Form>
+                        <Form.Group className="mb-4">
+                          <Form.Control
+                            as="textarea"
+                            rows={4}
+                            value={prompt}
+                            onChange={(e) => setPrompt(e.target.value)}
+                            placeholder="Enter your content topic... (e.g., 'AI automation in marketing' or 'Building custom RAG systems')"
+                            className="bg-transparent border-light text-white"
+                            style={{backgroundColor: 'rgba(255, 255, 255, 0.05)'}}
+                          />
+                        </Form.Group>
+                        
+                        <Button
+                          onClick={generateContent}
+                          disabled={loading || !prompt.trim()}
+                          className="btn-primary-custom w-100 py-3 d-flex align-items-center justify-content-center gap-2"
+                        >
+                          {loading ? (
+                            <>
+                              <Spinner animation="border" size="sm" />
+                              Generating with RAG...
+                            </>
+                          ) : (
+                            <>
+                              <Send size={20} />
+                              Generate Content
+                            </>
+                          )}
+                        </Button>
+                      </Form>
+
+                      <Alert variant="primary" className="mt-4 bg-transparent border-primary">
+                        <Alert.Heading className="h6 d-flex align-items-center gap-2">
+                          <Database size={20} />
+                          How RAG Works
+                        </Alert.Heading>
+                        <ul className="mb-0 small">
+                          <li>→ Searches your indexed content for relevant insights</li>
+                          <li>→ Analyzes your writing style and voice patterns</li>
+                          <li>→ Generates content that maintains your authenticity</li>
+                          <li>→ Includes your unique frameworks and perspectives</li>
+                        </ul>
+                      </Alert>
+                    </Card.Body>
+                  </Card>
+                </Tab.Pane>
+
+                <Tab.Pane eventKey="review">
+                  <Card className="card-glassmorphism border-0 text-white">
+                    <Card.Body className="p-4">
+                      <h2 className="h3 fw-bold mb-4">Review & Approve</h2>
+                      <p className="text-light mb-4">
+                        Review AI-generated content before publishing. Human-in-the-loop keeps you in control.
+                      </p>
+                      
+                      {posts.length === 0 ? (
+                        <div className="text-center py-5">
+                          <Bot size={64} className="opacity-50 mb-3" />
+                          <p className="text-muted">No posts generated yet. Head to the Generate tab to create your first post!</p>
+                        </div>
+                      ) : (
+                        <div className="d-grid gap-4">
+                          {posts.map(post => (
+                            <Card key={post.id} className="bg-transparent border-light">
+                              <Card.Body>
+                                <Row className="align-items-start">
+                                  <Col sm={8} className="mb-3">
+                                    <div className="d-flex align-items-center gap-2 mb-2">
+                                      <User size={16} className="text-primary" />
+                                      <span className="small text-muted">
+                                        {new Date(post.timestamp).toLocaleDateString()}
+                                      </span>
+                                      <Badge 
+                                        bg={post.status === 'approved' ? 'success' : 
+                                            post.status === 'rejected' ? 'danger' : 'warning'}
+                                        className="ms-2"
+                                      >
+                                        {post.status}
+                                      </Badge>
+                                    </div>
+                                    <p className="fw-bold text-primary mb-2">Prompt: {post.prompt}</p>
+                                  </Col>
+                                  <Col sm={4} className="text-end">
+                                    {post.status === 'pending' && (
+                                      <div className="d-flex gap-2 justify-content-end">
+                                        <Button
+                                          size="sm"
+                                          variant="success"
+                                          onClick={() => updatePostStatus(post.id, 'approved')}
+                                        >
+                                          <CheckCircle size={16} className="me-1" />
+                                          Approve
+                                        </Button>
+                                        <Button
+                                          size="sm"
+                                          variant="danger"
+                                          onClick={() => updatePostStatus(post.id, 'rejected')}
+                                        >
+                                          <XCircle size={16} className="me-1" />
+                                          Reject
+                                        </Button>
+                                      </div>
+                                    )}
+                                  </Col>
+                                </Row>
+                                
+                                <Card className="bg-secondary bg-opacity-25 border-0 mb-3">
+                                  <Card.Body className="p-3">
+                                    <pre className="mb-0 text-white" style={{whiteSpace: 'pre-wrap', fontFamily: 'inherit'}}>
+                                      {post.content}
+                                    </pre>
+                                  </Card.Body>
+                                </Card>
+
+                                <Alert variant="info" className="mb-0 bg-transparent">
+                                  <div className="small">
+                                    <strong>RAG Sources:</strong>
+                                    <ul className="mb-0 mt-1">
+                                      {post.ragSources.map((source, idx) => (
+                                        <li key={idx}>{source}</li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                </Alert>
+                              </Card.Body>
+                            </Card>
+                          ))}
+                        </div>
+                      )}
+                    </Card.Body>
+                  </Card>
+                </Tab.Pane>
+
+                <Tab.Pane eventKey="setup">
+                  <Card className="card-glassmorphism border-0 text-white">
+                    <Card.Body className="p-4">
+                      <h2 className="h3 fw-bold mb-4">System Configuration</h2>
+                      
+                      <Row className="g-4">
+                        <Col md={6}>
+                          <Card className="bg-transparent border-success">
+                            <Card.Header className="bg-transparent border-success">
+                              <Card.Title className="h5 mb-0 d-flex align-items-center gap-2">
+                                <Zap className="text-warning" size={20} />
+                                n8n Automation
+                              </Card.Title>
+                            </Card.Header>
+                            <Card.Body>
+                              <Form>
+                                <Form.Group className="mb-3">
+                                  <Form.Label>Webhook URL</Form.Label>
+                                  <Form.Control
+                                    type="url"
+                                    value={n8nConfig.webhookUrl}
+                                    onChange={(e) => updateConfig('webhookUrl', e.target.value)}
+                                    placeholder="https://your-n8n.com/webhook/..."
+                                    className="bg-transparent border-light text-white"
+                                  />
+                                  <Form.Text className="text-muted">
+                                    Connect to your n8n workflow for automated publishing
+                                  </Form.Text>
+                                </Form.Group>
+                                
+                                <Form.Group>
+                                  <Form.Label>API Key</Form.Label>
+                                  <Form.Control
+                                    type="password"
+                                    value={n8nConfig.apiKey}
+                                    onChange={(e) => updateConfig('apiKey', e.target.value)}
+                                    placeholder="Your n8n API key"
+                                    className="bg-transparent border-light text-white"
+                                  />
+                                  <Form.Text className="text-muted">
+                                    Used for secure API authentication
+                                  </Form.Text>
+                                </Form.Group>
+                              </Form>
+                              
+                              <div className="mt-3">
+                                <Badge bg={n8nConfig.webhookUrl ? 'success' : 'secondary'}>
+                                  {n8nConfig.webhookUrl ? 'Connected' : 'Not Connected'}
+                                </Badge>
+                              </div>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+
+                        <Col md={6}>
+                          <Card className="bg-transparent border-info">
+                            <Card.Header className="bg-transparent border-info">
+                              <Card.Title className="h5 mb-0 d-flex align-items-center gap-2">
+                                <Database className="text-info" size={20} />
+                                Vector Database
+                              </Card.Title>
+                            </Card.Header>
+                            <Card.Body>
+                              <div className="d-flex align-items-center justify-content-between mb-3">
+                                <span>Status</span>
+                                <Badge bg={vectorDB.status === 'connected' ? 'success' : 'warning'}>
+                                  {vectorDB.status === 'connected' ? 'Connected' : 'Disconnected'}
+                                </Badge>
+                              </div>
+                              
+                              <div className="d-flex align-items-center justify-content-between mb-3">
+                                <span>Indexed Content</span>
+                                <span className="fw-bold">{vectorDB.indexed} posts</span>
+                              </div>
+                              
+                              <Button 
+                                variant="outline-info" 
+                                size="sm"
+                                onClick={() => indexContent('Manual index test')}
+                                disabled={vectorDB.status === 'indexing'}
+                              >
+                                {vectorDB.status === 'indexing' ? (
+                                  <>
+                                    <Spinner size="sm" className="me-2" />
+                                    Indexing...
+                                  </>
+                                ) : (
+                                  'Test Connection'
+                                )}
+                              </Button>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                      </Row>
+
+                      {/* Integration Guide */}
+                      <Alert variant="primary" className="mt-4 bg-transparent border-primary">
+                        <Alert.Heading className="h5">🚀 Quick Start Guide</Alert.Heading>
+                        <ol className="mb-0">
+                          <li>Set up your n8n workflow with the webhook trigger</li>
+                          <li>Configure Faiss vector database for content storage</li>
+                          <li>Index your best LinkedIn posts to train your voice</li>
+                          <li>Connect Telegram for human-in-the-loop approval</li>
+                          <li>Generate and review content before publishing</li>
+                        </ol>
+                      </Alert>
+                    </Card.Body>
+                  </Card>
+                </Tab.Pane>
+              </Tab.Content>
+            </Tab.Container>
+          </Col>
+        </Row>
+
+        {/* Footer */}
+        <Row className="justify-content-center mt-5">
+          <Col lg={10} xl={8}>
+            <footer className="py-4 border-top border-light border-opacity-25">
+              <Row className="g-4">
+                <Col lg={6} className="text-center text-lg-start">
+                  <h3 className="h5">Connect with me</h3>
+                  <div className="d-flex justify-content-center justify-content-lg-start gap-3 mt-3">
+                    <a href="https://www.youtube.com/@RifatErdemSahin" target="_blank" rel="noopener noreferrer" className="social-link youtube-link" title="YouTube">
+                      <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"></path>
+                      </svg>
+                    </a>
+                    <a href="https://www.linkedin.com/in/rifaterdemsahin/" target="_blank" rel="noopener noreferrer" className="social-link linkedin-link" title="LinkedIn">
+                      <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"></path>
+                      </svg>
+                    </a>
+                    <a href="https://github.com/rifaterdemsahin/" target="_blank" rel="noopener noreferrer" className="social-link github-link" title="GitHub">
+                      <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path>
+                      </svg>
+                    </a>
+                  </div>
+                </Col>
+                <Col lg={6} className="text-center text-lg-end">
+                  <a href="https://buymeacoffee.com/rifaterdemsahin" target="_blank" rel="noopener noreferrer" className="support-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                      <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                      <line x1="6" y1="1" x2="6" y2="4"></line>
+                      <line x1="10" y1="1" x2="10" y2="4"></line>
+                      <line x1="14" y1="1" x2="14" y2="4"></line>
+                    </svg>
+                    Buy Me a Coffee
+                  </a>
+                  <p className="text-muted mt-3">Built with ❤️ by Rifat Erdem Sahin</p>
+                </Col>
+              </Row>
+            </footer>
+          </Col>
+        </Row>
+      </Container>
+    </div>
+  );
+}
