@@ -796,7 +796,7 @@ Content source: ${post.content}`
                         style={{ width: '16px', height: '16px', fontSize: '10px' }}>
                     📊
                   </span>
-                  <span className="text-nowrap">Delivery Dashboard</span>
+                  <span className="text-nowrap">Delivery Pilot</span>
                 </Button>
                 <Button 
                   variant={debugData.visible ? 'success' : 'outline-secondary'}
@@ -1002,6 +1002,54 @@ Examples:
                       <p style={{ color: '#8B949E' }} className="mb-4">
                         AI analyzes your seed data against indexed content to create authentic prompts that match your voice and style.
                       </p>
+
+                      {/* Status Indicators */}
+                      <Row className="mb-4">
+                        <Col md={4}>
+                          <Card className="bg-transparent border-info text-center">
+                            <Card.Body className="py-3">
+                              <div className="d-flex align-items-center justify-content-center gap-2 mb-2">
+                                <MessageSquare size={24} style={{ color: '#58A6FF' }} />
+                                <h5 className="mb-0 text-info">Posts</h5>
+                              </div>
+                              <div className="display-6 fw-bold text-info">{posts.length}</div>
+                              <small className="text-muted">Generated Posts</small>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                        <Col md={4}>
+                          <Card className="bg-transparent border-warning text-center">
+                            <Card.Body className="py-3">
+                              <div className="d-flex align-items-center justify-content-center gap-2 mb-2">
+                                <Zap size={24} style={{ color: '#FFC107' }} />
+                                <h5 className="mb-0 text-warning">Setup</h5>
+                              </div>
+                              <div className="display-6 fw-bold text-warning">
+                                {n8nConfig.connectionStatus === 'connected' ? '✓' : '⚠'}
+                              </div>
+                              <small className="text-muted">
+                                {n8nConfig.connectionStatus === 'connected' ? 'Connected' : 'Not Connected'}
+                              </small>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                        <Col md={4}>
+                          <Card className="bg-transparent border-success text-center">
+                            <Card.Body className="py-3">
+                              <div className="d-flex align-items-center justify-content-center gap-2 mb-2">
+                                <Database size={24} style={{ color: '#28A745' }} />
+                                <h5 className="mb-0 text-success">RAG Status</h5>
+                              </div>
+                              <div className="display-6 fw-bold text-success">
+                                {vectorDB.status === 'connected' ? vectorDB.indexed : '0'}
+                              </div>
+                              <small className="text-muted">
+                                {vectorDB.status === 'connected' ? 'Documents Indexed' : 'Not Indexed'}
+                              </small>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                      </Row>
 
                       {/* Workflow Stages */}
                       <Row className="mb-4">

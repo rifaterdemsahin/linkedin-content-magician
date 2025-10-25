@@ -10,9 +10,11 @@ release the video
 Index your real second brain data not the sample data 
 ---
 this should be inside the RAG Process tab > 0
-Posts Indexed
+Posts 
 Setup
 RAG Status
+> F:\linkedin-content-magician\5_Symbols\src\App.jsx
+
 ---
 
 Make the prompts as template that are send to n8n with placeholders
