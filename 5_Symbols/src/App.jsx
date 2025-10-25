@@ -114,7 +114,7 @@ export default function LinkedInContentMagician() {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Bot className="w-12 h-12 text-blue-400" />
             <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              LinkedIn Content Magician
+              LinkedIn Content Magician 🧙‍♂️
             </h1>
           </div>
           <p className="text-gray-300 text-lg">Your AI-Powered Content Assistant with RAG Technology</p>
