@@ -1758,12 +1758,14 @@ Examples:
                 </Tab.Pane>
 
                 <Tab.Pane eventKey="linkedin-publishing">
-                  <Card className="card-glassmorphism border-0 text-white">
-                    <Card.Body className="p-4">
-                      <h2 className="h3 fw-bold mb-4">🚀 LinkedIn Publishing</h2>
-                      <p style={{ color: '#8B949E' }} className="mb-4">
-                        Automated posting to LinkedIn with analytics tracking and scheduling capabilities.
-                      </p>
+                  <Card className="bg-transparent" style={{ borderColor: '#30363D' }}>
+                    <Card.Body>
+                      <h3 style={{ color: '#58A6FF' }} className="mb-4">
+                        <div className="d-flex align-items-center gap-3">
+                          � 5. LinkedIn Publishing
+                          <Badge bg="info" className="fs-6">Checklist Workflow</Badge>
+                        </div>
+                      </h3>
                       
                       {/* N8N Send Result */}
                       {n8nResult && (
