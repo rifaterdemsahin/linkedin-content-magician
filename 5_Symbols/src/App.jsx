@@ -631,15 +631,43 @@ Content source: ${post.content}`
               <p className="lead" style={{ color: '#8B949E' }}>Your AI-Powered Content Assistant with RAG Technology</p>
               
               {/* Debug Toggle Button */}
-              <Button 
-                variant="outline-warning" 
-                size="sm"
-                className="position-absolute top-0 end-0"
-                onClick={() => setDebugData({ ...debugData, visible: !debugData.visible })}
-                style={{ opacity: 0.7 }}
-              >
-                🐛 Debug {debugData.visible ? 'ON' : 'OFF'}
-              </Button>
+              <div className="position-absolute top-0 end-0 d-flex flex-column align-items-end gap-2">
+                <Button 
+                  variant={debugData.visible ? 'success' : 'outline-secondary'}
+                  size="sm"
+                  className={`d-flex align-items-center gap-2 shadow-sm ${debugData.visible ? 'debug-toggle-active' : 'debug-toggle-inactive'}`}
+                  onClick={() => setDebugData({ ...debugData, visible: !debugData.visible })}
+                  style={{ 
+                    fontWeight: '500',
+                    transition: 'all 0.3s ease-in-out',
+                    minWidth: '110px'
+                  }}
+                >
+                  {debugData.visible ? (
+                    <>
+                      <span className="d-inline-flex align-items-center justify-content-center rounded-circle bg-white text-success" 
+                            style={{ width: '16px', height: '16px', fontSize: '10px' }}>
+                        ✓
+                      </span>
+                      Debug Mode
+                    </>
+                  ) : (
+                    <>
+                      <span className="d-inline-flex align-items-center justify-content-center rounded-circle bg-secondary text-white" 
+                            style={{ width: '16px', height: '16px', fontSize: '10px' }}>
+                        🐛
+                      </span>
+                      Debug Mode
+                    </>
+                  )}
+                </Button>
+                {debugData.visible && (
+                  <small className="debug-status-active text-white fw-medium px-2 py-1 rounded-pill" 
+                         style={{ fontSize: '0.7rem' }}>
+                    ⚡ Debug Active
+                  </small>
+                )}
+              </div>
             </div>
           </Col>
         </Row>
@@ -1198,8 +1226,9 @@ Examples:
                     <Card.Body className="p-4">
                       <h2 className="h3 fw-bold mb-4">System Configuration</h2>
                       
+
                       <Row className="g-4">
-                        <Col md={6}>
+                        <Col md={4}>
                           <Card className="bg-transparent" style={{ borderColor: '#30363D' }}>
                             <Card.Header className="bg-transparent" style={{ borderColor: '#30363D' }}>
                               <Card.Title className="h5 mb-0 d-flex align-items-center gap-2" style={{ color: '#E6EDF3' }}>
@@ -1250,7 +1279,7 @@ Examples:
                           </Card>
                         </Col>
 
-                        <Col md={6}>
+                        <Col md={4}>
                           <Card className="bg-transparent" style={{ borderColor: '#30363D' }}>
                             <Card.Header className="bg-transparent" style={{ borderColor: '#30363D' }}>
                               <Card.Title className="h5 mb-0 d-flex align-items-center gap-2" style={{ color: '#E6EDF3' }}>
@@ -1289,7 +1318,32 @@ Examples:
                             </Card.Body>
                           </Card>
                         </Col>
+                        <Col md={4}>
+                          <Card className="bg-transparent" style={{ borderColor: '#30363D' }}>
+                            <Card.Header className="bg-transparent" style={{ borderColor: '#30363D' }}>
+                              <Card.Title className="h5 mb-0 d-flex align-items-center gap-2" style={{ color: '#E6EDF3' }}>
+                                <Send className="text-primary" size={20} />
+                                Delivery Pilot
+                              </Card.Title>
+                            </Card.Header>
+                            <Card.Body>
+                              <p style={{ color: '#8B949E' }}>
+                                View the deployed application on GitHub Pages.
+                              </p>
+                              <Button 
+                                as="a" 
+                                href="https://rifaterdemsahin.github.io/linkedin-content-magician/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                variant="outline-primary"
+                              >
+                                Open Dashboard
+                              </Button>
+                            </Card.Body>
+                          </Card>
+                        </Col>
                       </Row>
+
 
                       {/* Integration Guide */}
                       <Alert variant="primary" className="mt-4 bg-transparent" style={{ borderColor: '#58A6FF' }}>
@@ -1362,21 +1416,45 @@ Examples:
         {debugData.visible && (
           <Row className="justify-content-center mt-4">
             <Col lg={10} xl={8}>
-              <Card className="card-glassmorphism border-warning">
-                <Card.Header className="bg-transparent border-warning d-flex justify-content-between align-items-center">
-                  <div className="d-flex align-items-center gap-2">
-                    <Zap className="text-warning" size={20} />
-                    <h5 className="mb-0 text-warning">🐛 Debug Window</h5>
-                    <Badge bg="warning" text="dark">
-                      {debugData.timestamp ? new Date(debugData.timestamp).toLocaleTimeString() : ''}
+              <Card className="card-glassmorphism border-success shadow-lg">
+                <Card.Header className="bg-transparent border-success d-flex justify-content-between align-items-center">
+                  <div className="d-flex align-items-center gap-3">
+                    <div className="d-flex align-items-center justify-content-center rounded-circle bg-success text-white" 
+                         style={{ width: '32px', height: '32px' }}>
+                      🐛
+                    </div>
+                    <div>
+                      <h5 className="mb-0 text-success fw-bold">Debug Console</h5>
+                      <small className="text-muted">Real-time RAG processing insights</small>
+                    </div>
+                    <Badge bg="success" className="px-3 py-1">
+                      {debugData.timestamp ? new Date(debugData.timestamp).toLocaleTimeString() : 'Ready'}
                     </Badge>
                   </div>
                   <Button 
-                    variant="outline-warning" 
+                    variant="outline-success" 
                     size="sm"
+                    className="d-flex align-items-center gap-2"
                     onClick={() => setDebugData({ ...debugData, visible: false })}
+                    style={{ 
+                      borderColor: '#28a745',
+                      color: '#28a745',
+                      transition: 'all 0.3s ease-in-out',
+                      minWidth: '70px'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = '#28a745';
+                      e.target.style.color = '#fff';
+                      e.target.style.transform = 'translateY(-1px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = 'transparent';
+                      e.target.style.color = '#28a745';
+                      e.target.style.transform = 'translateY(0)';
+                    }}
                   >
-                    ✕ Close
+                    <span style={{ fontSize: '12px' }}>✕</span>
+                    Close
                   </Button>
                 </Card.Header>
                 <Card.Body>
@@ -1596,15 +1674,37 @@ Examples:
                     </Row>
                   )}
 
-                  <Alert variant="info" className="mt-4 mb-0 bg-transparent border-info">
-                    <div className="small">
-                      <strong>🛠️ Debug Information:</strong>
-                      <ul className="mb-0 mt-1">
-                        <li><strong>Processing:</strong> Shows each step of the RAG pipeline</li>
-                        <li><strong>RAG Sources:</strong> Displays retrieved content sources and input</li>
-                        <li><strong>Generated Content:</strong> Preview of the AI-generated LinkedIn post</li>
-                        <li><strong>n8n Payload:</strong> Complete data structure sent to automation workflow</li>
-                      </ul>
+                  <Alert variant="success" className="mt-4 mb-0 bg-transparent border-success">
+                    <div className="d-flex align-items-start gap-3">
+                      <div className="d-flex align-items-center justify-content-center rounded-circle bg-success text-white flex-shrink-0" 
+                           style={{ width: '24px', height: '24px', fontSize: '12px' }}>
+                        💡
+                      </div>
+                      <div className="small">
+                        <strong className="text-success">Debug Panel Guide:</strong>
+                        <div className="row mt-2 g-2">
+                          <div className="col-md-6">
+                            <div className="d-flex align-items-center gap-2 mb-1">
+                              <span className="badge bg-info">Processing</span>
+                              <span className="text-light">Real-time RAG pipeline steps</span>
+                            </div>
+                            <div className="d-flex align-items-center gap-2 mb-1">
+                              <span className="badge bg-success">RAG Sources</span>
+                              <span className="text-light">Retrieved content & similarity scores</span>
+                            </div>
+                          </div>
+                          <div className="col-md-6">
+                            <div className="d-flex align-items-center gap-2 mb-1">
+                              <span className="badge bg-warning">Content</span>
+                              <span className="text-light">AI-generated LinkedIn post preview</span>
+                            </div>
+                            <div className="d-flex align-items-center gap-2 mb-1">
+                              <span className="badge bg-danger">Payload</span>
+                              <span className="text-light">Complete n8n automation data</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </Alert>
                 </Card.Body>
