@@ -39,8 +39,11 @@ const MarkdownConfigs = {
         'formula_github_actions_static_deployment.md',
         'formula_github_pages_routing.md',
         'formula_google_flow.md',
+        'formula_index.md',
         'formula_jsx_explanation.md',
         'formula_last_commit_changes.md',
+        'formula_markdown_config_sync.md',
+        'formula_netlify_deployment.md',
         'formula_post_processing_implementation.md',
         'formula_post_processing_visual_guide.md',
         'formula_post_processing_workflow.md',
@@ -53,7 +56,8 @@ const MarkdownConfigs = {
         'formula_why_user_vercel.md',
         'formula_youtube_voice_over.md',
         'formula-estimate-delivery.md',
-        'N8N_SETUP_UPDATES.md'
+        'N8N_SETUP_UPDATES.md',
+        'README.md'
     ],
     
     'semblance': [
