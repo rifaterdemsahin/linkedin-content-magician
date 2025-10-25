@@ -369,7 +369,7 @@ Agree or disagree? Let's debate in the comments! 🔥
                         style={{backgroundColor: activeTab === 'generate' ? '#58A6FF' : 'transparent'}}
                       >
                         Generate
-                      </Nav.LInk>
+                      </Nav.Link>
                     </Nav.Item>
                     <Nav.Item className="flex-fill">
                       <Nav.Link 
@@ -378,7 +378,7 @@ Agree or disagree? Let's debate in the comments! 🔥
                         style={{backgroundColor: activeTab === 'review' ? '#58A6FF' : 'transparent'}}
                       >
                         Review
-                      </Nav.LInk>
+                      </Nav.Link>
                     </Nav.Item>
                     <Nav.Item className="flex-fill">
                       <Nav.Link 
@@ -387,7 +387,7 @@ Agree or disagree? Let's debate in the comments! 🔥
                         style={{backgroundColor: activeTab === 'setup' ? '#58A6FF' : 'transparent'}}
                       >
                         Setup
-                      </Nav.LInk>
+                      </Nav.Link>
                     </Nav.Item>
                   </Nav>
                 </Card.Header>
