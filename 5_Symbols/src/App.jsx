@@ -778,8 +778,26 @@ Content source: ${post.content}`
               </div>
               <p className="lead" style={{ color: '#8B949E' }}>Your AI-Powered Content Assistant with RAG Technology</p>
               
-              {/* Debug Toggle Button */}
+              {/* Top Navigation - Dashboard Link and Debug Toggle */}
               <div className="position-absolute top-0 end-0 d-flex flex-column align-items-end gap-2">
+                <Button 
+                  variant="outline-info"
+                  size="sm"
+                  className="d-flex align-items-center gap-2 shadow-sm"
+                  onClick={() => window.open('https://rifaterdemsahin.github.io/linkedin-content-magician/dashboard.html', '_blank')}
+                  title="Access the Delivery Pilot Dashboard for project overview"
+                  style={{ 
+                    fontWeight: '500',
+                    transition: 'all 0.3s ease-in-out',
+                    minWidth: '180px'
+                  }}
+                >
+                  <span className="d-inline-flex align-items-center justify-content-center rounded-circle bg-info text-white" 
+                        style={{ width: '16px', height: '16px', fontSize: '10px' }}>
+                    📊
+                  </span>
+                  <span className="text-nowrap">Delivery Dashboard</span>
+                </Button>
                 <Button 
                   variant={debugData.visible ? 'success' : 'outline-secondary'}
                   size="sm"

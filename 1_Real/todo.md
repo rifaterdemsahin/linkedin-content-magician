@@ -14,13 +14,6 @@ Posts Indexed
 Setup
 RAG Status
 ---
- Access the Delivery Pilot Dashboard for project overview > make the link work
-https://rifaterdemsahin.github.io/linkedin-content-magician/dashboard.htm
-Place it in th top header
-
-
-
----
 
 Make the prompts as template that are send to n8n with placeholders
 � Text Content Prompts
