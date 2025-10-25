@@ -16,6 +16,19 @@ Custom RAG to build newsletters for professionals
 
 > **Note**: If auto-redirect doesn't work, manually click the "click here" link on the landing page.
 
+## 🚀 Vercel Production Deployment
+
+**🔗 [Live Application with Full RAG](https://linkedin-content-magician-nrywmc06o-rifaterdemsahins-projects.vercel.app)**
+
+### Full-Stack Features:
+- **Real RAG Search**: Python-powered semantic search using FAISS vector database
+- **Serverless Backend**: Python API functions for content generation
+- **Global CDN**: Fast loading worldwide via Vercel edge network
+- **Dynamic Content**: Real-time LinkedIn content generation with AI
+- **Production Database**: Live access to knowledge base documents
+
+> **Note**: This is the production deployment with complete RAG functionality, unlike the static GitHub Pages version.
+
 ## � n8n Workflow Monitoring
 
 **🔗 [View Workflow Executions](https://n8n.rifaterdemsahin.com/workflow/u8PdboUp5JCCPv55/executions)**
