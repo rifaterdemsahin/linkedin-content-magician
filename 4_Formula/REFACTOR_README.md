@@ -23,9 +23,9 @@ This document describes the refactored JavaScript architecture that eliminates c
 linkedin-content-magician/
 ├── 5_Symbols/
 │   ├── carousel-renderer.js      # ⭐ Reusable carousel component
-│   └── check-markdown-config.js  # ⭐ Configuration checker
-├── markdown-configs.js           # ⭐ Configuration for all sections
-├── delivery-pilot-menu.js        # Navigation menu component
+│   ├── check-markdown-config.js  # ⭐ Configuration checker
+│   ├── delivery-pilot-menu.js    # ⭐ Navigation menu component
+│   └── markdown-configs.js       # ⭐ Configuration for all sections
 └── [sections]/
     ├── index.html               # Updated to use shared components
     └── renderer.js.backup       # Backed up old files
@@ -52,7 +52,7 @@ MarkdownCarouselRenderer.create({
 - ✅ **Marked.js integration** - Automatic markdown rendering
 - ✅ **Bootstrap compatibility** - Works with Bootstrap carousel structure
 
-### 2. `markdown-configs.js`
+### 2. `5_Symbols/markdown-configs.js`
 **Centralized Configuration Management**
 
 ```javascript
@@ -84,7 +84,7 @@ const MarkdownConfigs = {
 - **Type safety** with JSDoc comments
 
 ### 3. **Extensibility**
-- **Easy to add new sections** - Just update `markdown-configs.js`
+- **Easy to add new sections** - Just update `5_Symbols/markdown-configs.js`
 - **Customizable rendering** - Override error handlers, styling, etc.
 - **Plugin-ready** - Clean API for future enhancements
 
@@ -125,7 +125,7 @@ All carousel pages tested successfully:
 ### For Developers:
 
 #### Adding a New Section:
-1. **Update `markdown-configs.js`**:
+1. **Update `5_Symbols/markdown-configs.js`**:
    ```javascript
    const MarkdownConfigs = {
        // ... existing configs
@@ -144,7 +144,7 @@ All carousel pages tested successfully:
 3. **Create HTML file** with standard carousel structure and script includes
 
 #### Adding Files to Existing Section:
-- Just update the array in `markdown-configs.js` - no other changes needed!
+- Just update the array in `5_Symbols/markdown-configs.js` - no other changes needed!
 
 #### Customizing Behavior:
 ```javascript

@@ -7,7 +7,7 @@ const path = require('path');
 // Read and parse the configuration from browser-side JS file
 let MarkdownConfigs = {};
 try {
-    const content = fs.readFileSync('markdown-configs.js', 'utf8');
+    const content = fs.readFileSync('./markdown-configs.js', 'utf8');
     // Extract the MarkdownConfigs object - look for the object that ends with just '};'
     const start = content.indexOf('const MarkdownConfigs = {');
     
@@ -45,7 +45,7 @@ try {
         }
     }
 } catch (error) {
-    console.error('Error reading markdown-configs.js:', error.message);
+    console.error('Error reading ./markdown-configs.js:', error.message);
     process.exit(1);
 }
 

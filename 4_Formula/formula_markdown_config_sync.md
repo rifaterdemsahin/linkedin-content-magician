@@ -16,7 +16,7 @@ Systematically identify and update missing markdown files in the `markdown-confi
 cd /Users/rifaterdemsahin/projects/linkedin-content-magician
 
 # Read the current markdown-configs.js
-cat markdown-configs.js
+cat 5_Symbols/markdown-configs.js
 ```
 
 ### Step 2: Audit Each Directory
@@ -53,7 +53,7 @@ Create a comparison matrix for each section:
 
 ### Manual Method:
 ```javascript
-// Open markdown-configs.js
+// Open 5_Symbols/markdown-configs.js
 // Locate the 'formula' array
 // Add missing files in alphabetical order
 

@@ -31,7 +31,7 @@ for i in "${!DIRS[@]}"; do
         configured_count=$(node -e "
             const fs = require('fs');
             try {
-                let content = fs.readFileSync('markdown-configs.js', 'utf8');
+                let content = fs.readFileSync('./markdown-configs.js', 'utf8');
                 // Remove the const declaration and other JS syntax
                 content = content.replace(/^.*const\s+MarkdownConfigs\s*=\s*/, 'const MarkdownConfigs = ');
                 content = content.replace(/\/\*[\s\S]*?\*\//g, '');
@@ -68,7 +68,7 @@ for i in "${!DIRS[@]}"; do
             node -e "
                 const fs = require('fs');
                 try {
-                    let content = fs.readFileSync('markdown-configs.js', 'utf8');
+                    let content = fs.readFileSync('./markdown-configs.js', 'utf8');
                     // Remove the const declaration and other JS syntax
                     content = content.replace(/^.*const\s+MarkdownConfigs\s*=\s*/, 'const MarkdownConfigs = ');
                     content = content.replace(/\/\*[\s\S]*?\*\//g, '');
