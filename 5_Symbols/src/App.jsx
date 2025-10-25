@@ -17,7 +17,7 @@ export default function LinkedInContentMagician() {
     processingSteps: []
   });
   const [n8nConfig, setN8nConfig] = useState({
-    webhookUrl: 'https://n8n.rifaterdemsahin.com/webhook-test/05c91180-4e19-4ccd-8917-658a96008ad9',
+    webhookUrl: import.meta.env.VITE_N8N_WEBHOOK_URL || 'https://n8n.rifaterdemsahin.com/webhook/05c91180-4e19-4ccd-8917-658a96008ad9',
     connectionStatus: 'disconnected',
     testing: false,
     debugOutput: []
