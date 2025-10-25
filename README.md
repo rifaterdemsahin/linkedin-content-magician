@@ -7,12 +7,14 @@ Custom RAG to build newsletters for professionals
 ## ☁️ Cloud URL
 
 **🔗 [Access the Application](https://rifaterdemsahin.github.io/linkedin-content-magician/)**
+**📊 [Delivery Pilot Dashboard](https://rifaterdemsahin.github.io/linkedin-content-magician/dashboard.html)**
 
 ### How to Navigate:
 1. **Visit**: [https://rifaterdemsahin.github.io/linkedin-content-magician/](https://rifaterdemsahin.github.io/linkedin-content-magician/)
-2. **Auto-redirect**: The landing page will automatically redirect you to the main application
-3. **Main App**: Located at `/5_Symbols/dist/index.html` - the core LinkedIn Content Magician interface
-4. **Features**: Generate, review, and manage AI-powered LinkedIn content with RAG technology
+2. **Dashboard**: [https://rifaterdemsahin.github.io/linkedin-content-magician/dashboard.html](https://rifaterdemsahin.github.io/linkedin-content-magician/dashboard.html) - Project overview and navigation
+3. **Auto-redirect**: The landing page will automatically redirect you to the main application
+4. **Main App**: Located at `/5_Symbols/dist/index.html` - the core LinkedIn Content Magician interface
+5. **Features**: Generate, review, and manage AI-powered LinkedIn content with RAG technology
 
 > **Note**: If auto-redirect doesn't work, manually click the "click here" link on the landing page.
 
