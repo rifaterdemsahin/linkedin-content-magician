@@ -17,7 +17,8 @@ export default function LinkedInContentMagician() {
     processingSteps: []
   });
   const [n8nConfig, setN8nConfig] = useState({
-    webhookUrl: import.meta.env.VITE_N8N_WEBHOOK_URL || 'https://n8n.rifaterdemsahin.com/webhook/05c91180-4e19-4ccd-8917-658a96008ad9',
+    normalizeWebhookUrl: import.meta.env.VITE_N8N_NORMALIZE_WEBHOOK_URL || 'https://n8n.rifaterdemsahin.com/webhook/normalize-data',
+    promptWebhookUrl: import.meta.env.VITE_N8N_PROMPT_WEBHOOK_URL || 'https://n8n.rifaterdemsahin.com/webhook/05c91180-4e19-4ccd-8917-658a96008ad9',
     connectionStatus: 'disconnected',
     testing: false,
     debugOutput: []
@@ -208,7 +209,9 @@ Agree or disagree? Let's debate in the comments! 🔥
       };
       
       debugSteps.push(`📦 [${new Date().toLocaleTimeString()}] n8n payload prepared`);
-      debugSteps.push(`🚀 Ready to send to n8n webhook: ${n8nConfig.webhookUrl}`);
+      debugSteps.push(`🚀 Ready to send to n8n webhooks:`);
+      debugSteps.push(`   📡 Normalize: ${n8nConfig.normalizeWebhookUrl}`);
+      debugSteps.push(`   📡 Prompt Generation: ${n8nConfig.promptWebhookUrl}`);
       
       // Update debug data
       setDebugData({
@@ -271,6 +274,32 @@ Agree or disagree? Let's debate in the comments! 🔥
       setVectorDB(updated);
       await saveToStorage('vectordb', updated);
     }, 1000);
+  };
+
+  const normalizeData = async () => {
+    if (!prompt.trim()) return;
+    
+    setLoading(true);
+    
+    const normalizePayload = {
+      seedData: prompt,
+      timestamp: new Date().toISOString(),
+      source: 'LinkedIn Content Magician',
+      action: 'normalize',
+      metadata: {
+        wordCount: prompt.trim().split(/\s+/).filter(Boolean).length,
+        characterCount: prompt.length
+      }
+    };
+
+    try {
+      await sendToN8n(normalizePayload, 'normalize');
+      setActiveTab('prompt-generation');
+    } catch (error) {
+      console.error('Failed to normalize data:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const setupTestIndex = async () => {
@@ -384,8 +413,9 @@ Agree or disagree? Let's debate in the comments! 🔥
     const debugLog = [];
     const timestamp = new Date().toISOString();
     
-    debugLog.push(`🔍 [${new Date().toLocaleTimeString()}] Starting connection test...`);
-    debugLog.push(`📡 Target URL: ${n8nConfig.webhookUrl}`);
+    debugLog.push(`🔍 [${new Date().toLocaleTimeString()}] Starting connection test for both webhooks...`);
+    debugLog.push(`📡 Normalize URL: ${n8nConfig.normalizeWebhookUrl}`);
+    debugLog.push(`📡 Prompt Generation URL: ${n8nConfig.promptWebhookUrl}`);
     
     setN8nConfig({ 
       ...n8nConfig, 
@@ -395,86 +425,90 @@ Agree or disagree? Let's debate in the comments! 🔥
     });
     
     try {
-      debugLog.push(`🚀 [${new Date().toLocaleTimeString()}] Sending POST request...`);
-      
-      const requestPayload = {
-        test: true,
-        message: 'Connection test from LinkedIn Content Magician',
-        timestamp: timestamp,
-        source: 'LinkedIn Content Magician UI',
-        debugMode: true
-      };
-      
-      debugLog.push(`📦 Request payload: ${JSON.stringify(requestPayload, null, 2)}`);
-      
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': 'LinkedIn-Content-Magician/1.0.0',
-          'X-Debug-Request': 'true'
-        },
-        body: JSON.stringify(requestPayload)
-      };
-      
-      debugLog.push(`🔧 Request headers: ${JSON.stringify(requestOptions.headers, null, 2)}`);
-      
-      const startTime = performance.now();
-      const response = await fetch(n8nConfig.webhookUrl, requestOptions);
-      const endTime = performance.now();
-      const responseTime = Math.round(endTime - startTime);
-      
-      debugLog.push(`⏱️ Response time: ${responseTime}ms`);
-      debugLog.push(`📊 Status Code: ${response.status} ${response.statusText}`);
-      debugLog.push(`🌐 Response headers: ${JSON.stringify(Object.fromEntries(response.headers), null, 2)}`);
-      
-      let responseText = '';
-      try {
-        responseText = await response.text();
-        debugLog.push(`📄 Response body: ${responseText || '(empty)'}`);
-      } catch (textError) {
-        debugLog.push(`❌ Failed to read response body: ${textError.message}`);
-      }
+      const testWebhook = async (url, type) => {
+        debugLog.push(`\n🚀 [${new Date().toLocaleTimeString()}] Testing ${type} webhook...`);
+        
+        const requestPayload = {
+          test: true,
+          message: `Connection test from LinkedIn Content Magician - ${type}`,
+          timestamp: timestamp,
+          source: 'LinkedIn Content Magician UI',
+          debugMode: true,
+          webhookType: type
+        };
+        
+        debugLog.push(`📦 ${type} payload: ${JSON.stringify(requestPayload, null, 2)}`);
+        
+        const requestOptions = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'User-Agent': 'LinkedIn-Content-Magician/1.0.0',
+            'X-Debug-Request': 'true'
+          },
+          body: JSON.stringify(requestPayload)
+        };
+        
+        const startTime = performance.now();
+        const response = await fetch(url, requestOptions);
+        const endTime = performance.now();
+        const responseTime = Math.round(endTime - startTime);
+        
+        debugLog.push(`⏱️ ${type} response time: ${responseTime}ms`);
+        debugLog.push(`📊 ${type} status: ${response.status} ${response.statusText}`);
+        
+        let responseText = '';
+        try {
+          responseText = await response.text();
+          debugLog.push(`📄 ${type} response: ${responseText || '(empty)'}`);
+        } catch (textError) {
+          debugLog.push(`❌ Failed to read ${type} response: ${textError.message}`);
+        }
 
-      if (response.ok) {
-        debugLog.push(`✅ [${new Date().toLocaleTimeString()}] Connection successful!`);
+        return { success: response.ok, status: response.status, responseTime, responseText };
+      };
+
+      // Test both webhooks
+      const normalizeResult = await testWebhook(n8nConfig.normalizeWebhookUrl, 'Normalize');
+      const promptResult = await testWebhook(n8nConfig.promptWebhookUrl, 'Prompt Generation');
+
+      const bothSuccessful = normalizeResult.success && promptResult.success;
+      
+      if (bothSuccessful) {
+        debugLog.push(`\n✅ [${new Date().toLocaleTimeString()}] Both webhooks connected successfully!`);
         const updated = { 
           ...n8nConfig, 
           connectionStatus: 'connected', 
           testing: false,
           debugOutput: debugLog,
           lastTestTime: timestamp,
-          lastResponseTime: responseTime
+          lastResponseTime: `Normalize: ${normalizeResult.responseTime}ms, Prompt: ${promptResult.responseTime}ms`
         };
         setN8nConfig(updated);
         await saveToStorage('config', updated);
       } else {
-        debugLog.push(`❌ [${new Date().toLocaleTimeString()}] HTTP Error: ${response.status}`);
-        if (response.status === 404) {
-          debugLog.push(`🔍 404 Error: Webhook endpoint not found. Please check the URL.`);
-        } else if (response.status === 500) {
-          debugLog.push(`🔍 500 Error: Server error. Check n8n workflow configuration.`);
-        } else if (response.status === 403) {
-          debugLog.push(`🔍 403 Error: Forbidden. Check webhook permissions.`);
-        }
+        const failedWebhooks = [];
+        if (!normalizeResult.success) failedWebhooks.push(`Normalize (${normalizeResult.status})`);
+        if (!promptResult.success) failedWebhooks.push(`Prompt Generation (${promptResult.status})`);
+        
+        debugLog.push(`\n❌ [${new Date().toLocaleTimeString()}] Failed webhooks: ${failedWebhooks.join(', ')}`);
         
         setN8nConfig({ 
           ...n8nConfig, 
           connectionStatus: 'failed', 
           testing: false,
           debugOutput: debugLog,
-          lastError: `HTTP ${response.status}: ${response.statusText}`,
+          lastError: `Failed: ${failedWebhooks.join(', ')}`,
           lastTestTime: timestamp
         });
       }
     } catch (error) {
-      debugLog.push(`💥 [${new Date().toLocaleTimeString()}] Network Error: ${error.message}`);
+      debugLog.push(`\n💥 [${new Date().toLocaleTimeString()}] Network Error: ${error.message}`);
       debugLog.push(`🔍 Error type: ${error.name}`);
-      debugLog.push(`📍 Error stack: ${error.stack}`);
       
       // More specific error analysis
       if (error.message.includes('Failed to fetch')) {
-        debugLog.push(`🌐 Network issue: Unable to reach the server. Check internet connection and URL.`);
+        debugLog.push(`🌐 Network issue: Unable to reach the server. Check internet connection and URLs.`);
       } else if (error.message.includes('CORS')) {
         debugLog.push(`🔒 CORS Error: Server may not allow cross-origin requests.`);
       } else if (error.message.includes('timeout')) {
@@ -499,12 +533,17 @@ Agree or disagree? Let's debate in the comments! 🔥
     await saveToStorage('config', updated);
   };
 
-  const sendToN8n = async (payload) => {
+  const sendToN8n = async (payload, webhookType = 'prompt') => {
     setN8nSending(true);
     setN8nResult(null);
     
+    // Select the appropriate webhook URL based on the type
+    const webhookUrl = webhookType === 'normalize' 
+      ? n8nConfig.normalizeWebhookUrl 
+      : n8nConfig.promptWebhookUrl;
+    
     try {
-      const response = await fetch(n8nConfig.webhookUrl, {
+      const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -987,23 +1026,43 @@ Examples:
                       <div className="text-center py-4">
                         {prompt.trim() ? (
                           <>
-                            <Button
-                              onClick={generateContent}
-                              disabled={loading}
-                              className="btn-warning w-75 py-3 d-flex align-items-center justify-content-center gap-2 mx-auto"
-                            >
-                              {loading ? (
-                                <>
-                                  <Spinner animation="border" size="sm" />
-                                  Processing with RAG...
-                                </>
-                              ) : (
-                                <>
-                                  <Send size={20} />
-                                  Start RAG Processing
-                                </>
-                              )}
-                            </Button>
+                            <div className="d-grid gap-3">
+                              <Button
+                                onClick={normalizeData}
+                                disabled={loading}
+                                className="btn-info w-75 py-3 d-flex align-items-center justify-content-center gap-2 mx-auto"
+                              >
+                                {loading ? (
+                                  <>
+                                    <Spinner animation="border" size="sm" />
+                                    Normalizing Data...
+                                  </>
+                                ) : (
+                                  <>
+                                    <Send size={20} />
+                                    Send to Normalize Webhook
+                                  </>
+                                )}
+                              </Button>
+                              
+                              <Button
+                                onClick={generateContent}
+                                disabled={loading}
+                                className="btn-warning w-75 py-3 d-flex align-items-center justify-content-center gap-2 mx-auto"
+                              >
+                                {loading ? (
+                                  <>
+                                    <Spinner animation="border" size="sm" />
+                                    Processing with RAG...
+                                  </>
+                                ) : (
+                                  <>
+                                    <Send size={20} />
+                                    Full RAG Processing (Local)
+                                  </>
+                                )}
+                              </Button>
+                            </div>
                             {!loading && (
                               <Button
                                 onClick={() => setActiveTab('prompt-generation')}
@@ -1597,7 +1656,7 @@ Examples:
                                           ragSources: post.ragSources || [],
                                           timestamp: new Date().toISOString(),
                                           status: "publishing"
-                                        })}
+                                        }, 'prompt')}
                                       >
                                         {n8nSending ? (
                                           <>
@@ -1680,15 +1739,28 @@ Examples:
                             <Card.Body>
                               <Form>
                                 <Form.Group className="mb-3">
-                                  <Form.Label style={{ color: '#E6EDF3' }}>Webhook URL</Form.Label>
+                                  <Form.Label style={{ color: '#E6EDF3' }}>Normalize Data Webhook URL</Form.Label>
                                   <Form.Control
                                     type="url"
-                                    value={n8nConfig.webhookUrl}
-                                    onChange={(e) => updateConfig('webhookUrl', e.target.value)}
-                                    placeholder="https://your-n8n.com/webhook/..."
+                                    value={n8nConfig.normalizeWebhookUrl}
+                                    onChange={(e) => updateConfig('normalizeWebhookUrl', e.target.value)}
+                                    placeholder="https://n8n.rifaterdemsahin.com/webhook/normalize-data"
                                   />
                                   <Form.Text style={{ color: '#8B949E' }}>
-                                    Connect to your n8n workflow for automated publishing
+                                    Used for normalizing seed data in the RAG process
+                                  </Form.Text>
+                                </Form.Group>
+                                
+                                <Form.Group className="mb-3">
+                                  <Form.Label style={{ color: '#E6EDF3' }}>Prompt Generation Webhook URL</Form.Label>
+                                  <Form.Control
+                                    type="url"
+                                    value={n8nConfig.promptWebhookUrl}
+                                    onChange={(e) => updateConfig('promptWebhookUrl', e.target.value)}
+                                    placeholder="https://n8n.rifaterdemsahin.com/webhook/05c91180-4e19-4ccd-8917-658a96008ad9"
+                                  />
+                                  <Form.Text style={{ color: '#8B949E' }}>
+                                    Used for generating content prompts and LinkedIn publishing
                                   </Form.Text>
                                 </Form.Group>
                               </Form>
@@ -1704,15 +1776,15 @@ Examples:
                                   variant="outline-warning" 
                                   size="sm"
                                   onClick={testN8nConnection}
-                                  disabled={n8nConfig.testing || !n8nConfig.webhookUrl}
+                                  disabled={n8nConfig.testing || !n8nConfig.normalizeWebhookUrl || !n8nConfig.promptWebhookUrl}
                                 >
                                   {n8nConfig.testing ? (
                                     <>
                                       <Spinner size="sm" className="me-2" />
-                                      Testing...
+                                      Testing Both Webhooks...
                                     </>
                                   ) : (
-                                    'Test Connection'
+                                    'Test Both Connections'
                                   )}
                                 </Button>
                               </div>

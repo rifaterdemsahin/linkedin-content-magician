@@ -324,7 +324,7 @@
     logContent.textContent = `🚀 Sending request to n8n workflow...\n\nPayload:\n${JSON.stringify(payload, null, 2)}\n\n`;
     
     try {
-      const response = await fetch('https://n8n.rifaterdemsahin.com/webhook/05c91180-4e19-4ccd-8917-658a96008ad9', {
+      const response = await fetch('https://n8n.rifaterdemsahin.com/webhook/normalize-data', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
