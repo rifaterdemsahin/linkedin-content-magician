@@ -4,3 +4,5 @@ youtube > audience feedback > https://studio.youtube.com/channel/UCSJyG3bTM7lnjM
 gemini > catchy titles > https://gemini.google.com/app/b279a0def312aa80
 thumbnails > ctr > https://www.canva.com/design/DAGJhH098do/7a-TDVcjX482MetGV3HLPA/edit
 google flow > animations > https://labs.google/fx/tools/flow/project/8e6dbb86-7c14-41af-85d8-41998005a559](https://labs.google/fx/tools/flow/project/8e6dbb86-7c14-41af-85d8-41998005a559)
+
+obsidian > /Users/rifaterdemsahin/projects/secondbrain/secondbrain/4_Archieve/2025/10/22/october video 4 upgrades.md
