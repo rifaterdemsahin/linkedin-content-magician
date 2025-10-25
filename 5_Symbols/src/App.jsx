@@ -85,7 +85,13 @@ export default function LinkedInContentMagician() {
       if (ragResponse.ok) {
         const ragData = await ragResponse.json();
         if (ragData.success && ragData.sources) {
-          ragSources = ragData.sources.map(source => source.title || source.file_name);
+          ragSources = ragData.sources.map(source => ({
+            title: source.title || source.file_name,
+            fileName: source.file_name,
+            distance: source.distance,
+            similarity: source.similarity,
+            score: ((1 - source.distance) * 100).toFixed(1) // Convert distance to percentage score
+          }));
           debugSteps.push(`✅ [${new Date().toLocaleTimeString()}] RAG search completed successfully`);
           debugSteps.push(`📊 Found ${ragSources.length} relevant sources from knowledge base`);
         } else {
@@ -99,9 +105,9 @@ export default function LinkedInContentMagician() {
       debugSteps.push(`⚠️ [${new Date().toLocaleTimeString()}] RAG search failed: ${error.message}`);
       debugSteps.push(`🔄 [${new Date().toLocaleTimeString()}] Using fallback knowledge sources`);
       ragSources = [
-        'Previous LinkedIn post about automation',
-        'Video transcript from tech talk', 
-        'Article draft on AI implementation'
+        { title: 'Previous LinkedIn post about automation', fileName: 'fallback_automation.md', score: '85.0', distance: 0.15 },
+        { title: 'Video transcript from tech talk', fileName: 'fallback_techtalk.md', score: '82.0', distance: 0.18 }, 
+        { title: 'Article draft on AI implementation', fileName: 'fallback_ai.md', score: '80.0', distance: 0.20 }
       ];
     }
     
