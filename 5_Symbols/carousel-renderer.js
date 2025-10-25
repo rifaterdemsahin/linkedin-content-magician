@@ -109,7 +109,28 @@ class MarkdownCarouselRenderer {
     }
 
     fetchAndRenderMarkdown(file, contentDiv) {
-        fetch(file)
+        // Construct proper path for GitHub Pages
+        let filePath = file;
+        const currentPath = window.location.pathname;
+        
+        // If we're on GitHub Pages, construct absolute path
+        if (window.location.hostname.includes('github.io')) {
+            if (currentPath.includes('/1_Real/')) {
+                filePath = '/linkedin-content-magician/1_Real/' + file;
+            } else if (currentPath.includes('/2_Environment/')) {
+                filePath = '/linkedin-content-magician/2_Environment/' + file;
+            } else if (currentPath.includes('/4_Formula/')) {
+                filePath = '/linkedin-content-magician/4_Formula/' + file;
+            } else if (currentPath.includes('/6_Semblance/')) {
+                filePath = '/linkedin-content-magician/6_Semblance/' + file;
+            } else if (currentPath.includes('/7_Testing/')) {
+                filePath = '/linkedin-content-magician/7_Testing/' + file;
+            } else if (currentPath.includes('/sample_docs/')) {
+                filePath = '/linkedin-content-magician/3_UI/sample_docs/' + file;
+            }
+        }
+        
+        fetch(filePath)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);

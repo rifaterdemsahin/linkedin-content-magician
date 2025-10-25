@@ -16,18 +16,29 @@ class DeliveryPilotMenu {
     }
 
     getRelativePath(targetFolder, isHome = false, isDashboard = false) {
+        // Check if we're on GitHub Pages
+        const isGitHubPages = window.location.hostname.includes('github.io');
+        const basePath = isGitHubPages ? '/linkedin-content-magician' : '';
+        
         // If it's the home link, always go to index.html in root
         if (isHome) {
-            return this.currentFolder ? '../index.html' : './index.html';
+            return isGitHubPages ? `${basePath}/index.html` : (this.currentFolder ? '../index.html' : './index.html');
         }
         // If it's the dashboard link, always go to dashboard.html in root
         if (isDashboard) {
-            return this.currentFolder ? '../dashboard.html' : './dashboard.html';
+            return isGitHubPages ? `${basePath}/dashboard.html` : (this.currentFolder ? '../dashboard.html' : './dashboard.html');
         }
         // If targeting dashboard (empty folder) - legacy support
         if (!targetFolder) {
-            return this.currentFolder ? '../dashboard.html' : './dashboard.html';
+            return isGitHubPages ? `${basePath}/dashboard.html` : (this.currentFolder ? '../dashboard.html' : './dashboard.html');
         }
+        
+        // For GitHub Pages, use absolute paths
+        if (isGitHubPages) {
+            return `${basePath}/${targetFolder}/index.html`;
+        }
+        
+        // For local development, use relative paths
         // If we're in the root directory or no current folder specified
         if (!this.currentFolder) {
             return `./${targetFolder}/index.html`;
