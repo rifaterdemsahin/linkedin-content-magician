@@ -65,17 +65,15 @@ export default function LinkedInContentMagician() {
     debugSteps.push(`🕐 [${new Date().toLocaleTimeString()}] Starting content generation process`);
     debugSteps.push(`📥 Input prompt: "${prompt}"`);
     
-    // Simulate RAG data retrieval
+    // Simulate RAG data retrieval - Top 3 picks only
     const ragSources = [
       'Previous LinkedIn post about automation',
-      'Video transcript from tech talk',
-      'Article draft on AI implementation',
-      'Whiteboard notes from strategy session',
-      'Client feedback on similar topics'
+      'Video transcript from tech talk', 
+      'Article draft on AI implementation'
     ];
     
     debugSteps.push(`🔍 [${new Date().toLocaleTimeString()}] RAG retrieval completed`);
-    debugSteps.push(`📊 Found ${ragSources.length} relevant sources`);
+    debugSteps.push(`📊 Found ${ragSources.length} relevant sources (top 3 picks)`);
     
     // Simulate content generation with RAG
     setTimeout(async () => {
