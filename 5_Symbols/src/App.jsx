@@ -8,8 +8,9 @@ export default function LinkedInContentMagician() {
   const [prompt, setPrompt] = useState('');
   const [loading, setLoading] = useState(false);
   const [n8nConfig, setN8nConfig] = useState({
-    webhookUrl: '',
-    apiKey: ''
+    webhookUrl: 'https://n8n.rifaterdemsahin.com/webhook-test/05c91180-4e19-4ccd-8917-658a96008ad9',
+    connectionStatus: 'disconnected',
+    testing: false
   });
   const [vectorDB, setVectorDB] = useState({
     indexed: 0,
@@ -158,6 +159,47 @@ Agree or disagree? Let's debate in the comments! 🔥
       setVectorDB(updated);
       await saveToStorage('vectordb', updated);
     }, 1000);
+  };
+
+  const testN8nConnection = async () => {
+    setN8nConfig({ ...n8nConfig, testing: true });
+    
+    try {
+      const response = await fetch(n8nConfig.webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          test: true,
+          message: 'Connection test from LinkedIn Content Magician',
+          timestamp: new Date().toISOString()
+        })
+      });
+
+      if (response.ok) {
+        const updated = { 
+          ...n8nConfig, 
+          connectionStatus: 'connected', 
+          testing: false 
+        };
+        setN8nConfig(updated);
+        await saveToStorage('config', updated);
+      } else {
+        setN8nConfig({ 
+          ...n8nConfig, 
+          connectionStatus: 'failed', 
+          testing: false 
+        });
+      }
+    } catch (error) {
+      console.error('Connection test failed:', error);
+      setN8nConfig({ 
+        ...n8nConfig, 
+        connectionStatus: 'failed', 
+        testing: false 
+      });
+    }
   };
 
   const updateConfig = async (field, value) => {
