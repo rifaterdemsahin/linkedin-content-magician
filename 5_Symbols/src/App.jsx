@@ -1534,7 +1534,25 @@ Examples:
                           </div>
                           {n8nResult.data && (
                             <div className="small">
-                              <strong>Response:</strong>
+                              <div className="d-flex justify-content-between align-items-center mb-2">
+                                <strong>Response:</strong>
+                                <Button 
+                                  size="sm" 
+                                  variant="outline-light"
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(n8nResult.data);
+                                    // Optional: Show temporary feedback
+                                    const btn = event.target;
+                                    const originalText = btn.textContent;
+                                    btn.textContent = '✓ Copied!';
+                                    setTimeout(() => {
+                                      btn.textContent = originalText;
+                                    }, 1500);
+                                  }}
+                                >
+                                  📋 Copy Response
+                                </Button>
+                              </div>
                               <pre className="mt-1 p-2 rounded" style={{ 
                                 backgroundColor: 'rgba(0,0,0,0.2)', 
                                 fontSize: '0.75rem',
@@ -1545,8 +1563,33 @@ Examples:
                               </pre>
                             </div>
                           )}
-                          <div className="small text-muted mt-2">
-                            Sent at: {new Date(n8nResult.timestamp).toLocaleString()}
+                          <div className="d-flex justify-content-between align-items-center">
+                            <div className="small text-muted">
+                              Sent at: {new Date(n8nResult.timestamp).toLocaleString()}
+                            </div>
+                            <Button 
+                              size="sm" 
+                              variant="outline-secondary"
+                              onClick={() => {
+                                const fullResult = {
+                                  success: n8nResult.success,
+                                  message: n8nResult.message,
+                                  data: n8nResult.data,
+                                  timestamp: n8nResult.timestamp,
+                                  error: n8nResult.error
+                                };
+                                navigator.clipboard.writeText(JSON.stringify(fullResult, null, 2));
+                                // Optional: Show temporary feedback
+                                const btn = event.target;
+                                const originalText = btn.textContent;
+                                btn.textContent = '✓ Copied!';
+                                setTimeout(() => {
+                                  btn.textContent = originalText;
+                                }, 1500);
+                              }}
+                            >
+                              📋 Copy Full Result
+                            </Button>
                           </div>
                         </Alert>
                       </Col>
