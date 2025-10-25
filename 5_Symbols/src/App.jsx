@@ -365,8 +365,12 @@ export default function LinkedInContentMagician() {
         </div>
 
         {/* Footer */}
-        <footer className="text-center mt-8 text-gray-400 text-sm">
-          <p>Built with n8n, Faiss, and React | Your authentic voice, amplified 🚀</p>
+        <footer className="text-center mt-12 py-6 border-t border-white/20 text-gray-300">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <Bot className="w-4 h-4 text-blue-400" />
+            <p className="text-sm">Built with n8n, Faiss, and React | Your authentic voice, amplified 🚀</p>
+          </div>
+          <p className="text-xs text-gray-400">LinkedIn Content Magician © 2025</p>
         </footer>
       </div>
     </div>
