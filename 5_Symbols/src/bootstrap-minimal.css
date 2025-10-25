@@ -8,6 +8,38 @@
   padding: 0 15px;
 }
 
+/* Fix for Netlify deployment centering issue */
+.container-fluid {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+@media (min-width: 1200px) {
+  .container-fluid {
+    max-width: 1200px;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .container-fluid {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .container-fluid {
+    max-width: 720px;
+  }
+}
+
+@media (max-width: 767px) {
+  .container-fluid {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+}
+
 .row {
   display: flex;
   flex-wrap: wrap;
