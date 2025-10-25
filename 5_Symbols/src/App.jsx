@@ -7,6 +7,15 @@ export default function LinkedInContentMagician() {
   const [activeTab, setActiveTab] = useState('generate');
   const [prompt, setPrompt] = useState('');
   const [loading, setLoading] = useState(false);
+  const [debugData, setDebugData] = useState({
+    visible: false,
+    timestamp: '',
+    inputPrompt: '',
+    ragSources: [],
+    generatedContent: '',
+    n8nPayload: {},
+    processingSteps: []
+  });
   const [n8nConfig, setN8nConfig] = useState({
     webhookUrl: 'https://n8n.rifaterdemsahin.com/webhook-test/05c91180-4e19-4ccd-8917-658a96008ad9',
     connectionStatus: 'disconnected',
@@ -48,6 +57,25 @@ export default function LinkedInContentMagician() {
     if (!prompt.trim()) return;
     
     setLoading(true);
+    
+    // Initialize debug data
+    const timestamp = new Date().toISOString();
+    const debugSteps = [];
+    
+    debugSteps.push(`🕐 [${new Date().toLocaleTimeString()}] Starting content generation process`);
+    debugSteps.push(`📥 Input prompt: "${prompt}"`);
+    
+    // Simulate RAG data retrieval
+    const ragSources = [
+      'Previous LinkedIn post about automation',
+      'Video transcript from tech talk',
+      'Article draft on AI implementation',
+      'Whiteboard notes from strategy session',
+      'Client feedback on similar topics'
+    ];
+    
+    debugSteps.push(`🔍 [${new Date().toLocaleTimeString()}] RAG retrieval completed`);
+    debugSteps.push(`📊 Found ${ragSources.length} relevant sources`);
     
     // Simulate content generation with RAG
     setTimeout(async () => {
@@ -106,17 +134,48 @@ Agree or disagree? Let's debate in the comments! 🔥
 
       const selectedTemplate = templates[Math.floor(Math.random() * templates.length)];
       
+      debugSteps.push(`✨ [${new Date().toLocaleTimeString()}] Content generation completed`);
+      debugSteps.push(`📝 Generated ${selectedTemplate.length} characters of content`);
+      
+      // Prepare n8n payload
+      const n8nPayload = {
+        timestamp: timestamp,
+        source: 'LinkedIn Content Magician',
+        originalPrompt: prompt,
+        generatedContent: selectedTemplate,
+        ragSources: ragSources,
+        contentMetrics: {
+          characterCount: selectedTemplate.length,
+          wordCount: selectedTemplate.split(' ').length,
+          hashtags: (selectedTemplate.match(/#\w+/g) || []).length,
+          emojis: (selectedTemplate.match(/[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu) || []).length
+        },
+        platform: 'linkedin',
+        contentType: 'post',
+        status: 'ready_for_review'
+      };
+      
+      debugSteps.push(`📦 [${new Date().toLocaleTimeString()}] n8n payload prepared`);
+      debugSteps.push(`🚀 Ready to send to n8n webhook: ${n8nConfig.webhookUrl}`);
+      
+      // Update debug data
+      setDebugData({
+        visible: true,
+        timestamp: timestamp,
+        inputPrompt: prompt,
+        ragSources: ragSources,
+        generatedContent: selectedTemplate,
+        n8nPayload: n8nPayload,
+        processingSteps: debugSteps
+      });
+      
       const newPost = {
         id: Date.now(),
         content: selectedTemplate,
         prompt: prompt,
-        timestamp: new Date().toISOString(),
+        timestamp: timestamp,
         status: 'pending',
-        ragSources: [
-          'Previous LinkedIn post about automation',
-          'Video transcript from tech talk',
-          'Article draft on AI implementation'
-        ]
+        ragSources: ragSources
       };
 
       const updatedPosts = [newPost, ...posts];
@@ -536,7 +595,7 @@ Content source: ${post.content}`
                         className="text-center fw-medium border-0 text-white"
                         style={{backgroundColor: activeTab === 'generate' ? '#58A6FF' : 'transparent'}}
                       >
-                        Generate
+                        📊 Generate Prompts
                       </Nav.Link>
                     </Nav.Item>
                     <Nav.Item className="flex-fill">
@@ -545,7 +604,7 @@ Content source: ${post.content}`
                         className="text-center fw-medium border-0 text-white"
                         style={{backgroundColor: activeTab === 'review' ? '#58A6FF' : 'transparent'}}
                       >
-                        Review
+                        🚀 Review & Release
                       </Nav.Link>
                     </Nav.Item>
                     <Nav.Item className="flex-fill">
@@ -566,22 +625,87 @@ Content source: ${post.content}`
                 <Tab.Pane eventKey="generate">
                   <Card className="card-glassmorphism border-0 text-white">
                     <Card.Body className="p-4">
-                      <h2 className="h3 fw-bold mb-4">Generate New Content</h2>
+                      <h2 className="h3 fw-bold mb-4">Generate Content Prompts</h2>
                       <p style={{ color: '#8B949E' }} className="mb-4">
-                        Enter a topic or idea from your whiteboard from your weekly stream, and the RAG system will generate authentic content in your voice.
+                        Transform your seed ideas into comprehensive content strategies. Follow our 5-stage process from idea to LinkedIn post.
                       </p>
+
+                      {/* Workflow Stages */}
+                      <Row className="mb-4">
+                        <Col md={12}>
+                          <Card className="bg-transparent border-info mb-4">
+                            <Card.Header className="bg-transparent border-info">
+                              <h5 className="mb-0 text-info">🚀 Content Creation Workflow</h5>
+                            </Card.Header>
+                            <Card.Body>
+                              <div className="workflow-stages">
+                                <div className="stage-item d-flex align-items-start mb-3">
+                                  <div className="stage-number bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style={{minWidth: '30px', height: '30px', fontSize: '14px'}}>1</div>
+                                  <div>
+                                    <h6 className="text-primary mb-1">📊 Seed Data Collection</h6>
+                                    <p className="small text-muted mb-0">Gather ideas from your weekly streams, whiteboards, and brainstorming sessions</p>
+                                  </div>
+                                </div>
+                                
+                                <div className="stage-item d-flex align-items-start mb-3">
+                                  <div className="stage-number bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3" style={{minWidth: '30px', height: '30px', fontSize: '14px'}}>2</div>
+                                  <div>
+                                    <h6 className="text-warning mb-1">⚡ RAG Processing</h6>
+                                    <p className="small text-muted mb-0">AI analyzes your seed data against indexed content to create authentic prompts</p>
+                                  </div>
+                                </div>
+                                
+                                <div className="stage-item d-flex align-items-start mb-3">
+                                  <div className="stage-number bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-3" style={{minWidth: '30px', height: '30px', fontSize: '14px'}}>3</div>
+                                  <div>
+                                    <h6 className="text-info mb-1">📝 Prompt Generation</h6>
+                                    <p className="small text-muted mb-0">System creates multiple content prompts for text, images, videos, and campaigns</p>
+                                  </div>
+                                </div>
+                                
+                                <div className="stage-item d-flex align-items-start mb-3">
+                                  <div className="stage-number bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style={{minWidth: '30px', height: '30px', fontSize: '14px'}}>4</div>
+                                  <div>
+                                    <h6 className="text-success mb-1">👁️ Review & Execute</h6>
+                                    <p className="small text-muted mb-0">Human-in-the-loop review, customization, and execution of generated prompts</p>
+                                  </div>
+                                </div>
+                                
+                                <div className="stage-item d-flex align-items-start mb-0">
+                                  <div className="stage-number bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3" style={{minWidth: '30px', height: '30px', fontSize: '14px'}}>5</div>
+                                  <div>
+                                    <h6 className="text-danger mb-1">🚀 LinkedIn Publishing</h6>
+                                    <p className="small text-muted mb-0">Automated posting to LinkedIn with analytics tracking</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                      </Row>
                       
                       <Form>
                         <Form.Group className="mb-4">
+                          <Form.Label className="text-white mb-2">🌱 Enter Your Seed Data</Form.Label>
                           <Form.Control
                             as="textarea"
                             rows={4}
                             value={prompt}
                             onChange={(e) => setPrompt(e.target.value)}
-                            placeholder="Enter your content topic... (e.g., 'AI automation in marketing' or 'Building custom RAG systems')"
+                            placeholder="Enter your seed content ideas... 
+
+Examples:
+• Raw thoughts from your weekly stream
+• Whiteboard concepts and frameworks  
+• Client case studies and insights
+• Technical discoveries and learnings
+• Industry observations and trends"
                             className="bg-transparent border-light text-white"
                             style={{backgroundColor: 'rgba(255, 255, 255, 0.05)'}}
                           />
+                          <Form.Text className="text-muted">
+                            💡 Tip: The more context you provide, the better the AI can create authentic content in your voice
+                          </Form.Text>
                         </Form.Group>
                         
                         <Button
@@ -592,12 +716,12 @@ Content source: ${post.content}`
                           {loading ? (
                             <>
                               <Spinner animation="border" size="sm" />
-                              Generating with RAG...
+                              Processing with RAG...
                             </>
                           ) : (
                             <>
                               <Send size={20} />
-                              Generate Content
+                              Generate Content Prompts
                             </>
                           )}
                         </Button>
@@ -606,14 +730,28 @@ Content source: ${post.content}`
                       <Alert variant="primary" className="mt-4 bg-transparent border-primary">
                         <Alert.Heading className="h6 d-flex align-items-center gap-2">
                           <Database size={20} />
-                          How RAG Works
+                          How Our RAG System Works
                         </Alert.Heading>
                         <ul className="mb-0 small">
-                          <li>→ Searches your indexed content for relevant insights</li>
-                          <li>→ Analyzes your writing style and voice patterns</li>
-                          <li>→ Generates content that maintains your authenticity</li>
-                          <li>→ Includes your unique frameworks and perspectives</li>
+                          <li>🔍 <strong>Retrieval:</strong> Searches your indexed content library for relevant insights</li>
+                          <li>🧠 <strong>Augmentation:</strong> Enhances your seed data with your historical patterns</li>
+                          <li>✨ <strong>Generation:</strong> Creates authentic content that matches your voice</li>
+                          <li>🎯 <strong>Frameworks:</strong> Applies your unique methodologies and perspectives</li>
                         </ul>
+                      </Alert>
+
+                      <Alert variant="success" className="mt-3 bg-transparent border-success">
+                        <Alert.Heading className="h6 d-flex align-items-center gap-2">
+                          <CheckCircle size={20} />
+                          What Happens Next?
+                        </Alert.Heading>
+                        <ol className="mb-0 small">
+                          <li>Initial LinkedIn post is generated from your seed data</li>
+                          <li>Go to "Review & Prepare Release" tab to review the content</li>
+                          <li>Click "Generate Release Prompts" for comprehensive content suite</li>
+                          <li>Use prompts with AI tools (ChatGPT, Midjourney, etc.) to create assets</li>
+                          <li>Deploy across multiple platforms with automated publishing</li>
+                        </ol>
                       </Alert>
                     </Card.Body>
                   </Card>
@@ -630,7 +768,7 @@ Content source: ${post.content}`
                       {posts.length === 0 ? (
                         <div className="text-center py-5">
                           <Bot size={64} className="opacity-50 mb-3" />
-                          <p className="text-muted">No posts generated yet. Head to the Generate tab to create your first post!</p>
+                          <p className="text-muted">No posts generated yet. Head to the "Generate Prompts" tab to create your first content!</p>
                         </div>
                       ) : (
                         <div className="d-grid gap-4">
@@ -1002,6 +1140,162 @@ Content source: ${post.content}`
             </footer>
           </Col>
         </Row>
+
+        {/* Debug Window */}
+        {debugData.visible && (
+          <Row className="justify-content-center mt-4">
+            <Col lg={10} xl={8}>
+              <Card className="card-glassmorphism border-warning">
+                <Card.Header className="bg-transparent border-warning d-flex justify-content-between align-items-center">
+                  <div className="d-flex align-items-center gap-2">
+                    <Zap className="text-warning" size={20} />
+                    <h5 className="mb-0 text-warning">🐛 Debug Window</h5>
+                    <Badge bg="warning" text="dark">
+                      {debugData.timestamp ? new Date(debugData.timestamp).toLocaleTimeString() : ''}
+                    </Badge>
+                  </div>
+                  <Button 
+                    variant="outline-warning" 
+                    size="sm"
+                    onClick={() => setDebugData({ ...debugData, visible: false })}
+                  >
+                    ✕ Close
+                  </Button>
+                </Card.Header>
+                <Card.Body>
+                  <Row className="g-4">
+                    {/* Processing Steps */}
+                    <Col md={6}>
+                      <Card className="bg-transparent border-secondary h-100">
+                        <Card.Header className="bg-transparent border-secondary">
+                          <h6 className="mb-0 text-info">⚡ Processing Steps</h6>
+                        </Card.Header>
+                        <Card.Body className="p-3" style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                          {debugData.processingSteps.map((step, idx) => (
+                            <div key={idx} className="mb-2 p-2 bg-dark rounded">
+                              <small className="text-light" style={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>
+                                {step}
+                              </small>
+                            </div>
+                          ))}
+                        </Card.Body>
+                      </Card>
+                    </Col>
+
+                    {/* RAG Sources */}
+                    <Col md={6}>
+                      <Card className="bg-transparent border-secondary h-100">
+                        <Card.Header className="bg-transparent border-secondary">
+                          <h6 className="mb-0 text-success">📊 RAG Data Sources</h6>
+                        </Card.Header>
+                        <Card.Body className="p-3">
+                          <div className="mb-3">
+                            <strong className="text-primary">Input Prompt:</strong>
+                            <div className="mt-1 p-2 bg-dark rounded">
+                              <small className="text-white">{debugData.inputPrompt}</small>
+                            </div>
+                          </div>
+                          <div>
+                            <strong className="text-success">Retrieved Sources:</strong>
+                            <ul className="list-unstyled mt-1">
+                              {debugData.ragSources.map((source, idx) => (
+                                <li key={idx} className="mb-1">
+                                  <small className="text-muted">
+                                    <Zap size={12} className="me-1 text-success" />
+                                    {source}
+                                  </small>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </Card.Body>
+                      </Card>
+                    </Col>
+
+                    {/* Generated Content Preview */}
+                    <Col md={6}>
+                      <Card className="bg-transparent border-secondary h-100">
+                        <Card.Header className="bg-transparent border-secondary">
+                          <h6 className="mb-0 text-warning">📝 Generated Content</h6>
+                        </Card.Header>
+                        <Card.Body className="p-3" style={{ maxHeight: '250px', overflowY: 'auto' }}>
+                          <div className="p-2 bg-dark rounded">
+                            <small className="text-white" style={{ whiteSpace: 'pre-wrap', fontSize: '0.8rem' }}>
+                              {debugData.generatedContent}
+                            </small>
+                          </div>
+                        </Card.Body>
+                      </Card>
+                    </Col>
+
+                    {/* n8n Payload */}
+                    <Col md={6}>
+                      <Card className="bg-transparent border-secondary h-100">
+                        <Card.Header className="bg-transparent border-secondary d-flex justify-content-between align-items-center">
+                          <h6 className="mb-0 text-danger">🚀 n8n Payload</h6>
+                          <Button 
+                            size="sm" 
+                            variant="outline-light"
+                            onClick={() => navigator.clipboard.writeText(JSON.stringify(debugData.n8nPayload, null, 2))}
+                          >
+                            📋 Copy JSON
+                          </Button>
+                        </Card.Header>
+                        <Card.Body className="p-3" style={{ maxHeight: '250px', overflowY: 'auto' }}>
+                          <pre className="text-light mb-0" style={{ fontSize: '0.7rem', background: '#0d1117', padding: '10px', borderRadius: '4px' }}>
+                            {JSON.stringify(debugData.n8nPayload, null, 2)}
+                          </pre>
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                  </Row>
+
+                  {/* Action Buttons */}
+                  <Row className="mt-4">
+                    <Col className="text-center">
+                      <div className="d-flex gap-3 justify-content-center">
+                        <Button 
+                          variant="success" 
+                          onClick={() => {
+                            console.log('Sending to n8n:', debugData.n8nPayload);
+                            // Here you would normally send to n8n
+                            alert('Debug: Would send payload to n8n webhook');
+                          }}
+                        >
+                          🚀 Send to n8n
+                        </Button>
+                        <Button 
+                          variant="outline-info"
+                          onClick={() => navigator.clipboard.writeText(JSON.stringify(debugData, null, 2))}
+                        >
+                          📋 Copy All Debug Data
+                        </Button>
+                        <Button 
+                          variant="outline-secondary"
+                          onClick={() => console.log('Full Debug Data:', debugData)}
+                        >
+                          🔍 Log to Console
+                        </Button>
+                      </div>
+                    </Col>
+                  </Row>
+
+                  <Alert variant="info" className="mt-4 mb-0 bg-transparent border-info">
+                    <div className="small">
+                      <strong>🛠️ Debug Information:</strong>
+                      <ul className="mb-0 mt-1">
+                        <li><strong>Processing:</strong> Shows each step of the RAG pipeline</li>
+                        <li><strong>RAG Sources:</strong> Displays retrieved content sources and input</li>
+                        <li><strong>Generated Content:</strong> Preview of the AI-generated LinkedIn post</li>
+                        <li><strong>n8n Payload:</strong> Complete data structure sent to automation workflow</li>
+                      </ul>
+                    </div>
+                  </Alert>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        )}
       </Container>
     </div>
   );
