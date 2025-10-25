@@ -33,6 +33,19 @@ export default function LinkedInContentMagician() {
     loadFromStorage();
   }, []);
 
+  // Keyboard shortcut for debug toggle (Ctrl/Cmd + D)
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 'd') {
+        event.preventDefault();
+        setDebugData(prev => ({ ...prev, visible: !prev.visible }));
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyPress);
+    return () => document.removeEventListener('keydown', handleKeyPress);
+  }, []);
+
   const loadFromStorage = async () => {
     try {
       const postsData = await window.storage.get('posts');
@@ -637,6 +650,8 @@ Content source: ${post.content}`
                   size="sm"
                   className={`d-flex align-items-center gap-2 shadow-sm ${debugData.visible ? 'debug-toggle-active' : 'debug-toggle-inactive'}`}
                   onClick={() => setDebugData({ ...debugData, visible: !debugData.visible })}
+                  title={debugData.visible ? 'Close debug panel to hide RAG processing details (Ctrl/Cmd + D)' : 'Open debug panel to view RAG processing details (Ctrl/Cmd + D)'}
+                  aria-label={debugData.visible ? 'Close debug mode' : 'Enable debug mode'}
                   style={{ 
                     fontWeight: '500',
                     transition: 'all 0.3s ease-in-out',
@@ -663,7 +678,8 @@ Content source: ${post.content}`
                 </Button>
                 {debugData.visible && (
                   <small className="debug-status-active text-white fw-medium px-2 py-1 rounded-pill" 
-                         style={{ fontSize: '0.7rem' }}>
+                         style={{ fontSize: '0.7rem' }}
+                         title="Debug mode is currently active - you'll see detailed RAG processing information">
                     ⚡ Debug Active
                   </small>
                 )}
@@ -1226,9 +1242,8 @@ Examples:
                     <Card.Body className="p-4">
                       <h2 className="h3 fw-bold mb-4">System Configuration</h2>
                       
-
                       <Row className="g-4">
-                        <Col md={4}>
+                        <Col md={6}>
                           <Card className="bg-transparent" style={{ borderColor: '#30363D' }}>
                             <Card.Header className="bg-transparent" style={{ borderColor: '#30363D' }}>
                               <Card.Title className="h5 mb-0 d-flex align-items-center gap-2" style={{ color: '#E6EDF3' }}>
@@ -1279,7 +1294,7 @@ Examples:
                           </Card>
                         </Col>
 
-                        <Col md={4}>
+                        <Col md={6}>
                           <Card className="bg-transparent" style={{ borderColor: '#30363D' }}>
                             <Card.Header className="bg-transparent" style={{ borderColor: '#30363D' }}>
                               <Card.Title className="h5 mb-0 d-flex align-items-center gap-2" style={{ color: '#E6EDF3' }}>
@@ -1318,32 +1333,7 @@ Examples:
                             </Card.Body>
                           </Card>
                         </Col>
-                        <Col md={4}>
-                          <Card className="bg-transparent" style={{ borderColor: '#30363D' }}>
-                            <Card.Header className="bg-transparent" style={{ borderColor: '#30363D' }}>
-                              <Card.Title className="h5 mb-0 d-flex align-items-center gap-2" style={{ color: '#E6EDF3' }}>
-                                <Send className="text-primary" size={20} />
-                                Delivery Pilot
-                              </Card.Title>
-                            </Card.Header>
-                            <Card.Body>
-                              <p style={{ color: '#8B949E' }}>
-                                View the deployed application on GitHub Pages.
-                              </p>
-                              <Button 
-                                as="a" 
-                                href="https://rifaterdemsahin.github.io/linkedin-content-magician/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                variant="outline-primary"
-                              >
-                                Open Dashboard
-                              </Button>
-                            </Card.Body>
-                          </Card>
-                        </Col>
                       </Row>
-
 
                       {/* Integration Guide */}
                       <Alert variant="primary" className="mt-4 bg-transparent" style={{ borderColor: '#58A6FF' }}>
@@ -1425,7 +1415,7 @@ Examples:
                     </div>
                     <div>
                       <h5 className="mb-0 text-success fw-bold">Debug Console</h5>
-                      <small className="text-muted">Real-time RAG processing insights</small>
+                      <small className="text-muted">Real-time RAG processing insights • Press Ctrl/Cmd + D to toggle</small>
                     </div>
                     <Badge bg="success" className="px-3 py-1">
                       {debugData.timestamp ? new Date(debugData.timestamp).toLocaleTimeString() : 'Ready'}
