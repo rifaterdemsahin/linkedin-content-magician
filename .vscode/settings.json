@@ -1,3 +1,4 @@
+
 {
     "DockerRun.DisableDockerrc": true,
 
@@ -19,5 +20,29 @@
     "security.promptForWorkspaceTrust": false,
 
     // --- Optional: make terminals non-interactive ---
-    "terminal.integrated.confirmOnKill": "never"
+    "terminal.integrated.confirmOnKill": "never",
+
+    // --- Editor & Formatting (for AI Agent consistency) ---
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "files.autoSave": "onFocusChange",
+
+    // --- File Search Exclusions (for faster AI agent searches) ---
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/*.code-search": true,
+        "**/dist": true
+    },
+
+    // --- ESLint Configuration ---
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ]
 }
