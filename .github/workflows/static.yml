@@ -31,43 +31,67 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: '5_Symbols/package-lock.json'
-      
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: "5_Symbols/package-lock.json"
+
       - name: Install dependencies
         run: |
           cd 5_Symbols
           npm ci
-      
-      - name: Build application
+
+      - name: Build Vite application
         run: |
           cd 5_Symbols
           npm run build
-      
-      - name: Verify build output
+
+      - name: Prepare deployment directory
         run: |
-          cd 5_Symbols
-          echo "📊 Build Output Summary:"
-          du -sh dist/
-          echo "📁 Generated Files:"
-          ls -la dist/
-          echo "🎯 Asset Files:"
-          ls -la dist/assets/ || echo "No assets directory found"
-      
+          # Create deployment directory
+          mkdir -p deploy
+
+          # Copy all static files and directories to deployment
+          cp -r 1_Real deploy/
+          cp -r 2_Environment deploy/
+          cp -r 3_UI deploy/
+          cp -r 4_Formula deploy/
+          cp -r 6_Semblance deploy/
+          cp -r 7_Testing deploy/
+
+          # Copy JavaScript files that the index pages depend on
+          mkdir -p deploy/5_Symbols
+          cp 5_Symbols/delivery-pilot-menu.js deploy/5_Symbols/
+          cp 5_Symbols/carousel-renderer.js deploy/5_Symbols/
+          cp 5_Symbols/markdown-configs.js deploy/5_Symbols/
+
+          # Copy root files
+          cp index.html deploy/ || echo "No root index.html found"
+          cp dashboard.html deploy/ || echo "No root dashboard.html found"
+          cp robots.txt deploy/ || echo "No robots.txt found"
+
+          # Copy the built Vite app to replace 5_Symbols if needed
+          cp -r 5_Symbols/dist/* deploy/5_Symbols/ 2>/dev/null || echo "No Vite build output to copy"
+
+      - name: Verify deployment structure
+        run: |
+          echo "📊 Deployment Structure:"
+          find deploy -type f -name "*.html" | head -20
+          echo "📁 JavaScript Files:"
+          find deploy -name "*.js" | head -10
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
-      
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload build output
-          path: '5_Symbols/dist'
-      
+          # Upload the complete deployment directory
+          path: "deploy"
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
