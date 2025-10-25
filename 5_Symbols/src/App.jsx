@@ -565,24 +565,13 @@ Agree or disagree? Let's debate in the comments! 🔥
                                     Connect to your n8n workflow for automated publishing
                                   </Form.Text>
                                 </Form.Group>
-                                
-                                <Form.Group>
-                                  <Form.Label style={{ color: '#E6EDF3' }}>API Key</Form.Label>
-                                  <Form.Control
-                                    type="password"
-                                    value={n8nConfig.apiKey}
-                                    onChange={(e) => updateConfig('apiKey', e.target.value)}
-                                    placeholder="Your n8n API key"
-                                  />
-                                  <Form.Text style={{ color: '#8B949E' }}>
-                                    Used for secure API authentication
-                                  </Form.Text>
-                                </Form.Group>
                               </Form>
                               
                               <div className="mt-3">
-                                <Badge bg={n8nConfig.webhookUrl ? 'success' : 'secondary'}>
-                                  {n8nConfig.webhookUrl ? 'Connected' : 'Not Connected'}
+                                <Badge bg={n8nConfig.connectionStatus === 'connected' ? 'success' : n8nConfig.connectionStatus === 'testing' ? 'warning' : 'secondary'}>
+                                  {n8nConfig.connectionStatus === 'connected' ? '✅ Connected' : 
+                                   n8nConfig.connectionStatus === 'testing' ? '🔄 Testing...' : 
+                                   '❌ Not Connected'}
                                 </Badge>
                               </div>
                             </Card.Body>
