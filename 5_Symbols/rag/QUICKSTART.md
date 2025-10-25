@@ -9,8 +9,8 @@ Your RAG (Retrieval-Augmented Generation) system is now ready with these compone
 ├── 🔧 index.py              # Creates vector index from markdown files
 ├── 🔍 search.py             # Searches the vector index
 ├── 📋 requirements.txt      # Python dependencies
-├── 🎬 demo.sh               # Automated demo script
 ├── 📚 README.md             # Complete documentation
+├── 📚 QUICKSTART.md         # This quick start guide
 └── 📁 sample_docs/          # Sample documents for testing
     ├── linkedin_strategy.md     # LinkedIn content strategy
     ├── video_production.md      # Video creation workflow
@@ -22,9 +22,10 @@ Your RAG (Retrieval-Augmented Generation) system is now ready with these compone
 ## 🎯 3-Step Usage
 
 ### Step 1: Run the Demo
+
 ```bash
 cd /Users/rifaterdemsahin/projects/linkedin-content-magician/5_Symbols/rag
-./demo.sh
+../../7_Testing/demo.sh
 ```
 
 This will:
