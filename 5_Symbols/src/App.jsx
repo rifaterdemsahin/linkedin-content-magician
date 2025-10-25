@@ -416,10 +416,7 @@ Agree or disagree? Let's debate in the comments! 🔥
         };
         setN8nResult(result);
         
-        // Auto-dismiss success message after 5 seconds
-        setTimeout(() => {
-          setN8nResult(null);
-        }, 5000);
+        // Results persist until manually dismissed - no auto-dismiss
       } else {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
@@ -432,10 +429,7 @@ Agree or disagree? Let's debate in the comments! 🔥
       };
       setN8nResult(result);
       
-      // Auto-dismiss error message after 8 seconds
-      setTimeout(() => {
-        setN8nResult(null);
-      }, 8000);
+      // Results persist until manually dismissed - no auto-dismiss
     } finally {
       setN8nSending(false);
     }
@@ -1505,7 +1499,16 @@ Examples:
                         <Card.Body className="p-3" style={{ maxHeight: '300px', overflowY: 'auto' }}>
                           {debugData.processingSteps.map((step, idx) => (
                             <div key={idx} className="mb-2 p-2 bg-dark rounded">
-                              <small className="text-light" style={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>
+                              <small 
+                                className="text-light" 
+                                style={{ 
+                                  fontFamily: 'monospace', 
+                                  fontSize: '0.8rem',
+                                  whiteSpace: 'pre-wrap',
+                                  wordWrap: 'break-word',
+                                  overflowWrap: 'break-word'
+                                }}
+                              >
                                 {step}
                               </small>
                             </div>
