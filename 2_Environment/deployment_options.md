@@ -25,4 +25,5 @@ This document provides an overview of the different deployment options for the L
 
 *   **Description:** A popular alternative to Vercel that also offers a comprehensive platform for deploying web applications with serverless functions.
 *   **Feature Support:** Full support for the frontend and the Python-based RAG API via Netlify Functions.
+*   **Live URL:** [https://content-magician.netlify.app/](https://content-magician.netlify.app/)
 *   **Guide:** [Netlify Deployment Guide](../4_Formula/formula_netlify_deployment.md)

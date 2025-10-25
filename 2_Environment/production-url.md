@@ -1,17 +1,28 @@
 # 🔗 Production URL
 
-## LinkedIn Content Magician - Live Application
+## LinkedIn Content Magician - Live Applications
 
-**🚀 Production URL**: [https://linkedin-content-magician-nrywmc06o-rifaterdemsahins-projects.vercel.app](https://linkedin-content-magician-nrywmc06o-rifaterdemsahins-projects.vercel.app)
+### 🚀 Primary Deployment (Vercel)
+**Production URL**: [https://linkedin-content-magician-nrywmc06o-rifaterdemsahins-projects.vercel.app](https://linkedin-content-magician-nrywmc06o-rifaterdemsahins-projects.vercel.app)
+
+### 🌐 Alternative Deployment (Netlify)
+**Production URL**: [https://content-magician.netlify.app/](https://content-magician.netlify.app/)
 
 ---
 
 ## Quick Links
 
+### Vercel Deployment
 - **Main Application**: Full RAG-powered LinkedIn content generation
 - **API Endpoint**: `/api/rag-search` - Python serverless function
 - **Status**: ✅ Active and fully functional
-- **Last Updated**: October 25, 2025
+
+### Netlify Deployment
+- **Main Application**: Static frontend with optimized performance
+- **Status**: ✅ Active and accessible
+- **Features**: Fast CDN delivery, continuous deployment
+
+**Last Updated**: October 25, 2025
 
 ---
 

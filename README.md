@@ -42,7 +42,20 @@ Custom RAG to build newsletters for professionals
 
 > **Note**: This link provides access to the Proxmox-hosted n8n instance that handles the automation workflows for LinkedIn content publishing.
 
-## �💻 Local URL
+## 🚀 Netlify Deployment
+
+**🔗 [Live Application on Netlify](https://content-magician.netlify.app/)**
+
+### Netlify Features:
+- **Continuous Deployment**: Automatically deploys from GitHub on every push
+- **Static Site Hosting**: Fast, reliable hosting with global CDN
+- **Custom Domain**: Clean, memorable URL for easy access
+- **HTTPS by Default**: Secure connection with SSL certificates
+- **Branch Previews**: Deploy preview versions for testing
+
+> **Note**: This is an alternative deployment option providing fast static hosting with automatic builds.
+
+## 💻 Local URL
 
 **🔗 [http://localhost:5173/](http://localhost:5173/)**
 
