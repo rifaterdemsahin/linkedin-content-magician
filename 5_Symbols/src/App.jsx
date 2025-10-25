@@ -968,12 +968,17 @@ Examples:
                                   </div>
                                 )}
 
-                                <Alert variant="info" className="mb-0 bg-transparent">
+                                <Alert variant="info" className="mb-0 bg-dark bg-opacity-50 border-success border-opacity-50">
                                   <div className="small">
-                                    <strong>RAG Sources:</strong>
-                                    <ul className="mb-0 mt-1">
+                                    <strong className="text-success">📊 RAG Sources:</strong>
+                                    <ul className="mb-0 mt-2 list-unstyled">
                                       {post.ragSources.map((source, idx) => (
-                                        <li key={idx}>{source}</li>
+                                        <li key={idx} className="mb-2 p-2 rag-source-item rounded">
+                                          <span className="text-light">
+                                            <Database size={14} className="me-2 text-info" />
+                                            <strong className="text-info">{source}</strong>
+                                          </span>
+                                        </li>
                                       ))}
                                     </ul>
                                   </div>
@@ -1202,19 +1207,19 @@ Examples:
                         <Card.Body className="p-3">
                           <div className="mb-3">
                             <strong className="text-primary">Input Prompt:</strong>
-                            <div className="mt-1 p-2 bg-dark rounded">
-                              <small className="text-white">{debugData.inputPrompt}</small>
+                            <div className="mt-1 p-3 rag-input-prompt">
+                              <small className="text-white fw-medium">{debugData.inputPrompt}</small>
                             </div>
                           </div>
                           <div>
                             <strong className="text-success">Retrieved Sources:</strong>
-                            <ul className="list-unstyled mt-1">
+                            <ul className="list-unstyled mt-2">
                               {debugData.ragSources.map((source, idx) => (
-                                <li key={idx} className="mb-1">
-                                  <small className="text-muted">
-                                    <Zap size={12} className="me-1 text-success" />
-                                    {source}
-                                  </small>
+                                <li key={idx} className="mb-2 p-3 rag-source-item rounded">
+                                  <div className="text-light">
+                                    <Zap size={16} className="me-2 text-info" />
+                                    <strong className="text-info">{source}</strong>
+                                  </div>
                                 </li>
                               ))}
                             </ul>
