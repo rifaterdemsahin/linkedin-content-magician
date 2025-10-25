@@ -173,8 +173,34 @@
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Next</span>
   </button>
-</div>
+  <div class="container mt-5 text-center">
+    <button id="runWorkflowBtn" class="btn btn-primary btn-lg">Run n8n Workflow</button>
+    <div id="debugWindow" class="mt-4 p-3 bg-dark text-white rounded" style="display: none;">
+      <h5>Debug Log:</h5>
+      <pre id="logContent"></pre>
+    </div>
+  </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.getElementById('runWorkflowBtn').addEventListener('click', () => {
+    const debugWindow = document.getElementById('debugWindow');
+    const logContent = document.getElementById('logContent');
+
+    debugWindow.style.display = 'block';
+    logContent.textContent = 'Running workflow...';
+
+    fetch('https://n8n.rifaterdemsahin.com/webhook/05c91180-4e19-4ccd-8917-658a96008ad9', {
+      method: 'POST',
+    })
+    .then(response => response.json())
+    .then(data => {
+      logContent.textContent = JSON.stringify(data, null, 2);
+    })
+    .catch(error => {
+      logContent.textContent = `Error: ${error}`;
+    });
+  });
+</script>
 </body>
 </html>

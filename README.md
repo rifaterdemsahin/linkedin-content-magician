@@ -16,7 +16,20 @@ Custom RAG to build newsletters for professionals
 
 > **Note**: If auto-redirect doesn't work, manually click the "click here" link on the landing page.
 
-## 💻 Local URL
+## � n8n Workflow Monitoring
+
+**🔗 [View Workflow Executions](https://n8n.rifaterdemsahin.com/workflow/u8PdboUp5JCCPv55/executions)**
+
+### Workflow Monitoring:
+- **Real-time execution tracking**: Monitor automation workflow runs in real-time
+- **Success/failure analysis**: View detailed logs of content processing and LinkedIn posting
+- **Performance metrics**: Track execution times and success rates
+- **Debug information**: Access detailed workflow execution data for troubleshooting
+- **Webhook integration**: Monitor incoming requests from the Content Magician app
+
+> **Note**: This link provides access to the Proxmox-hosted n8n instance that handles the automation workflows for LinkedIn content publishing.
+
+## �💻 Local URL
 
 **🔗 [http://localhost:5173/](http://localhost:5173/)**
 
