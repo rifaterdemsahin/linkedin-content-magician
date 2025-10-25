@@ -1,6 +1,7 @@
 {
   "name": "linkedin-content-magician",
   "version": "1.0.0",
+  "type": "module",
   "description": "Custom RAG to build newsletters for professionals",
   "main": "index.js",
   "scripts": {
