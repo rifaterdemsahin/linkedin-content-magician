@@ -2,7 +2,7 @@
 
 Custom RAG to build newsletters for professionals
 
-## 🌐 Live Demo
+## ☁️ Cloud URL
 
 **🔗 [Access the Application](https://rifaterdemsahin.github.io/linkedin-content-magician/)**
 
@@ -13,3 +13,7 @@ Custom RAG to build newsletters for professionals
 4. **Features**: Generate, review, and manage AI-powered LinkedIn content with RAG technology
 
 > **Note**: If auto-redirect doesn't work, manually click the "click here" link on the landing page.
+
+## 💻 Local URL
+
+**🔗 [http://localhost:5173/](http://localhost:5173/)**
