@@ -17,7 +17,7 @@ I have successfully updated the n8n Automation section in the Setup tab accordin
    - Professional branding for your n8n instance
 
 3. **Pre-configured Webhook URL**
-   - Default webhook URL: `https://n8n.rifaterdemsahin.com/webhook-test/05c91180-4e19-4ccd-8917-658a96008ad9`
+   - Default webhook URL: `https://n8n.rifaterdemsahin.com/webhook/05c91180-4e19-4ccd-8917-658a96008ad9`
    - Users can still modify if needed
    - Specific to your LinkedIn Content Magician workflow
 
@@ -32,7 +32,7 @@ I have successfully updated the n8n Automation section in the Setup tab accordin
 #### New State Management
 ```javascript
 const [n8nConfig, setN8nConfig] = useState({
-  webhookUrl: 'https://n8n.rifaterdemsahin.com/webhook-test/05c91180-4e19-4ccd-8917-658a96008ad9',
+  webhookUrl: 'https://n8n.rifaterdemsahin.com/webhook/05c91180-4e19-4ccd-8917-658a96008ad9',
   connectionStatus: 'disconnected',
   testing: false
 });

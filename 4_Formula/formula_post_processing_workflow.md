@@ -274,7 +274,7 @@ Use this content as reference: ${baseContent}`
 
 **Technical Details**:
 - **Method**: POST
-- **URL**: `https://n8n.rifaterdemsahin.com/webhook-test/[webhook-id]`
+- **URL**: `https://n8n.rifaterdemsahin.com/webhook/05c91180-4e19-4ccd-8917-658a96008ad9`
 - **Headers**: 
   ```json
   {

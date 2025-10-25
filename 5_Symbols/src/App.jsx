@@ -69,6 +69,7 @@ export default function LinkedInContentMagician() {
     let ragSources = [];
     try {
       debugSteps.push(`🔍 [${new Date().toLocaleTimeString()}] Performing RAG search...`);
+      debugSteps.push(`📡 [${new Date().toLocaleTimeString()}] Requesting POST /api/rag-search`);
       
       // Call Python RAG search API
       const ragResponse = await fetch('/api/rag-search', {

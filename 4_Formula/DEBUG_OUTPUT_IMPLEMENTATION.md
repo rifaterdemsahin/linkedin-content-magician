@@ -16,7 +16,7 @@ I have successfully added comprehensive debug output to the test connection butt
 #### 2. **Enhanced State Management**
 ```javascript
 const [n8nConfig, setN8nConfig] = useState({
-  webhookUrl: 'https://n8n.rifaterdemsahin.com/webhook-test/05c91180-4e19-4ccd-8917-658a96008ad9',
+  webhookUrl: 'https://n8n.rifaterdemsahin.com/webhook/05c91180-4e19-4ccd-8917-658a96008ad9',
   connectionStatus: 'disconnected',
   testing: false,
   debugOutput: [],           // New: Array of debug messages
@@ -88,7 +88,7 @@ The system now provides specific hints for common issues:
 #### **Successful Connection:**
 ```
 🔍 [12:34:56] Starting connection test...
-📡 Target URL: https://n8n.rifaterdemsahin.com/webhook-test/05c91180-4e19-4ccd-8917-658a96008ad9
+📡 Target URL: https://n8n.rifaterdemsahin.com/webhook/05c91180-4e19-4ccd-8917-658a96008ad9
 🚀 [12:34:56] Sending POST request...
 📦 Request payload: {
   "test": true,

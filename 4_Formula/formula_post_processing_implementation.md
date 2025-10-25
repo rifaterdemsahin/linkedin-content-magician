@@ -154,7 +154,7 @@ function createN8nPayload(content, ragData) {
 ### 7. Webhook Transmission
 ```javascript
 async function sendToN8n(payload) {
-  const webhookUrl = 'https://n8n.rifaterdemsahin.com/webhook-test/[id]';
+  const webhookUrl = 'https://n8n.rifaterdemsahin.com/webhook/05c91180-4e19-4ccd-8917-658a96008ad9';
   
   try {
     const response = await fetch(webhookUrl, {
