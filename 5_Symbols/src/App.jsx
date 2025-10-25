@@ -26,6 +26,8 @@ export default function LinkedInContentMagician() {
     indexed: 0,
     status: 'disconnected'
   });
+  const [n8nSending, setN8nSending] = useState(false);
+  const [n8nResult, setN8nResult] = useState(null);
 
   useEffect(() => {
     loadFromStorage();
@@ -375,6 +377,43 @@ Agree or disagree? Let's debate in the comments! 🔥
     const updated = { ...n8nConfig, [field]: value };
     setN8nConfig(updated);
     await saveToStorage('config', updated);
+  };
+
+  const sendToN8n = async (payload) => {
+    setN8nSending(true);
+    setN8nResult(null);
+    
+    try {
+      const response = await fetch(n8nConfig.webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': 'LinkedIn-Content-Magician/1.0.0'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (response.ok) {
+        const responseData = await response.text();
+        setN8nResult({
+          success: true,
+          message: 'Successfully sent to N8N!',
+          data: responseData,
+          timestamp: new Date().toISOString()
+        });
+      } else {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+    } catch (error) {
+      setN8nResult({
+        success: false,
+        message: `Failed to send to N8N: ${error.message}`,
+        error: error.message,
+        timestamp: new Date().toISOString()
+      });
+    } finally {
+      setN8nSending(false);
+    }
   };
 
   const generateReleasePrompts = async (post) => {
@@ -1333,13 +1372,19 @@ Examples:
                       <div className="d-flex gap-3 justify-content-center">
                         <Button 
                           variant="success" 
-                          onClick={() => {
-                            console.log('Sending to n8n:', debugData.n8nPayload);
-                            // Here you would normally send to n8n
-                            alert('Debug: Would send payload to n8n webhook');
-                          }}
+                          disabled={n8nSending}
+                          onClick={() => sendToN8n(debugData.n8nPayload)}
                         >
-                          🚀 Send to n8n
+                          {n8nSending ? (
+                            <>
+                              <Spinner animation="border" size="sm" className="me-2" />
+                              Sending to N8N...
+                            </>
+                          ) : (
+                            <>
+                              🚀 Send to N8N
+                            </>
+                          )}
                         </Button>
                         <Button 
                           variant="outline-info"
@@ -1356,6 +1401,44 @@ Examples:
                       </div>
                     </Col>
                   </Row>
+
+                  {/* N8N Send Result */}
+                  {n8nResult && (
+                    <Row className="mt-4">
+                      <Col>
+                        <Alert 
+                          variant={n8nResult.success ? 'success' : 'danger'} 
+                          className="mb-0 bg-transparent"
+                          style={{ borderColor: n8nResult.success ? '#28a745' : '#dc3545' }}
+                        >
+                          <div className="d-flex align-items-center gap-2 mb-2">
+                            {n8nResult.success ? (
+                              <CheckCircle size={20} className="text-success" />
+                            ) : (
+                              <XCircle size={20} className="text-danger" />
+                            )}
+                            <strong>{n8nResult.message}</strong>
+                          </div>
+                          {n8nResult.data && (
+                            <div className="small">
+                              <strong>Response:</strong>
+                              <pre className="mt-1 p-2 rounded" style={{ 
+                                backgroundColor: 'rgba(0,0,0,0.2)', 
+                                fontSize: '0.75rem',
+                                maxHeight: '100px',
+                                overflowY: 'auto'
+                              }}>
+                                {n8nResult.data}
+                              </pre>
+                            </div>
+                          )}
+                          <div className="small text-muted mt-2">
+                            Sent at: {new Date(n8nResult.timestamp).toLocaleString()}
+                          </div>
+                        </Alert>
+                      </Col>
+                    </Row>
+                  )}
 
                   <Alert variant="info" className="mt-4 mb-0 bg-transparent border-info">
                     <div className="small">
