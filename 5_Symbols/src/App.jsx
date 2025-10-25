@@ -65,15 +65,47 @@ export default function LinkedInContentMagician() {
     debugSteps.push(`🕐 [${new Date().toLocaleTimeString()}] Starting content generation process`);
     debugSteps.push(`📥 Input prompt: "${prompt}"`);
     
-    // Simulate RAG data retrieval - Top 3 picks only
-    const ragSources = [
-      'Previous LinkedIn post about automation',
-      'Video transcript from tech talk', 
-      'Article draft on AI implementation'
-    ];
+    // Perform real RAG data retrieval using Python search API
+    let ragSources = [];
+    try {
+      debugSteps.push(`🔍 [${new Date().toLocaleTimeString()}] Performing RAG search...`);
+      
+      // Call Python RAG search API
+      const ragResponse = await fetch('/api/rag-search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: prompt,
+          top_k: 3
+        })
+      });
+      
+      if (ragResponse.ok) {
+        const ragData = await ragResponse.json();
+        if (ragData.success && ragData.sources) {
+          ragSources = ragData.sources.map(source => source.title || source.file_name);
+          debugSteps.push(`✅ [${new Date().toLocaleTimeString()}] RAG search completed successfully`);
+          debugSteps.push(`📊 Found ${ragSources.length} relevant sources from knowledge base`);
+        } else {
+          throw new Error(ragData.error || 'RAG search failed');
+        }
+      } else {
+        throw new Error(`HTTP ${ragResponse.status}: ${ragResponse.statusText}`);
+      }
+    } catch (error) {
+      // Fallback to default sources if RAG search fails
+      debugSteps.push(`⚠️ [${new Date().toLocaleTimeString()}] RAG search failed: ${error.message}`);
+      debugSteps.push(`🔄 [${new Date().toLocaleTimeString()}] Using fallback knowledge sources`);
+      ragSources = [
+        'Previous LinkedIn post about automation',
+        'Video transcript from tech talk', 
+        'Article draft on AI implementation'
+      ];
+    }
     
-    debugSteps.push(`🔍 [${new Date().toLocaleTimeString()}] RAG retrieval completed`);
-    debugSteps.push(`📊 Found ${ragSources.length} relevant sources (top 3 picks)`);
+    debugSteps.push(`📊 Final source count: ${ragSources.length} sources selected`);
     
     // Simulate content generation with RAG
     setTimeout(async () => {
