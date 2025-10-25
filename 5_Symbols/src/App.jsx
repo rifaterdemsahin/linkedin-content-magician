@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Container, Row, Col, Nav, Tab, Card, Button, Form, Alert, Spinner, Badge } from 'react-bootstrap';
 import { Send, Bot, User, Database, Zap, MessageSquare, CheckCircle, XCircle, Loader } from 'lucide-react';
 
 export default function LinkedInContentMagician() {
