@@ -8,14 +8,41 @@ const path = require('path');
 let MarkdownConfigs = {};
 try {
     const content = fs.readFileSync('markdown-configs.js', 'utf8');
-    // Extract the MarkdownConfigs object
+    // Extract the MarkdownConfigs object - look for the object that ends with just '};'
     const start = content.indexOf('const MarkdownConfigs = {');
-    const end = content.indexOf('};', start) + 2;
     
-    if (start !== -1 && end !== -1) {
-        const configPart = content.substring(start, end);
-        // Use eval to parse the JavaScript object
-        eval(configPart);
+    if (start !== -1) {
+        // Find the matching closing brace by looking for standalone '};'
+        const lines = content.split('\n');
+        let endLine = -1;
+        let braceCount = 0;
+        let foundStart = false;
+        
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            if (line.includes('const MarkdownConfigs = {')) {
+                foundStart = true;
+                braceCount = 1; // Starting brace
+                continue;
+            }
+            
+            if (foundStart) {
+                // Count braces to find the matching closing one
+                braceCount += (line.match(/\{/g) || []).length;
+                braceCount -= (line.match(/\}/g) || []).length;
+                
+                if (braceCount === 0 && line.trim() === '};') {
+                    endLine = i;
+                    break;
+                }
+            }
+        }
+        
+        if (endLine !== -1) {
+            const configLines = lines.slice(lines.findIndex(l => l.includes('const MarkdownConfigs = {')), endLine + 1);
+            const configPart = configLines.join('\n');
+            eval(configPart);
+        }
     }
 } catch (error) {
     console.error('Error reading markdown-configs.js:', error.message);
