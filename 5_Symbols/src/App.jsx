@@ -950,8 +950,11 @@ Examples:
                               <pre className="mt-1 p-2 rounded" style={{ 
                                 backgroundColor: 'rgba(0,0,0,0.2)', 
                                 fontSize: '0.75rem',
-                                maxHeight: '100px',
-                                overflowY: 'auto'
+                                maxHeight: '200px',
+                                overflowY: 'auto',
+                                whiteSpace: 'pre-wrap',
+                                wordWrap: 'break-word',
+                                overflowWrap: 'break-word'
                               }}>
                                 {n8nResult.data}
                               </pre>
@@ -1290,6 +1293,50 @@ Examples:
                                   )}
                                 </Button>
                               </div>
+                              
+                              {/* Debug Output Section */}
+                              {n8nConfig.debugOutput && n8nConfig.debugOutput.length > 0 && (
+                                <div className="mt-4">
+                                  <div className="d-flex align-items-center justify-content-between mb-2">
+                                    <h6 className="mb-0 text-info">🔍 Debug Output</h6>
+                                    <Button 
+                                      size="sm" 
+                                      variant="outline-secondary"
+                                      onClick={() => setN8nConfig({...n8nConfig, debugOutput: []})}
+                                    >
+                                      Clear
+                                    </Button>
+                                  </div>
+                                  <div 
+                                    className="bg-dark border rounded p-3"
+                                    style={{ 
+                                      maxHeight: '200px', 
+                                      overflowY: 'auto',
+                                      fontSize: '0.75rem',
+                                      fontFamily: 'monospace'
+                                    }}
+                                  >
+                                    {n8nConfig.debugOutput.map((line, idx) => (
+                                      <div 
+                                        key={idx} 
+                                        className="text-light mb-1" 
+                                        style={{ 
+                                          whiteSpace: 'pre-wrap',
+                                          wordWrap: 'break-word',
+                                          overflowWrap: 'break-word'
+                                        }}
+                                      >
+                                        {line}
+                                      </div>
+                                    ))}
+                                  </div>
+                                  {n8nConfig.lastTestTime && (
+                                    <small className="text-muted mt-2 d-block">
+                                      Last tested: {new Date(n8nConfig.lastTestTime).toLocaleString()}
+                                    </small>
+                                  )}
+                                </div>
+                              )}
                             </Card.Body>
                           </Card>
                         </Col>
@@ -1539,7 +1586,15 @@ Examples:
                           </Button>
                         </Card.Header>
                         <Card.Body className="p-3" style={{ maxHeight: '250px', overflowY: 'auto' }}>
-                          <pre className="text-light mb-0" style={{ fontSize: '0.7rem', background: '#0d1117', padding: '10px', borderRadius: '4px' }}>
+                          <pre className="text-light mb-0" style={{ 
+                            fontSize: '0.7rem', 
+                            background: '#0d1117', 
+                            padding: '10px', 
+                            borderRadius: '4px',
+                            whiteSpace: 'pre-wrap',
+                            wordWrap: 'break-word',
+                            overflowWrap: 'break-word'
+                          }}>
                             {JSON.stringify(debugData.n8nPayload, null, 2)}
                           </pre>
                         </Card.Body>
