@@ -68,7 +68,7 @@ export default defineConfig(({ command, mode }) => {
       // Only use local RAG API plugin in development
       ...(isProduction ? [] : [ragApiPlugin()])
     ],
-    base: isProduction ? '/' : '/linkedin-content-magician/',
+    base: isProduction ? '/linkedin-content-magician/' : '/',
     build: {
       outDir: 'dist',
       assetsDir: 'assets',
