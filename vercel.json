@@ -1,33 +1,20 @@
+
 {
   "builds": [
     {
-      "src": "api/*.py",
+      "src": "api/search.py",
       "use": "@vercel/python"
     },
     {
-      "src": "5_Symbols/package.json",
+      "src": "package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "5_Symbols/dist"
+        "distDir": "dist"
       }
     }
   ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/5_Symbols/dist/$1"
-    }
-  ],
-  "functions": {
-    "api/*.py": {
-      "runtime": "python3.9"
-    }
-  },
-  "env": {
-    "PYTHONPATH": "/var/task"
-  }
+  "rewrites": [
+    { "source": "/api/rag-search", "destination": "/api/search.py" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }
