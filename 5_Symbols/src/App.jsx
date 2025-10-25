@@ -852,6 +852,42 @@ Examples:
                         Generate comprehensive content and assets for your final release. Get prompts for text, images, videos, and marketing materials.
                       </p>
                       
+                      {/* N8N Send Result */}
+                      {n8nResult && (
+                        <Alert 
+                          variant={n8nResult.success ? 'success' : 'danger'} 
+                          className="mb-4 bg-transparent"
+                          style={{ borderColor: n8nResult.success ? '#28a745' : '#dc3545' }}
+                          dismissible
+                          onClose={() => setN8nResult(null)}
+                        >
+                          <div className="d-flex align-items-center gap-2 mb-2">
+                            {n8nResult.success ? (
+                              <CheckCircle size={20} className="text-success" />
+                            ) : (
+                              <XCircle size={20} className="text-danger" />
+                            )}
+                            <strong>{n8nResult.message}</strong>
+                          </div>
+                          {n8nResult.data && (
+                            <div className="small">
+                              <strong>N8N Response:</strong>
+                              <pre className="mt-1 p-2 rounded" style={{ 
+                                backgroundColor: 'rgba(0,0,0,0.2)', 
+                                fontSize: '0.75rem',
+                                maxHeight: '100px',
+                                overflowY: 'auto'
+                              }}>
+                                {n8nResult.data}
+                              </pre>
+                            </div>
+                          )}
+                          <div className="small text-muted mt-2">
+                            📅 {new Date(n8nResult.timestamp).toLocaleString()}
+                          </div>
+                        </Alert>
+                      )}
+                      
                       {posts.length === 0 ? (
                         <div className="text-center py-5">
                           <Bot size={64} className="opacity-50 mb-3" />
@@ -909,6 +945,52 @@ Examples:
                                         >
                                           📝 Generate Release Prompts
                                         </Button>
+                                      </div>
+                                    )}
+                                    {(post.status === 'approved' || post.status === 'release_ready') && (
+                                      <div className="d-flex flex-column gap-2">
+                                        <Button
+                                          size="sm"
+                                          variant="warning"
+                                          className="w-100"
+                                          disabled={n8nSending}
+                                          onClick={() => sendToN8n({
+                                            originalPrompt: post.prompt,
+                                            platform: "LinkedIn",
+                                            contentType: "Post",
+                                            generatedContent: post.content,
+                                            contentMetrics: {
+                                              characterCount: post.content.length,
+                                              wordCount: post.content.split(' ').length,
+                                              hashtags: (post.content.match(/#\w+/g) || []).length,
+                                              emojis: (post.content.match(/[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu) || []).length
+                                            },
+                                            ragSources: post.ragSources || [],
+                                            timestamp: new Date().toISOString(),
+                                            status: "pending"
+                                          })}
+                                        >
+                                          {n8nSending ? (
+                                            <>
+                                              <Spinner animation="border" size="sm" className="me-2" />
+                                              Sending to N8N...
+                                            </>
+                                          ) : (
+                                            <>
+                                              🚀 Send to N8N
+                                            </>
+                                          )}
+                                        </Button>
+                                        {post.status === 'approved' && (
+                                          <Button
+                                            size="sm"
+                                            variant="outline-info"
+                                            className="w-100"
+                                            onClick={() => generateReleasePrompts(post)}
+                                          >
+                                            📝 Generate Release Prompts
+                                          </Button>
+                                        )}
                                       </div>
                                     )}
                                   </Col>
