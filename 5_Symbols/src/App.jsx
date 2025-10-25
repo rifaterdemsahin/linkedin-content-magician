@@ -395,22 +395,34 @@ Agree or disagree? Let's debate in the comments! 🔥
 
       if (response.ok) {
         const responseData = await response.text();
-        setN8nResult({
+        const result = {
           success: true,
           message: 'Successfully sent to N8N!',
           data: responseData,
           timestamp: new Date().toISOString()
-        });
+        };
+        setN8nResult(result);
+        
+        // Auto-dismiss success message after 5 seconds
+        setTimeout(() => {
+          setN8nResult(null);
+        }, 5000);
       } else {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
     } catch (error) {
-      setN8nResult({
+      const result = {
         success: false,
         message: `Failed to send to N8N: ${error.message}`,
         error: error.message,
         timestamp: new Date().toISOString()
-      });
+      };
+      setN8nResult(result);
+      
+      // Auto-dismiss error message after 8 seconds
+      setTimeout(() => {
+        setN8nResult(null);
+      }, 8000);
     } finally {
       setN8nSending(false);
     }
@@ -585,7 +597,26 @@ Content source: ${post.content}`
   };
 
   return (
-    <div className="min-h-100vh bg-dark-custom text-white">
+    <div className="min-h-100vh bg-dark-custom text-white position-relative">
+      {/* N8N Sending Overlay */}
+      {n8nSending && (
+        <div 
+          className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+          style={{ 
+            backgroundColor: 'rgba(0, 0, 0, 0.7)', 
+            zIndex: 9999 
+          }}
+        >
+          <Card className="bg-dark border-warning text-center p-4">
+            <Card.Body>
+              <Spinner animation="border" variant="warning" className="mb-3" />
+              <h5 className="text-warning mb-2">Sending to N8N...</h5>
+              <p className="text-muted mb-0">Please wait while we process your request</p>
+            </Card.Body>
+          </Card>
+        </div>
+      )}
+      
       <Container fluid className="py-4">
         {/* Header */}
         <Row className="justify-content-center mb-5">
