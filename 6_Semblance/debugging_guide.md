@@ -1,11 +1,10 @@
-
-# Debugging Guide for LinkedIn Content Magician
+# 🐛 Debugging Guide for LinkedIn Content Magician
 
 This document outlines the primary locations and methods for debugging the LinkedIn Content Magician application. A multi-faceted approach is necessary to effectively diagnose issues, as the system involves a frontend application, a serverless backend API, and a CI/CD pipeline.
 
 ---
 
-## Primary Debugging Locations
+## 📍 Primary Debugging Locations
 
 These are the first places you should look when you encounter an issue.
 
@@ -44,7 +43,7 @@ These are the first places you should look when you encounter an issue.
 
 ---
 
-## Secondary Debugging Locations
+##  secondary Debugging Locations
 
 If the primary locations do not reveal the issue, these are the next places to look.
 

@@ -1,8 +1,8 @@
-# Tailwind CSS PostCSS Plugin Error
+# 🚨 Tailwind CSS PostCSS Plugin Error
 
 This document explains the error related to the Tailwind CSS PostCSS plugin and how it was resolved.
 
-## The Error
+## 📜 The Error
 
 After setting up Tailwind CSS, the following error occurred:
 
@@ -12,7 +12,7 @@ After setting up Tailwind CSS, the following error occurred:
 
 This error occurs because recent versions of Tailwind CSS have moved the PostCSS plugin to a separate package.
 
-## The Solution
+## 💡 The Solution
 
 To fix this, the following steps were taken:
 
@@ -33,4 +33,4 @@ To fix this, the following steps were taken:
     }
     ```
 
-By making these changes, the application will now use the correct PostCSS plugin for Tailwind CSS, and the error will be resolved.
+By making these changes, the application will now use the correct PostCSS plugin for Tailwind CSS, and the error will be resolved. 🚀

@@ -1,8 +1,8 @@
-# Tailwind CSS Package Path Export Error
+# 🚨 Tailwind CSS Package Path Export Error
 
 This document explains the error related to the Tailwind CSS package path exports and how it was resolved.
 
-## The Error
+## 📜 The Error
 
 When running the Vite development server, the following error occurred:
 
@@ -12,7 +12,7 @@ When running the Vite development server, the following error occurred:
 
 This error is caused by a change in how Node.js handles package exports, and it affects how Tailwind CSS directives are resolved.
 
-## The Solution
+## 💡 The Solution
 
 To fix this, the `@tailwind` directives in the `src/index.css` file were replaced with `@import` statements:
 
@@ -32,4 +32,4 @@ To fix this, the `@tailwind` directives in the `src/index.css` file were replace
 @import 'tailwindcss/utilities';
 ```
 
-This change ensures that the Tailwind CSS files are imported correctly, resolving the package path export error. Please restart your development server (`npm run dev`) to see the changes.
+This change ensures that the Tailwind CSS files are imported correctly, resolving the package path export error. Please restart your development server (`npm run dev`) to see the changes. 🚀

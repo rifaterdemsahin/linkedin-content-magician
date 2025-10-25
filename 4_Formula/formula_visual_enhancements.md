@@ -1,12 +1,12 @@
-# Formula for Visual Enhancements
+# 🎨 Formula for Visual Enhancements
 
 This document outlines the changes made to improve the visual appeal of the application, including fixing the color palette and adding emojis.
 
-## The Problem: Missing Colors and Lack of Visual Appeal
+## 🖼️ The Problem: Missing Colors and Lack of Visual Appeal
 
 The application was not displaying the intended colors, resulting in a plain and visually unappealing interface. The custom color palette was not being applied correctly, and the UI lacked engaging elements like emojis.
 
-## The Solution: Enhancing the UI
+## ✨ The Solution: Enhancing the UI
 
 To address this, the following changes were made:
 
@@ -63,4 +63,4 @@ To address this, the following changes were made:
     </h1>
     ```
 
-By implementing these changes, the application now has a more vibrant and engaging user interface that aligns with the intended design.
+By implementing these changes, the application now has a more vibrant and engaging user interface that aligns with the intended design. 🚀

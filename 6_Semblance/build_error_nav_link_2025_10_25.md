@@ -1,4 +1,4 @@
-## Build Error: Unexpected closing Nav.LInk tag
+## 🚨 Build Error: Unexpected closing Nav.LInk tag
 
 **Date:** 2025-10-25
 
@@ -78,4 +78,4 @@ A typo was introduced in `5_Symbols/src/App.jsx`, where the closing tag for `Nav
 
 **Solution:**
 
-Correct the typo by replacing all instances of `</Nav.LInk>` with `</Nav.Link>` in `5_Symbols/src/App.jsx`.
+Correct the typo by replacing all instances of `</Nav.LInk>` with `</Nav.Link>` in `5_Symbols/src/App.jsx`. 👨‍💻

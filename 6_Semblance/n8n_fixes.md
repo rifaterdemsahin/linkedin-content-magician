@@ -21,7 +21,7 @@ Here’s your **fixed and valid n8n workflow JSON** — cleaned up for proper qu
         "rules": {
           "rules": [
             {
-              "value": "={{ $json[\"body\"][\"status\"] }}",
+              "value": "={{ $json["body"]["status"] }}",
               "operation": "equal",
               "value2": "approved"
             }
@@ -35,7 +35,7 @@ Here’s your **fixed and valid n8n workflow JSON** — cleaned up for proper qu
     },
     {
       "parameters": {
-        "content": "={{ $json[\"body\"][\"content\"] }}",
+        "content": "={{ $json["body"]["content"] }}",
         "options": {}
       },
       "name": "Post to LinkedIn",
@@ -107,9 +107,9 @@ Here’s your **fixed and valid n8n workflow JSON** — cleaned up for proper qu
 
 ### ✅ Fixes Made:
 
-* Escaped nested quotes inside expressions like `={{ $json["body"]["status"] }}` (these must be `\"` inside JSON).
-* Verified all connections and node references.
-* Removed stray trailing commas.
-* Ensured consistent indentation and valid JSON syntax.
+*   Escaped nested quotes inside expressions like `={{ $json["body"]["status"] }}` (these must be `"` inside JSON).
+*   Verified all connections and node references.
+*   Removed stray trailing commas.
+*   Ensured consistent indentation and valid JSON syntax.
 
-Would you like me to extend this so it **returns a confirmation message to the webhook** (e.g., `"LinkedIn post triggered"`)? That’s often useful for API responses.
+Would you like me to extend this so it **returns a confirmation message to the webhook** (e.g., `"LinkedIn post triggered"`)? That’s often useful for API responses. 🤖
