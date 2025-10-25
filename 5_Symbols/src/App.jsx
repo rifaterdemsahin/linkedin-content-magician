@@ -567,12 +567,28 @@ Agree or disagree? Let's debate in the comments! 🔥
                                 </Form.Group>
                               </Form>
                               
-                              <div className="mt-3">
+                              <div className="mt-3 d-flex align-items-center justify-content-between">
                                 <Badge bg={n8nConfig.connectionStatus === 'connected' ? 'success' : n8nConfig.connectionStatus === 'testing' ? 'warning' : 'secondary'}>
                                   {n8nConfig.connectionStatus === 'connected' ? '✅ Connected' : 
                                    n8nConfig.connectionStatus === 'testing' ? '🔄 Testing...' : 
                                    '❌ Not Connected'}
                                 </Badge>
+                                
+                                <Button 
+                                  variant="outline-warning" 
+                                  size="sm"
+                                  onClick={testN8nConnection}
+                                  disabled={n8nConfig.testing || !n8nConfig.webhookUrl}
+                                >
+                                  {n8nConfig.testing ? (
+                                    <>
+                                      <Spinner size="sm" className="me-2" />
+                                      Testing...
+                                    </>
+                                  ) : (
+                                    'Test Connection'
+                                  )}
+                                </Button>
                               </div>
                             </Card.Body>
                           </Card>
