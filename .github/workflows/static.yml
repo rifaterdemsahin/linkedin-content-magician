@@ -68,13 +68,12 @@ jobs:
           cp 5_Symbols/carousel-renderer.js deploy/5_Symbols/
           cp 5_Symbols/markdown-configs.js deploy/5_Symbols/
 
-          # Copy root files
-          cp index.html deploy/ || echo "No root index.html found"
+          # Copy the built Vite app as the main site (this includes index.html)
+          cp -r 5_Symbols/dist/* deploy/
+
+          # Copy dashboard.html and other root files (but NOT the redirect index.html)
           cp dashboard.html deploy/ || echo "No root dashboard.html found"
           cp robots.txt deploy/ || echo "No robots.txt found"
-
-          # Copy the built Vite app to replace 5_Symbols if needed
-          cp -r 5_Symbols/dist/* deploy/5_Symbols/ 2>/dev/null || echo "No Vite build output to copy"
 
       - name: Verify deployment structure
         run: |
