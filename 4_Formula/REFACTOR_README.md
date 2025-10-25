@@ -21,17 +21,19 @@ This document describes the refactored JavaScript architecture that eliminates c
 
 ```
 linkedin-content-magician/
-├── carousel-renderer.js      # ⭐ Reusable carousel component
-├── markdown-configs.js       # ⭐ Configuration for all sections
-├── delivery-pilot-menu.js    # Navigation menu component
+├── 5_Symbols/
+│   ├── carousel-renderer.js      # ⭐ Reusable carousel component
+│   └── check-markdown-config.js  # ⭐ Configuration checker
+├── markdown-configs.js           # ⭐ Configuration for all sections
+├── delivery-pilot-menu.js        # Navigation menu component
 └── [sections]/
-    ├── index.html           # Updated to use shared components
-    └── renderer.js.backup   # Backed up old files
+    ├── index.html               # Updated to use shared components
+    └── renderer.js.backup       # Backed up old files
 ```
 
 ## 🔧 Core Components
 
-### 1. `carousel-renderer.js`
+### 1. `5_Symbols/carousel-renderer.js`
 **Reusable Markdown Carousel Component**
 
 ```javascript
