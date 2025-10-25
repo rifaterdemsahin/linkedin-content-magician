@@ -273,6 +273,113 @@ Agree or disagree? Let's debate in the comments! 🔥
     }, 1000);
   };
 
+  const setupTestIndex = async () => {
+    const documents = [
+      'ai_tools.md',
+      'analytics_metrics.md', 
+      'linkedin_strategy.md',
+      'personal_branding.md',
+      'video_production.md'
+    ];
+    
+    // Initialize debug tracking for indexing
+    const timestamp = new Date().toISOString();
+    const debugSteps = [];
+    
+    debugSteps.push(`🚀 [${new Date().toLocaleTimeString()}] Starting test index setup for ${documents.length} documents`);
+    debugSteps.push(`📂 Target documents: ${documents.join(', ')}`);
+    
+    setVectorDB({ ...vectorDB, status: 'indexing', indexed: 0 });
+    setDebugData({
+      ...debugData,
+      visible: true,
+      timestamp,
+      inputPrompt: 'Test Index Setup',
+      processingSteps: debugSteps
+    });
+    
+    // Index each document with realistic API simulation
+    for (let i = 0; i < documents.length; i++) {
+      const currentDoc = documents[i];
+      debugSteps.push(`\n📄 [${new Date().toLocaleTimeString()}] Processing document ${i + 1}/${documents.length}: ${currentDoc}`);
+      
+      // Simulate API call to index endpoint
+      debugSteps.push(`📡 [${new Date().toLocaleTimeString()}] API Request: POST /api/vector-db/index`);
+      debugSteps.push(`📤 Request Headers: {
+  "Content-Type": "application/json",
+  "Authorization": "Bearer ****...****",
+  "X-Request-ID": "${Math.random().toString(36).substr(2, 9)}",
+  "User-Agent": "LinkedInContentMagician/1.0.0"
+}`);
+      debugSteps.push(`📤 Request Payload: {
+  "document": "${currentDoc}",
+  "source": "sample_docs/${currentDoc}",
+  "operation": "index",
+  "chunk_size": 512,
+  "overlap": 50,
+  "metadata": {
+    "type": "linkedin_content",
+    "category": "${currentDoc.replace('.md', '').replace('_', ' ')}",
+    "indexed_at": "${new Date().toISOString()}",
+    "source_path": "/3_UI/sample_docs/${currentDoc}"
+  }
+}`);
+      
+      // Update debug data in real-time
+      setDebugData(prev => ({
+        ...prev,
+        processingSteps: [...debugSteps]
+      }));
+      
+      await new Promise(resolve => setTimeout(resolve, 800)); // Simulate processing time
+      
+      // Simulate API response
+      const processingTime = Math.floor(Math.random() * 200) + 100;
+      const chunksCreated = Math.floor(Math.random() * 5) + 3;
+      debugSteps.push(`✅ [${new Date().toLocaleTimeString()}] API Response: 200 OK`);
+      debugSteps.push(`📥 Response Headers: {
+  "Content-Type": "application/json",
+  "X-Processing-Time": "${processingTime}ms",
+  "X-Chunks-Created": "${chunksCreated}",
+  "X-Vector-Dimensions": "1536"
+}`);
+      debugSteps.push(`📥 Response Body: {
+  "success": true,
+  "document_id": "${currentDoc.replace('.md', '')}_${Date.now()}",
+  "chunks_created": ${chunksCreated},
+  "embedding_dimensions": 1536,
+  "processing_time_ms": ${processingTime},
+  "vector_ids": [${Array.from({length: chunksCreated}, (_, i) => `"vec_${Date.now()}_${i}"`).join(', ')}],
+  "index_size_after": ${(i + 1) * chunksCreated + Math.floor(Math.random() * 10)},
+  "status": "indexed",
+  "timestamp": "${new Date().toISOString()}"
+}`);
+      
+      const updated = {
+        indexed: i + 1,
+        status: i === documents.length - 1 ? 'connected' : 'indexing'
+      };
+      setVectorDB(prev => ({ ...prev, ...updated }));
+      await saveToStorage('vectordb', { ...vectorDB, ...updated });
+      
+      // Update debug with final status for this document
+      debugSteps.push(`🎯 Document ${currentDoc} successfully indexed (${i + 1}/${documents.length} complete)`);
+      
+      setDebugData(prev => ({
+        ...prev,
+        processingSteps: [...debugSteps]
+      }));
+    }
+    
+    debugSteps.push(`\n🎉 [${new Date().toLocaleTimeString()}] Test index setup completed successfully!`);
+    debugSteps.push(`📊 Final status: ${documents.length} documents indexed, vector database ready`);
+    
+    setDebugData(prev => ({
+      ...prev,
+      processingSteps: [...debugSteps]
+    }));
+  };
+
   const testN8nConnection = async () => {
     const debugLog = [];
     const timestamp = new Date().toISOString();
@@ -1346,8 +1453,10 @@ Examples:
                             <Card.Body>
                               <div className="d-flex align-items-center justify-content-between mb-3">
                                 <span style={{ color: '#E6EDF3' }}>Status</span>
-                                <Badge bg={vectorDB.status === 'connected' ? 'success' : 'warning'}>
-                                  {vectorDB.status === 'connected' ? 'Connected' : 'Disconnected'}
+                                <Badge bg={vectorDB.status === 'connected' ? 'success' : vectorDB.status === 'indexing' ? 'warning' : 'secondary'}>
+                                  {vectorDB.status === 'connected' ? 'Ready (5 docs indexed)' : 
+                                   vectorDB.status === 'indexing' ? 'Indexing...' : 
+                                   'Setup Required'}
                                 </Badge>
                               </div>
                               
@@ -1356,21 +1465,70 @@ Examples:
                                 <span className="fw-bold" style={{ color: '#E6EDF3' }}>{vectorDB.indexed} posts</span>
                               </div>
                               
-                              <Button 
-                                variant="outline-info" 
-                                size="sm"
-                                onClick={() => indexContent('Manual index test')}
-                                disabled={vectorDB.status === 'indexing'}
-                              >
-                                {vectorDB.status === 'indexing' ? (
-                                  <>
-                                    <Spinner size="sm" className="me-2" />
-                                    Indexing...
-                                  </>
-                                ) : (
-                                  'Test Connection'
+                              <div className="d-flex gap-2">
+                                <Button 
+                                  variant="outline-info" 
+                                  size="sm"
+                                  onClick={setupTestIndex}
+                                  disabled={vectorDB.status === 'indexing'}
+                                >
+                                  {vectorDB.status === 'indexing' ? (
+                                    <>
+                                      <Spinner size="sm" className="me-2" />
+                                      Indexing {vectorDB.indexed}/5...
+                                    </>
+                                  ) : (
+                                    'Setup Test Index (5 docs)'
+                                  )}
+                                </Button>
+                                
+                                {vectorDB.status === 'connected' && (
+                                  <Button 
+                                    variant="outline-secondary" 
+                                    size="sm"
+                                    onClick={() => {
+                                      setVectorDB({ indexed: 0, status: 'disconnected' });
+                                      setDebugData(prev => ({ ...prev, processingSteps: [] }));
+                                    }}
+                                  >
+                                    Reset
+                                  </Button>
                                 )}
-                              </Button>
+                              </div>
+                              
+                              {/* Vector DB Debug Output Section */}
+                              {debugData.processingSteps && debugData.processingSteps.length > 0 && debugData.inputPrompt === 'Test Index Setup' && (
+                                <div className="mt-4">
+                                  <div className="d-flex align-items-center justify-content-between mb-2">
+                                    <h6 className="mb-0 text-info">🔍 Indexing Debug Output</h6>
+                                    <Button 
+                                      size="sm" 
+                                      variant="outline-secondary"
+                                      onClick={() => setDebugData({...debugData, processingSteps: []})}
+                                    >
+                                      Clear
+                                    </Button>
+                                  </div>
+                                  <div 
+                                    className="bg-dark border rounded p-3"
+                                    style={{ 
+                                      maxHeight: '300px', 
+                                      overflowY: 'auto',
+                                      fontSize: '0.8rem',
+                                      fontFamily: 'Monaco, Consolas, "Lucida Console", monospace',
+                                      backgroundColor: '#0D1117',
+                                      borderColor: '#30363D',
+                                      color: '#E6EDF3'
+                                    }}
+                                  >
+                                    {debugData.processingSteps.map((step, idx) => (
+                                      <div key={idx} className="mb-1" style={{ whiteSpace: 'pre-wrap' }}>
+                                        {step}
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
                             </Card.Body>
                           </Card>
                         </Col>
