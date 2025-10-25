@@ -543,6 +543,83 @@ Agree or disagree? Let's debate in the comments! 🔥
   };
 
   const generateReleasePrompts = async (post) => {
+    // Check if release prompts are already generated (from N8N or local)
+    if (post.releasePrompts) {
+      console.log('Release prompts already exist for this post');
+      return;
+    }
+
+    // Try to generate via N8N if configured
+    if (n8nConfig.connectionStatus === 'connected') {
+      try {
+        setN8nSending(true);
+        
+        const payload = {
+          timestamp: new Date().toISOString(),
+          source: 'LinkedIn Content Magician - Release Prompts',
+          originalPrompt: post.prompt,
+          generatedContent: post.content,
+          ragSources: post.ragSources || [],
+          contentMetrics: {
+            characterCount: post.content.length,
+            wordCount: post.content.split(' ').length,
+            hashtags: (post.content.match(/#\w+/g) || []).length,
+            emojis: (post.content.match(/[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu) || []).length
+          },
+          platform: 'linkedin',
+          contentType: 'release_prompts_request',
+          status: 'ready_for_release_prompts'
+        };
+
+        const response = await fetch(n8nConfig.webhookUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'User-Agent': 'LinkedIn-Content-Magician/1.0.0'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          const responseData = await response.json();
+          
+          // If N8N returns release prompts, use them
+          if (responseData.releasePrompts) {
+            const updatedPost = {
+              ...post,
+              releasePrompts: responseData.releasePrompts,
+              status: 'release_ready'
+            };
+
+            const updatedPosts = posts.map(p => 
+              p.id === post.id ? updatedPost : p
+            );
+            setPosts(updatedPosts);
+            await saveToStorage('posts', updatedPosts);
+            
+            setN8nResult({
+              success: true,
+              message: 'Release prompts generated via N8N!',
+              data: JSON.stringify(responseData.releasePrompts, null, 2),
+              timestamp: new Date().toISOString()
+            });
+            return;
+          }
+        }
+      } catch (error) {
+        console.error('N8N release prompts generation failed:', error);
+        setN8nResult({
+          success: false,
+          message: `N8N release prompts failed: ${error.message}`,
+          error: error.message,
+          timestamp: new Date().toISOString()
+        });
+      } finally {
+        setN8nSending(false);
+      }
+    }
+
+    // Fallback to local generation if N8N fails or is not configured
     const releasePrompts = {
       textPrompts: [
         {
@@ -694,6 +771,12 @@ Content source: ${post.content}`
 - Clear value proposition
 - Multiple CTA variations`
         }
+      ],
+      usageTips: [
+        "Copy these prompts to your AI tools (ChatGPT, Claude, Midjourney, etc.)",
+        "Customize the prompts with your specific brand voice and requirements", 
+        "Use the generated content across multiple platforms for maximum reach",
+        "Track performance and iterate based on engagement metrics"
       ]
     };
 
@@ -792,8 +875,8 @@ Content source: ${post.content}`
         {/* Stats Bar */}
         <Row className="justify-content-center mb-4">
           <Col lg={10} xl={8}>
-            <Row className="g-3">
-              <Col sm={6} lg={3}>
+            <Row className="g-3 justify-content-center">
+              <Col sm={6} lg={4}>
                 <Card className="card-glassmorphism border-0 text-white h-100">
                   <Card.Body className="d-flex align-items-center">
                     <Database className="text-success me-3" size={32} />
@@ -805,31 +888,7 @@ Content source: ${post.content}`
                 </Card>
               </Col>
               
-              <Col sm={6} lg={3}>
-                <Card className="card-glassmorphism border-0 text-white h-100">
-                  <Card.Body className="d-flex align-items-center">
-                    <Zap className="text-warning me-3" size={32} />
-                    <div>
-                      <div className="fs-2 fw-bold">{posts.length}</div>
-                      <div className="small" style={{ color: '#8B949E' }}>Generated Posts</div>
-                    </div>
-                  </Card.Body>
-                </Card>
-              </Col>
-              
-              <Col sm={6} lg={3}>
-                <Card className="card-glassmorphism border-0 text-white h-100">
-                  <Card.Body className="d-flex align-items-center">
-                    <CheckCircle className="text-info me-3" size={32} />
-                    <div>
-                      <div className="fs-2 fw-bold">{posts.filter(p => p.status === 'approved').length}</div>
-                      <div className="small" style={{ color: '#8B949E' }}>Approved</div>
-                    </div>
-                  </Card.Body>
-                </Card>
-              </Col>
-              
-              <Col sm={6} lg={3}>
+              <Col sm={6} lg={4}>
                 <Card className="card-glassmorphism border-0 text-white h-100">
                   <Card.Body className="d-flex align-items-center">
                     <MessageSquare style={{ color: '#A371F7' }} className="me-3" size={32} />
@@ -1295,10 +1354,18 @@ Examples:
                                       <div className="small">
                                         <strong>💡 Usage Tips:</strong>
                                         <ul className="mb-0 mt-1">
-                                          <li>Copy these prompts to your AI tools (ChatGPT, Claude, Midjourney, etc.)</li>
-                                          <li>Customize the prompts with your specific brand voice and requirements</li>
-                                          <li>Use the generated content across multiple platforms for maximum reach</li>
-                                          <li>Track performance and iterate based on engagement metrics</li>
+                                          {post.releasePrompts.usageTips ? 
+                                            post.releasePrompts.usageTips.map((tip, idx) => (
+                                              <li key={idx}>{tip}</li>
+                                            ))
+                                            :
+                                            <>
+                                              <li>Copy these prompts to your AI tools (ChatGPT, Claude, Midjourney, etc.)</li>
+                                              <li>Customize the prompts with your specific brand voice and requirements</li>
+                                              <li>Use the generated content across multiple platforms for maximum reach</li>
+                                              <li>Track performance and iterate based on engagement metrics</li>
+                                            </>
+                                          }
                                         </ul>
                                       </div>
                                     </Alert>
