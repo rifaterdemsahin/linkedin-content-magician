@@ -1,5 +1,7 @@
 # 🚀 LinkedIn Content Magician
 
+![CI](https://github.com/rifaterdemsahin/linkedin-content-magician/actions/workflows/static.yml/badge.svg)
+
 Custom RAG to build newsletters for professionals
 
 ## ☁️ Cloud URL
