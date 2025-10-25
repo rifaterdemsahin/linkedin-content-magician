@@ -49,6 +49,16 @@ jobs:
           cd 5_Symbols
           npm run build
       
+      - name: Verify build output
+        run: |
+          cd 5_Symbols
+          echo "📊 Build Output Summary:"
+          du -sh dist/
+          echo "📁 Generated Files:"
+          ls -la dist/
+          echo "🎯 Asset Files:"
+          ls -la dist/assets/ || echo "No assets directory found"
+      
       - name: Setup Pages
         uses: actions/configure-pages@v5
       
