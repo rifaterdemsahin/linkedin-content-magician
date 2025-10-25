@@ -6,7 +6,7 @@
     "dev": "cd 5_Symbols && npm run dev",
     "preview": "cd 5_Symbols && npm run preview",
     "test": "cd 5_Symbols && npm run test",
-    "vercel-build": "cd 5_Symbols && npm install && npm run build"
+    "vercel-build": "cd 5_Symbols && npm ci && npm run build && echo 'Build completed - checking output:' && ls -la dist/"
   },
   "devDependencies": {
     "vercel": "^32.0.0"
