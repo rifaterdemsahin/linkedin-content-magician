@@ -1010,10 +1010,22 @@ Examples:
                                     <ul className="mb-0 mt-2 list-unstyled">
                                       {post.ragSources.map((source, idx) => (
                                         <li key={idx} className="mb-2 p-2 rag-source-item rounded">
-                                          <span className="text-light">
-                                            <Database size={14} className="me-2 text-info" />
-                                            <strong className="text-info">{source}</strong>
-                                          </span>
+                                          <div className="d-flex justify-content-between align-items-start">
+                                            <span className="text-light">
+                                              <Database size={14} className="me-2 text-info" />
+                                              <strong className="text-info">{typeof source === 'string' ? source : source.title}</strong>
+                                            </span>
+                                            {typeof source === 'object' && source.score && (
+                                              <span className="badge bg-primary ms-2">
+                                                {source.score}% match
+                                              </span>
+                                            )}
+                                          </div>
+                                          {typeof source === 'object' && source.fileName && (
+                                            <small className="text-muted d-block mt-1 ms-4">
+                                              📄 {source.fileName}
+                                            </small>
+                                          )}
                                         </li>
                                       ))}
                                     </ul>
@@ -1252,10 +1264,22 @@ Examples:
                             <ul className="list-unstyled mt-2">
                               {debugData.ragSources.map((source, idx) => (
                                 <li key={idx} className="mb-2 p-3 rag-source-item rounded">
-                                  <div className="text-light">
-                                    <Zap size={16} className="me-2 text-info" />
-                                    <strong className="text-info">{source}</strong>
+                                  <div className="d-flex justify-content-between align-items-start">
+                                    <div className="text-light">
+                                      <Zap size={16} className="me-2 text-info" />
+                                      <strong className="text-info">{typeof source === 'string' ? source : source.title}</strong>
+                                    </div>
+                                    {typeof source === 'object' && source.score && (
+                                      <span className="badge bg-primary ms-2">
+                                        {source.score}% match
+                                      </span>
+                                    )}
                                   </div>
+                                  {typeof source === 'object' && source.fileName && (
+                                    <small className="text-muted d-block mt-1 ms-4">
+                                      📄 {source.fileName} | Distance: {source.distance?.toFixed(3)}
+                                    </small>
+                                  )}
                                 </li>
                               ))}
                             </ul>
