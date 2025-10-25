@@ -14,7 +14,7 @@
     }
   ],
   "rewrites": [
-    { "source": "/api/rag-search", "destination": "/api/search.py" },
+    { "source": "/api/rag-search", "destination": "/api/search" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

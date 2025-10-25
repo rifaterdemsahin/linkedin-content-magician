@@ -1,3 +1,23 @@
 {
-    "DockerRun.DisableDockerrc": true
+    "DockerRun.DisableDockerrc": true,
+
+    // --- GitHub Copilot ---
+    "github.copilot.enable": { "*": true },
+    "github.copilot.chat.enable": true,
+    "github.copilot.advanced": {
+        "mcp.enabled": true,
+        "mcp.autoApprove": true,          // ✅ execute MCP commands automatically
+        "mcp.configPath": "${workspaceFolder}/copilot-mcp.config.json"
+    },
+
+    // --- Gemini Code Assist ---
+    "google.gemini.enableCodeAssist": true,
+    "google.gemini.allowCommandExecution": true,  // ✅ auto-run Gemini code commands
+
+    // --- Trust workspace so VS Code won't ask again ---
+    "security.workspace.trust.enabled": false,
+    "security.promptForWorkspaceTrust": false,
+
+    // --- Optional: make terminals non-interactive ---
+    "terminal.integrated.confirmOnKill": false
 }
