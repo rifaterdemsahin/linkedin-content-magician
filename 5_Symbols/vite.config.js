@@ -7,7 +7,7 @@ import { promisify } from 'util'
 
 const execAsync = promisify(exec)
 
-// Custom plugin to handle RAG search API
+// Custom plugin to handle RAG search API (development only)
 const ragApiPlugin = () => {
   return {
     name: 'rag-api',
@@ -35,12 +35,14 @@ const ragApiPlugin = () => {
               const result = JSON.parse(stdout)
               
               res.setHeader('Content-Type', 'application/json')
+              res.setHeader('Access-Control-Allow-Origin', '*')
               res.end(JSON.stringify(result))
               
             } catch (error) {
               console.error('RAG API error:', error)
               res.statusCode = 500
               res.setHeader('Content-Type', 'application/json')
+              res.setHeader('Access-Control-Allow-Origin', '*')
               res.end(JSON.stringify({
                 success: false,
                 error: error.message,
@@ -57,16 +59,24 @@ const ragApiPlugin = () => {
 }
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react(), ragApiPlugin()],
-  base: '/linkedin-content-magician/',
-  build: {
-    outDir: 'dist',
-    assetsDir: 'assets'
-  },
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: './src/setupTests.js',
-  },
+export default defineConfig(({ command, mode }) => {
+  const isProduction = mode === 'production'
+  
+  return {
+    plugins: [
+      react(),
+      // Only use local RAG API plugin in development
+      ...(isProduction ? [] : [ragApiPlugin()])
+    ],
+    base: isProduction ? '/' : '/linkedin-content-magician/',
+    build: {
+      outDir: 'dist',
+      assetsDir: 'assets'
+    },
+    test: {
+      globals: true,
+      environment: 'jsdom',
+      setupFiles: './src/setupTests.js',
+    },
+  }
 })

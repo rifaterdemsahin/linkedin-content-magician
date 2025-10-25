@@ -1,0 +1,14 @@
+{
+  "name": "linkedin-content-magician",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "cd 5_Symbols && npm run build",
+    "dev": "cd 5_Symbols && npm run dev",
+    "preview": "cd 5_Symbols && npm run preview",
+    "test": "cd 5_Symbols && npm run test",
+    "vercel-build": "cd 5_Symbols && npm install && npm run build"
+  },
+  "devDependencies": {
+    "vercel": "^32.0.0"
+  }
+}
