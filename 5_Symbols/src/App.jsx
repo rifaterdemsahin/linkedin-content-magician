@@ -1605,6 +1605,7 @@ Examples:
                       <Alert variant="primary" className="mt-4 bg-transparent" style={{ borderColor: '#58A6FF' }}>
                         <Alert.Heading className="h5" style={{ color: '#58A6FF' }}>🚀 Quick Start Guide</Alert.Heading>
                         <ol className="mb-0" style={{ color: '#E6EDF3' }}>
+                          <li>Access the <a href="../dashboard.html" target="_blank" rel="noopener noreferrer" style={{ color: '#58A6FF', textDecoration: 'none' }}>Delivery Pilot Dashboard</a> for project overview</li>
                           <li>Set up your n8n workflow with the webhook trigger</li>
                           <li>Configure Faiss vector database for content storage</li>
                           <li>Index your best LinkedIn posts to train your voice</li>
