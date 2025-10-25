@@ -3,6 +3,7 @@
 ## 🔧 Workflow & Automation
 
 - **[N8N Workflow](https://n8n.rifaterdemsahin.com/workflow/E2qGEqFAEFjKV2B7)** - Automated workflow source for content production
+- Workflow : https://n8n.rifaterdemsahin.com/workflow/u8PdboUp5JCCPv55
 
 ## 💡 AI Tools & Content Creation
 
