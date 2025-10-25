@@ -542,85 +542,9 @@ Agree or disagree? Let's debate in the comments! 🔥
     }
   };
 
-  const generateReleasePrompts = async (post) => {
-    // Check if release prompts are already generated (from N8N or local)
-    if (post.releasePrompts) {
-      console.log('Release prompts already exist for this post');
-      return;
-    }
-
-    // Try to generate via N8N if configured
-    if (n8nConfig.connectionStatus === 'connected') {
-      try {
-        setN8nSending(true);
-        
-        const payload = {
-          timestamp: new Date().toISOString(),
-          source: 'LinkedIn Content Magician - Release Prompts',
-          originalPrompt: post.prompt,
-          generatedContent: post.content,
-          ragSources: post.ragSources || [],
-          contentMetrics: {
-            characterCount: post.content.length,
-            wordCount: post.content.split(' ').length,
-            hashtags: (post.content.match(/#\w+/g) || []).length,
-            emojis: (post.content.match(/[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu) || []).length
-          },
-          platform: 'linkedin',
-          contentType: 'release_prompts_request',
-          status: 'ready_for_release_prompts'
-        };
-
-        const response = await fetch(n8nConfig.webhookUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'User-Agent': 'LinkedIn-Content-Magician/1.0.0'
-          },
-          body: JSON.stringify(payload)
-        });
-
-        if (response.ok) {
-          const responseData = await response.json();
-          
-          // If N8N returns release prompts, use them
-          if (responseData.releasePrompts) {
-            const updatedPost = {
-              ...post,
-              releasePrompts: responseData.releasePrompts,
-              status: 'release_ready'
-            };
-
-            const updatedPosts = posts.map(p => 
-              p.id === post.id ? updatedPost : p
-            );
-            setPosts(updatedPosts);
-            await saveToStorage('posts', updatedPosts);
-            
-            setN8nResult({
-              success: true,
-              message: 'Release prompts generated via N8N!',
-              data: JSON.stringify(responseData.releasePrompts, null, 2),
-              timestamp: new Date().toISOString()
-            });
-            return;
-          }
-        }
-      } catch (error) {
-        console.error('N8N release prompts generation failed:', error);
-        setN8nResult({
-          success: false,
-          message: `N8N release prompts failed: ${error.message}`,
-          error: error.message,
-          timestamp: new Date().toISOString()
-        });
-      } finally {
-        setN8nSending(false);
-      }
-    }
-
-    // Fallback to local generation if N8N fails or is not configured
-    const releasePrompts = {
+  // Template content prompts - these will be populated by N8N workflow output
+  const getTemplateReleasePrompts = (post) => {
+    return {
       textPrompts: [
         {
           title: "LinkedIn Carousel Post",
@@ -779,18 +703,6 @@ Content source: ${post.content}`
         "Track performance and iterate based on engagement metrics"
       ]
     };
-
-    const updatedPost = {
-      ...post,
-      releasePrompts,
-      status: 'release_ready'
-    };
-
-    const updatedPosts = posts.map(p => 
-      p.id === post.id ? updatedPost : p
-    );
-    setPosts(updatedPosts);
-    await saveToStorage('posts', updatedPosts);
   };
 
   return (
@@ -1070,7 +982,7 @@ Examples:
                         <ol className="mb-0 small">
                           <li>Initial LinkedIn post is generated from your seed data</li>
                           <li>Go to "Review & Prepare Release" tab to review the content</li>
-                          <li>Click "Generate Release Prompts" for comprehensive content suite</li>
+                          <li>View comprehensive content templates automatically generated</li>
                           <li>Use prompts with AI tools (ChatGPT, Midjourney, etc.) to create assets</li>
                           <li>Deploy across multiple platforms with automated publishing</li>
                         </ol>
@@ -1175,14 +1087,6 @@ Examples:
                                             Reject
                                           </Button>
                                         </div>
-                                        <Button
-                                          size="sm"
-                                          variant="outline-primary"
-                                          className="w-100"
-                                          onClick={() => generateReleasePrompts(post)}
-                                        >
-                                          📝 Generate Release Prompts
-                                        </Button>
                                       </div>
                                     )}
                                     {(post.status === 'approved' || post.status === 'release_ready') && (
@@ -1219,16 +1123,6 @@ Examples:
                                             </>
                                           )}
                                         </Button>
-                                        {post.status === 'approved' && (
-                                          <Button
-                                            size="sm"
-                                            variant="outline-info"
-                                            className="w-100"
-                                            onClick={() => generateReleasePrompts(post)}
-                                          >
-                                            📝 Generate Release Prompts
-                                          </Button>
-                                        )}
                                       </div>
                                     )}
                                   </Col>
@@ -1242,135 +1136,136 @@ Examples:
                                   </Card.Body>
                                 </Card>
 
-                                {post.releasePrompts && (
-                                  <div className="mt-4">
-                                    <h5 className="mb-3" style={{ color: '#58A6FF' }}>🚀 Release Prompts Generated</h5>
-                                    
-                                    {/* Text Content Prompts */}
-                                    <Card className="mb-3" style={{ backgroundColor: 'rgba(88, 166, 255, 0.1)', borderColor: '#58A6FF' }}>
-                                      <Card.Header className="bg-transparent" style={{ borderColor: '#58A6FF' }}>
-                                        <h6 className="mb-0 text-white">📝 Text Content Prompts</h6>
-                                      </Card.Header>
-                                      <Card.Body>
-                                        {post.releasePrompts.textPrompts.map((prompt, idx) => (
-                                          <div key={idx} className="mb-3 p-3 border border-secondary rounded">
-                                            <div className="d-flex justify-content-between align-items-start mb-2">
-                                              <h6 className="text-primary mb-0">{prompt.title}</h6>
-                                              <Button 
-                                                size="sm" 
-                                                variant="outline-light"
-                                                onClick={() => navigator.clipboard.writeText(prompt.prompt)}
-                                              >
-                                                📋 Copy
-                                              </Button>
-                                            </div>
-                                            <p className="text-white-50 small mb-0" style={{fontSize: '0.85rem'}}>
-                                              {prompt.prompt}
-                                            </p>
-                                          </div>
-                                        ))}
-                                      </Card.Body>
-                                    </Card>
+                                {/* Always show template content prompts */}
+                                <div className="mt-4">
+                                  <h5 className="mb-3" style={{ color: '#58A6FF' }}>� Content Template Prompts</h5>
+                                  <p className="text-muted small mb-3">
+                                    These templates are ready to use with AI tools. Copy and customize them for your content creation workflow.
+                                    Enhanced versions will be generated by N8N workflow processing.
+                                  </p>
+                                  
+                                  {(() => {
+                                    const templatePrompts = getTemplateReleasePrompts(post);
+                                    return (
+                                      <>
+                                        {/* Text Content Prompts */}
+                                        <Card className="mb-3" style={{ backgroundColor: 'rgba(88, 166, 255, 0.1)', borderColor: '#58A6FF' }}>
+                                          <Card.Header className="bg-transparent" style={{ borderColor: '#58A6FF' }}>
+                                            <h6 className="mb-0 text-white">📝 Text Content Prompts</h6>
+                                          </Card.Header>
+                                          <Card.Body>
+                                            {templatePrompts.textPrompts.map((prompt, idx) => (
+                                              <div key={idx} className="mb-3 p-3 border border-secondary rounded">
+                                                <div className="d-flex justify-content-between align-items-start mb-2">
+                                                  <h6 className="text-primary mb-0">{prompt.title}</h6>
+                                                  <Button 
+                                                    size="sm" 
+                                                    variant="outline-light"
+                                                    onClick={() => navigator.clipboard.writeText(prompt.prompt)}
+                                                  >
+                                                    📋 Copy
+                                                  </Button>
+                                                </div>
+                                                <p className="text-white-50 small mb-0" style={{fontSize: '0.85rem'}}>
+                                                  {prompt.prompt}
+                                                </p>
+                                              </div>
+                                            ))}
+                                          </Card.Body>
+                                        </Card>
 
-                                    {/* Image Prompts */}
-                                    <Card className="mb-3" style={{ backgroundColor: 'rgba(163, 113, 247, 0.1)', borderColor: '#A371F7' }}>
-                                      <Card.Header className="bg-transparent" style={{ borderColor: '#A371F7' }}>
-                                        <h6 className="mb-0 text-white">🎨 Image Generation Prompts</h6>
-                                      </Card.Header>
-                                      <Card.Body>
-                                        {post.releasePrompts.imagePrompts.map((prompt, idx) => (
-                                          <div key={idx} className="mb-3 p-3 border border-secondary rounded">
-                                            <div className="d-flex justify-content-between align-items-start mb-2">
-                                              <h6 className="text-info mb-0">{prompt.title}</h6>
-                                              <Button 
-                                                size="sm" 
-                                                variant="outline-light"
-                                                onClick={() => navigator.clipboard.writeText(prompt.prompt)}
-                                              >
-                                                📋 Copy
-                                              </Button>
-                                            </div>
-                                            <p className="text-white-50 small mb-0" style={{fontSize: '0.85rem'}}>
-                                              {prompt.prompt}
-                                            </p>
-                                          </div>
-                                        ))}
-                                      </Card.Body>
-                                    </Card>
+                                        {/* Image Prompts */}
+                                        <Card className="mb-3" style={{ backgroundColor: 'rgba(163, 113, 247, 0.1)', borderColor: '#A371F7' }}>
+                                          <Card.Header className="bg-transparent" style={{ borderColor: '#A371F7' }}>
+                                            <h6 className="mb-0 text-white">🎨 Image Generation Prompts</h6>
+                                          </Card.Header>
+                                          <Card.Body>
+                                            {templatePrompts.imagePrompts.map((prompt, idx) => (
+                                              <div key={idx} className="mb-3 p-3 border border-secondary rounded">
+                                                <div className="d-flex justify-content-between align-items-start mb-2">
+                                                  <h6 className="text-info mb-0">{prompt.title}</h6>
+                                                  <Button 
+                                                    size="sm" 
+                                                    variant="outline-light"
+                                                    onClick={() => navigator.clipboard.writeText(prompt.prompt)}
+                                                  >
+                                                    📋 Copy
+                                                  </Button>
+                                                </div>
+                                                <p className="text-white-50 small mb-0" style={{fontSize: '0.85rem'}}>
+                                                  {prompt.prompt}
+                                                </p>
+                                              </div>
+                                            ))}
+                                          </Card.Body>
+                                        </Card>
 
-                                    {/* Video Prompts */}
-                                    <Card className="mb-3" style={{ backgroundColor: 'rgba(255, 193, 7, 0.1)', borderColor: '#FFC107' }}>
-                                      <Card.Header className="bg-transparent" style={{ borderColor: '#FFC107' }}>
-                                        <h6 className="mb-0 text-white">🎥 Video Content Prompts</h6>
-                                      </Card.Header>
-                                      <Card.Body>
-                                        {post.releasePrompts.videoPrompts.map((prompt, idx) => (
-                                          <div key={idx} className="mb-3 p-3 border border-secondary rounded">
-                                            <div className="d-flex justify-content-between align-items-start mb-2">
-                                              <h6 className="text-warning mb-0">{prompt.title}</h6>
-                                              <Button 
-                                                size="sm" 
-                                                variant="outline-light"
-                                                onClick={() => navigator.clipboard.writeText(prompt.prompt)}
-                                              >
-                                                📋 Copy
-                                              </Button>
-                                            </div>
-                                            <p className="text-white-50 small mb-0" style={{fontSize: '0.85rem'}}>
-                                              {prompt.prompt}
-                                            </p>
-                                          </div>
-                                        ))}
-                                      </Card.Body>
-                                    </Card>
+                                        {/* Video Prompts */}
+                                        <Card className="mb-3" style={{ backgroundColor: 'rgba(255, 193, 7, 0.1)', borderColor: '#FFC107' }}>
+                                          <Card.Header className="bg-transparent" style={{ borderColor: '#FFC107' }}>
+                                            <h6 className="mb-0 text-white">🎥 Video Content Prompts</h6>
+                                          </Card.Header>
+                                          <Card.Body>
+                                            {templatePrompts.videoPrompts.map((prompt, idx) => (
+                                              <div key={idx} className="mb-3 p-3 border border-secondary rounded">
+                                                <div className="d-flex justify-content-between align-items-start mb-2">
+                                                  <h6 className="text-warning mb-0">{prompt.title}</h6>
+                                                  <Button 
+                                                    size="sm" 
+                                                    variant="outline-light"
+                                                    onClick={() => navigator.clipboard.writeText(prompt.prompt)}
+                                                  >
+                                                    📋 Copy
+                                                  </Button>
+                                                </div>
+                                                <p className="text-white-50 small mb-0" style={{fontSize: '0.85rem'}}>
+                                                  {prompt.prompt}
+                                                </p>
+                                              </div>
+                                            ))}
+                                          </Card.Body>
+                                        </Card>
 
-                                    {/* Marketing Prompts */}
-                                    <Card className="mb-3" style={{ backgroundColor: 'rgba(40, 167, 69, 0.1)', borderColor: '#28A745' }}>
-                                      <Card.Header className="bg-transparent" style={{ borderColor: '#28A745' }}>
-                                        <h6 className="mb-0 text-white">📈 Marketing & Campaign Prompts</h6>
-                                      </Card.Header>
-                                      <Card.Body>
-                                        {post.releasePrompts.marketingPrompts.map((prompt, idx) => (
-                                          <div key={idx} className="mb-3 p-3 border border-secondary rounded">
-                                            <div className="d-flex justify-content-between align-items-start mb-2">
-                                              <h6 className="text-success mb-0">{prompt.title}</h6>
-                                              <Button 
-                                                size="sm" 
-                                                variant="outline-light"
-                                                onClick={() => navigator.clipboard.writeText(prompt.prompt)}
-                                              >
-                                                📋 Copy
-                                              </Button>
-                                            </div>
-                                            <p className="text-white-50 small mb-0" style={{fontSize: '0.85rem'}}>
-                                              {prompt.prompt}
-                                            </p>
-                                          </div>
-                                        ))}
-                                      </Card.Body>
-                                    </Card>
+                                        {/* Marketing Prompts */}
+                                        <Card className="mb-3" style={{ backgroundColor: 'rgba(40, 167, 69, 0.1)', borderColor: '#28A745' }}>
+                                          <Card.Header className="bg-transparent" style={{ borderColor: '#28A745' }}>
+                                            <h6 className="mb-0 text-white">📈 Marketing & Campaign Prompts</h6>
+                                          </Card.Header>
+                                          <Card.Body>
+                                            {templatePrompts.marketingPrompts.map((prompt, idx) => (
+                                              <div key={idx} className="mb-3 p-3 border border-secondary rounded">
+                                                <div className="d-flex justify-content-between align-items-start mb-2">
+                                                  <h6 className="text-success mb-0">{prompt.title}</h6>
+                                                  <Button 
+                                                    size="sm" 
+                                                    variant="outline-light"
+                                                    onClick={() => navigator.clipboard.writeText(prompt.prompt)}
+                                                  >
+                                                    📋 Copy
+                                                  </Button>
+                                                </div>
+                                                <p className="text-white-50 small mb-0" style={{fontSize: '0.85rem'}}>
+                                                  {prompt.prompt}
+                                                </p>
+                                              </div>
+                                            ))}
+                                          </Card.Body>
+                                        </Card>
 
-                                    <Alert variant="success" className="mt-3 bg-transparent border-success">
-                                      <div className="small">
-                                        <strong>💡 Usage Tips:</strong>
-                                        <ul className="mb-0 mt-1">
-                                          {post.releasePrompts.usageTips ? 
-                                            post.releasePrompts.usageTips.map((tip, idx) => (
-                                              <li key={idx}>{tip}</li>
-                                            ))
-                                            :
-                                            <>
-                                              <li>Copy these prompts to your AI tools (ChatGPT, Claude, Midjourney, etc.)</li>
-                                              <li>Customize the prompts with your specific brand voice and requirements</li>
-                                              <li>Use the generated content across multiple platforms for maximum reach</li>
-                                              <li>Track performance and iterate based on engagement metrics</li>
-                                            </>
-                                          }
-                                        </ul>
-                                      </div>
-                                    </Alert>
-                                  </div>
-                                )}
+                                        <Alert variant="success" className="mt-3 bg-transparent border-success">
+                                          <div className="small">
+                                            <strong>💡 Usage Tips:</strong>
+                                            <ul className="mb-0 mt-1">
+                                              {templatePrompts.usageTips.map((tip, idx) => (
+                                                <li key={idx}>{tip}</li>
+                                              ))}
+                                            </ul>
+                                          </div>
+                                        </Alert>
+                                      </>
+                                    );
+                                  })()}
+                                </div>
 
                                 <Alert variant="info" className="mb-0 bg-dark bg-opacity-50 border-success border-opacity-50">
                                   <div className="small">
