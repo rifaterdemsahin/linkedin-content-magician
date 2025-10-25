@@ -3,7 +3,8 @@ class DeliveryPilotMenu {
     constructor(currentFolder = '') {
         this.currentFolder = currentFolder;
         this.menuItems = [
-            { name: 'Dashboard', emoji: '🚀', folder: '' },
+            { name: 'Home', emoji: '🏠', folder: '', isHome: true },
+            { name: 'Dashboard', emoji: '📊', folder: '', isDashboard: true },
             { name: 'Real', emoji: '🎯', folder: '1_Real' },
             { name: 'UI', emoji: '🎨', folder: '3_UI' },
             { name: 'Formula', emoji: '⚗️', folder: '4_Formula' },
@@ -14,8 +15,16 @@ class DeliveryPilotMenu {
         this.init();
     }
 
-    getRelativePath(targetFolder) {
-        // If targeting dashboard (empty folder)
+    getRelativePath(targetFolder, isHome = false, isDashboard = false) {
+        // If it's the home link, always go to index.html in root
+        if (isHome) {
+            return this.currentFolder ? '../index.html' : './index.html';
+        }
+        // If it's the dashboard link, always go to dashboard.html in root
+        if (isDashboard) {
+            return this.currentFolder ? '../dashboard.html' : './dashboard.html';
+        }
+        // If targeting dashboard (empty folder) - legacy support
         if (!targetFolder) {
             return this.currentFolder ? '../dashboard.html' : './dashboard.html';
         }
@@ -46,7 +55,7 @@ class DeliveryPilotMenu {
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             ${this.menuItems.map(item => `
                                 <li class="nav-item">
-                                    <a class="nav-link" href="${this.getRelativePath(item.folder)}">
+                                    <a class="nav-link" href="${this.getRelativePath(item.folder, item.isHome, item.isDashboard)}">
                                         ${item.emoji} ${item.name}
                                     </a>
                                 </li>
@@ -91,17 +100,17 @@ class DeliveryPilotMenu {
         });
     }
 
-    // Auto-highlight current page based on folder
+        // Auto-highlight current page based on folder
     autoHighlightCurrentPage() {
         if (this.currentFolder) {
             const folderToPageName = {
-                '': 'Dashboard',
                 '1_Real': 'Real',
                 '3_UI': 'UI', 
                 '4_Formula': 'Formula',
                 '6_Semblance': 'Semblance',
                 '7_Testing': 'Testing',
-                'sample_docs': 'Sample Docs'
+                'sample_docs': 'Sample Docs',
+                'dashboard': 'Dashboard'
             };
             const pageName = folderToPageName[this.currentFolder];
             if (pageName) {
@@ -123,6 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
     else if (path.includes('/6_Semblance/')) currentFolder = '6_Semblance';
     else if (path.includes('/7_Testing/')) currentFolder = '7_Testing';
     else if (path.includes('/sample_docs/')) currentFolder = 'sample_docs';
+    else if (path.includes('dashboard.html')) currentFolder = 'dashboard';
     
     window.deliveryPilot = new DeliveryPilotMenu(currentFolder);
 });
