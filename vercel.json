@@ -9,10 +9,16 @@
       "src": "package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "5_Symbols/dist"
+        "distDir": "5_Symbols/dist",
+        "buildCommand": "NODE_OPTIONS='--max-old-space-size=4096' npm run vercel-build"
       }
     }
   ],
+  "functions": {
+    "api/search.py": {
+      "memory": 512
+    }
+  },
   "rewrites": [
     { "source": "/api/rag-search", "destination": "/api/search" },
     { "source": "/(.*)", "destination": "/index.html" }

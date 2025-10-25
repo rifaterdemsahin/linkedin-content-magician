@@ -71,7 +71,28 @@ export default defineConfig(({ command, mode }) => {
     base: isProduction ? '/' : '/linkedin-content-magician/',
     build: {
       outDir: 'dist',
-      assetsDir: 'assets'
+      assetsDir: 'assets',
+      // Optimize bundle size and memory usage
+      minify: 'terser',
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            // Split vendor libraries to reduce memory pressure
+            vendor: ['react', 'react-dom'],
+            ui: ['lucide-react']
+          }
+        }
+      },
+      // Increase memory limit warning threshold
+      chunkSizeWarningLimit: 1000,
+      // Enable aggressive optimization
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+          pure_funcs: ['console.log', 'console.info']
+        }
+      }
     },
     test: {
       globals: true,

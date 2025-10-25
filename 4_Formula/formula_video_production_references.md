@@ -19,6 +19,9 @@
 - **[Canva Thumbnails](https://www.canva.com/design/DAGJhH098do/7a-TDVcjX482MetGV3HLPA/edit)** - Thumbnail design with click-through rate optimization
 - **[Google Flow Animations](https://labs.google/fx/tools/flow/project/8e6dbb86-7c14-41af-85d8-41998005a559)** - Animation creation tool
 
+## 📝 Backend to Run Vercel
+https://vercel.com/rifaterdemsahins-projects/linkedin-content-magician/deployments
+
 ## 📝 Notes & Documentation
 
 - **Obsidian Archive**: `/Users/rifaterdemsahin/projects/secondbrain/secondbrain/4_Archieve/2025/10/22/october video 4 upgrades.md`

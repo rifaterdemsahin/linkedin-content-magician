@@ -6,7 +6,7 @@
     "dev": "cd 5_Symbols && npm run dev",
     "preview": "cd 5_Symbols && npm run preview",
     "test": "cd 5_Symbols && npm run test",
-    "vercel-build": "cd 5_Symbols && npm ci && npm run build && echo 'Build completed - checking output:' && ls -la dist/"
+    "vercel-build": "cd 5_Symbols && NODE_OPTIONS='--max-old-space-size=4096' npm ci && NODE_OPTIONS='--max-old-space-size=4096' npm run build && echo 'Build completed - checking output:' && ls -la dist/"
   },
   "devDependencies": {
     "vercel": "^32.0.0"

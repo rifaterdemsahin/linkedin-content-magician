@@ -37,4 +37,22 @@ export default {
     },
   },
   plugins: [],
+  // Add aggressive CSS purging to reduce bundle size
+  purge: {
+    enabled: process.env.NODE_ENV === 'production',
+    content: [
+      "./index.html", 
+      "./src/**/*.{js,jsx,ts,tsx}"
+    ],
+    // Keep only essential classes
+    safelist: [
+      'container', 'flex', 'grid', 'text-center', 'font-bold',
+      // Add any critical classes that might be dynamically generated
+    ],
+    // Remove unused CSS aggressively
+    options: {
+      keyframes: true,
+      fontFace: true,
+    }
+  }
 }

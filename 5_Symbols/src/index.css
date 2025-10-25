@@ -1,7 +1,7 @@
-/* Import Bootstrap first */
-@import 'bootstrap/dist/css/bootstrap.min.css';
+/* Import minimal Bootstrap components - only what's needed */
+@import './bootstrap-minimal.css';
 
-/* Keep Tailwind for utility classes */
+/* Import Tailwind CSS for utility classes */
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
